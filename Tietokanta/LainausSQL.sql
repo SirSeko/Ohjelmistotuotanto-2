@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Lainaaja` (
   `Sukunimi` VARCHAR(45) NULL,
   `Luokka` VARCHAR(45) NULL,
   PRIMARY KEY (`LainaajaID`),
-  UNIQUE INDEX `LainaajaID_UNIQUE` (`LainaajaID` ASC) VISIBLE)
+  UNIQUE INDEX `LainaajaID_UNIQUE` (`LainaajaID` ASC) )
 ENGINE = InnoDB;
 
 
@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Lainaus` (
   `Lainaaja_LainaajaID` INT NOT NULL,
   `Välineet_VäineID` INT NOT NULL,
   PRIMARY KEY (`LaianusID`, `Lainaaja_LainaajaID`, `Välineet_VäineID`),
-  UNIQUE INDEX `LaianusID_UNIQUE` (`LaianusID` ASC) VISIBLE,
-  INDEX `fk_Lainaus_Lainaaja_idx` (`Lainaaja_LainaajaID` ASC) VISIBLE,
-  INDEX `fk_Lainaus_Välineet1_idx` (`Välineet_VäineID` ASC) VISIBLE,
+  UNIQUE INDEX `LaianusID_UNIQUE` (`LaianusID` ASC) ,
+  INDEX `fk_Lainaus_Lainaaja_idx` (`Lainaaja_LainaajaID` ASC) ,
+  INDEX `fk_Lainaus_Välineet1_idx` (`Välineet_VäineID` ASC) ,
   CONSTRAINT `fk_Lainaus_Lainaaja`
     FOREIGN KEY (`Lainaaja_LainaajaID`)
     REFERENCES `mydb`.`Lainaaja` (`LainaajaID`)
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Välineet` (
   `Nimi` VARCHAR(45) NULL,
   `ID` VARCHAR(45) NULL,
   PRIMARY KEY (`VäineID`),
-  UNIQUE INDEX `VäineID_UNIQUE` (`VäineID` ASC) VISIBLE)
+  UNIQUE INDEX `VäineID_UNIQUE` (`VäineID` ASC) )
 ENGINE = InnoDB;
 
 

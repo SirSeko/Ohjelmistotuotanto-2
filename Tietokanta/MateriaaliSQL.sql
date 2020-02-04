@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Materiaali` (
   `Hinta` DECIMAL NULL,
   `Määrä` INT NULL,
   PRIMARY KEY (`MateriaaliID`),
-  UNIQUE INDEX `MateriaaliID_UNIQUE` (`MateriaaliID` ASC) VISIBLE)
+  UNIQUE INDEX `MateriaaliID_UNIQUE` (`MateriaaliID` ASC) )
 ENGINE = InnoDB;
 
 
@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Tilaus` (
   `Määrä` INT NULL,
   `MateriaaliID` INT NOT NULL,
   PRIMARY KEY (`TilausID`, `MateriaaliID`),
-  UNIQUE INDEX `TilausID_UNIQUE` (`TilausID` ASC) VISIBLE,
-  INDEX `fk_Tilaus_Materiaali_idx` (`MateriaaliID` ASC) VISIBLE,
+  UNIQUE INDEX `TilausID_UNIQUE` (`TilausID` ASC) ,
+  INDEX `fk_Tilaus_Materiaali_idx` (`MateriaaliID` ASC) ,
   CONSTRAINT `fk_Tilaus_Materiaali`
     FOREIGN KEY (`MateriaaliID`)
     REFERENCES `mydb`.`Materiaali` (`MateriaaliID`)
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Varaus` (
   `MateriaaliID` INT NOT NULL,
   `Määrä` INT NULL,
   PRIMARY KEY (`VarausID`, `MateriaaliID`),
-  UNIQUE INDEX `VarausID_UNIQUE` (`VarausID` ASC) VISIBLE,
-  INDEX `fk_Varaus_Materiaali1_idx` (`MateriaaliID` ASC) VISIBLE,
+  UNIQUE INDEX `VarausID_UNIQUE` (`VarausID` ASC) ,
+  INDEX `fk_Varaus_Materiaali1_idx` (`MateriaaliID` ASC) ,
   CONSTRAINT `fk_Varaus_Materiaali1`
     FOREIGN KEY (`MateriaaliID`)
     REFERENCES `mydb`.`Materiaali` (`MateriaaliID`)
