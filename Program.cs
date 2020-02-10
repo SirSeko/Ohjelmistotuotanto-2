@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using varastosovellus.Backend;
 
 namespace varastosovellus
 {
@@ -7,14 +9,28 @@ namespace varastosovellus
     {
         static void Main(string[] args)
         {
-            SqlConnection cnn;
-            DatabaseManager dm = new DatabaseManager();
+            List<Materiaali> materiaalit = new List<Materiaali>(); //Lista materiaaleista
+            List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
+            List<Varaus> varaukset = new List<Varaus>();
+            SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
+            DatabaseManager dm = new DatabaseManager(); //tietokannanhallinta-olio, mm. yhdistys kantaan
 
-            cnn = dm.OpenConnection();
-            //System.Threading.Thread.Sleep(1000*10);
-            DatabaseMateriaali dmMat = new DatabaseMateriaali(cnn);
-            dmMat.test();
-            dm.CloseConnection();
+            cnn = dm.OpenConnection(); //yhdistetään kantaan
+            if (cnn != null)
+            {
+                DatabaseMateriaali dmMat = new DatabaseMateriaali(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
+                materiaalit = dmMat.SelectAll(materiaalit); //haetaan kaikki materiaalit kannasta listaan
+
+                DatabaseTilaus dmTil = new DatabaseTilaus(cnn); //luodaan olio, jolla käsitellään tilauksia tietokannassa
+                tilaukset = dmTil.SelectAll(tilaukset); //haetaan kaikki tilaukset kannasta listaan
+
+                DatabaseVaraus dmVar = new DatabaseVaraus(cnn);
+                varaukset = dmVar.SelectAll(varaukset);
+
+                //dmMat.test(); //testi
+                dm.CloseConnection();
+
+            }
         }
     }
 }
