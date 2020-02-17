@@ -22,7 +22,7 @@ namespace varastosovellus.Backend
 
         //Lukee kaiken datan taulusta
         public List<Tilaus> SelectAll(List<Tilaus> tilaukset){
-            sql = "Select * from Tilaus;";
+            sql = "Select * from mydb.Tilaus;";
             command = new SqlCommand(sql, cnn);
             dataReader = command.ExecuteReader();
             while(dataReader.Read()){
