@@ -136,7 +136,6 @@
     <Compile Include="Backend\DatabaseTilaus.cs" />
     <Compile Include="Backend\DatabaseVaraus.cs" />
     <Compile Include="Backend\Materiaali.cs" />
-    <Compile Include="Backend\Testi.cs" />
     <Compile Include="Backend\Tilaus.cs" />
     <Compile Include="Backend\Varaus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
