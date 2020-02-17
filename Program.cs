@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+using Collections.Generic;
+using Data.SqlClient;
 using varastosovellus.Backend;
 
 namespace varastosovellus

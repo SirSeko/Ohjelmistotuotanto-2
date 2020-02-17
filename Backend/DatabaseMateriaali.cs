@@ -25,7 +25,7 @@ namespace varastosovellus.Backend
 
         //Lukee kaiken datan taulusta
         public List<Materiaali> SelectAll(List<Materiaali> materiaalit){
-            sql = "Select * from Materiaali;";
+            sql = "Select * from mydb.Materiaali;";
             command = new SqlCommand(sql, cnn);
             dataReader = command.ExecuteReader();
             while(dataReader.Read()){
