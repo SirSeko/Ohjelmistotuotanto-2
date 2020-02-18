@@ -51,5 +51,25 @@ namespace VarastoApi.Backend
                 return false;
             }
         }
+
+        //Muokkaa ID:n mukaista Columnia. Tarkennus: Vastaanottaa olion Tilaus ja korvaa tietokannasta MateriaaliID:n mukaisen columnin tiedot.
+        public bool Update(Tilaus t) {
+            try
+            {
+                sql = "UPDATE mydb.Tilaus SET TilaajanNimi='" + t.TilaajanNimi + "', Määrä='" + t.Maara + "', MateriaaliID='" + t.MateriaaliId + "' WHERE TilausID ='" + t.Id + "';";
+                command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein d:D
+                adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
+                adapter.UpdateCommand.ExecuteNonQuery();
+                command.Dispose(); //poistetaan olio
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+        }
+     
     }
 }

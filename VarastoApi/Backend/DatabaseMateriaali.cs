@@ -41,7 +41,7 @@ namespace VarastoApi.Backend
             return materiaalit;
         }
 
-        //Lisää uuden materiaalin tauluun, palauttaa true jos onnistui ilman poikkeuksia, false jos tuli poikkeus
+        //Lisää materiaalin tauluun, palauttaa true jos onnistui ilman poikkeuksia, false jos tuli poikkeus
         public bool InsertInto(Materiaali m) {
             try {
                 sql = "Insert into mydb.Materiaali (Nimi, Koko, Hinta, Määrä) values ('" + m.Nimi + "', '" + m.Koko + "', '" + m.Hinta.ToString() + "', '" + m.Maara.ToString() + "');";
@@ -56,9 +56,24 @@ namespace VarastoApi.Backend
             }
         }
 
+        //Muokkaa ID:n mukaista Columnia. tark Vastaanottaa olion Materiaali ja korvaa tietokannasta MateriaaliID:n mukaisen columnin tiedot.
+        public bool Update(Materiaali m){
+            try {
+                sql = "UPDATE mydb.Materiaali SET Nimi='" + m.Nimi + "', Koko='" + m.Koko + "', Hinta='" + m.Hinta + "', Määrä='" + m.Maara + "' WHERE MateriaaliID ='" + m.Id + "';";
+                command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein UwU
+                adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
+                adapter.UpdateCommand.ExecuteNonQuery();
+                command.Dispose(); //poistetaan olio
+                return true;
+            }catch (Exception ex){
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
 
-        //testijuttuja
-        public void test(){
+
+            //testijuttuja
+            public void test(){
             //sql = "CREATE TABLE Testi(asd int, dew int);";
             sql = "Insert into Testi (asd,dew) values(1, 2);";
             command = new SqlCommand(sql, cnn);

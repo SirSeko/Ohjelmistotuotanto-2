@@ -28,19 +28,25 @@ namespace VarastoApi.Backend {
                 DatabaseVaraus dmVar = new DatabaseVaraus(cnn);
                 varaukset = dmVar.SelectAll(varaukset);
 
-                //Kokeillaan nyt lisätä kantaan ja päivittää listaa
+                //Kokeillaan nyt lisätä kantaan, muokata kantaa ja päivittää listaa 
                 Materiaali m = new Materiaali(-1, "Testi1", "Iso", 14.50f, 3);
+                Materiaali mU = new Materiaali(4, "Moottorisahat", "Kookas", 500f, 1);
                 dmMat.InsertInto(m);
+                dmMat.Update(mU);
                 materiaalit = new List<Materiaali>();
                 materiaalit = dmMat.SelectAll(materiaalit); //päivitetään lista
 
                 Tilaus t = new Tilaus(-1, "Tilaaja1", 666, materiaalit[materiaalit.Count - 1].Id);
+                Tilaus tU = new Tilaus(5 ,"Tilaaja4299", 1337, materiaalit[3].Id);
                 dmTil.InsertInto(t);
+                dmTil.Update(tU);
                 tilaukset = new List<Tilaus>();
                 tilaukset = dmTil.SelectAll(tilaukset);
 
                 Varaus v = new Varaus(-1, "Varaaja1", materiaalit[materiaalit.Count - 1].Id, 69);
+                Varaus vU = new Varaus(6, "Varaaja6069", materiaalit[4].Id, 21);
                 dmVar.InsertInto(v);
+                dmVar.Update(vU);
                 varaukset = new List<Varaus>();
                 varaukset = dmVar.SelectAll(varaukset);
 
