@@ -7,8 +7,6 @@ namespace VarastoApi.Backend
     public class DatabaseManager
     {
 
-        string connectionString;
-
         //käytetään kaikissa SQL komennoissa
         SqlConnection cnn;
 

@@ -28,12 +28,28 @@ namespace VarastoApi.Backend
             while(dataReader.Read()){
                 int.TryParse(dataReader.GetValue(0).ToString(), out id);
                 tilaajanNimi = dataReader.GetValue(1).ToString();
-                int.TryParse(dataReader.GetValue(3).ToString(), out maara);
-                int.TryParse(dataReader.GetValue(4).ToString(), out materiaaliId);
+                int.TryParse(dataReader.GetValue(2).ToString(), out maara);
+                int.TryParse(dataReader.GetValue(3).ToString(), out materiaaliId);
                 Tilaus t = new Tilaus(id, tilaajanNimi, maara, materiaaliId);
                 tilaukset.Add(t);
             }
+            dataReader.Close();
             return tilaukset;
+        }
+
+        //Lisää tilauksen tauluun, palauttaa true jos ei tule poikkeusta, muuten false
+        public bool InsertInto(Tilaus t) {
+            try {
+                sql = "Insert into mydb.Tilaus (TilaajanNimi, Määrä, MateriaaliID) values ('" + t.TilaajanNimi + "', '" + t.Maara.ToString() + "', '" + t.MateriaaliId.ToString() + "');";
+                command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein o.o
+                adapter.InsertCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
+                adapter.InsertCommand.ExecuteNonQuery();
+                command.Dispose(); //poistetaan olio
+                return true;
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

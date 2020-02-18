@@ -37,9 +37,9 @@ namespace VarastoApi.Backend
         }
 
 
-        //tarkistus ID:lle TODO
+        //tarkistus ID:lle, jos ID on -1, materiaali on uusi
         bool checkId(int Id){
-            if (Id < 0){
+            if (Id < -1){
                 return false;
             } else {
                 return true;

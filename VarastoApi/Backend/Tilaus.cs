@@ -38,7 +38,7 @@ namespace VarastoApi.Backend
         //tarkistus ID:lle TODO
         bool checkId(int Id)
         {
-            if (Id < 0)
+            if (Id < -1)
             {
                 return false;
             }

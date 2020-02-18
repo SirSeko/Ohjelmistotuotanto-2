@@ -15,6 +15,12 @@ namespace VarastoApi
     {
         protected void Application_Start()
         {
+
+            /*
+            Backend.Test test = new Backend.Test(); //TESTILUOKKA BACKENDILLE
+            test.Run();
+            */
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
