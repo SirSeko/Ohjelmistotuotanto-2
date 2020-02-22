@@ -1,85 +1,83 @@
-namespace VarastoApi.Backend
-{
-    public class Varaus
-    {
+namespace VarastoApi.Backend {
+    public class Varaus {
         public int Id; //VarausId
         public string VaraajanNimi;
         public int MateriaaliId;
         public int Maara;
 
-        public Varaus(int Id, string VaraajanNimi, int MateriaaliId, int Maara)
-        {
-            if (checkId(Id)){
-                this.Id = Id;
-            } else {
-                //TODO Virheilmoitus
+        string sender() {
+            return this.GetType().ToString();
         }
-            if (checkVaraajanNimi(VaraajanNimi)){
-                this.VaraajanNimi = VaraajanNimi;
-            } else {
-                //TODO Virheilmoitus
+
+        private Varaus(int Id, string VaraajanNimi, int MateriaaliId, int Maara) {
+            this.Id = Id;
+            this.VaraajanNimi = VaraajanNimi;
+            this.MateriaaliId = MateriaaliId;
+            this.Maara = Maara;
+        }
+
+        /// <summary>
+        /// Tarkistaa parametrit ja jos kaikki on OK, palauttaa varaus-olion. Jos jokin virhe, kirjoittaa lokiin ja palauttaa null
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="VaraajanNimi"></param>
+        /// <param name="MateriaaliId"></param>
+        /// <param name="Maara"></param>
+        /// <returns>new Varaus || null, jos virhe</returns>
+        public static Varaus CreateVaraus(int Id, string VaraajanNimi, int MateriaaliId, int Maara) {
+            Varaus v = new Varaus(-1, "", -1, -1);
+            if (!checkId(Id)) {
+                ExceptionController.WriteException(v, "Varausta luodessa huono ID.");
+                return null;
             }
-            if (checkMateriaaliId(MateriaaliId)){
-                this.MateriaaliId = MateriaaliId;
-            } else {
-                //TODO Virheilmoitus
+            if (!checkVaraajanNimi(VaraajanNimi)) {
+                ExceptionController.WriteException(v, "Varausta luodessa huono varaajan nimi.");
+                return null;
             }
-            if (checkMaara(Maara)){
-                this.Maara = Maara;
-            } else {
-                //TODO Virheilmoitus
+            if (!checkMateriaaliId(MateriaaliId)) {
+                ExceptionController.WriteException(v, "Varausta luodessa huono materiaaliID.");
+                return null;
             }
+            if (!checkMaara(Maara)) {
+                ExceptionController.WriteException(v, "Varausta luodessa huono määrä.");
+                return null;
+            }
+            return new Varaus(Id, VaraajanNimi, MateriaaliId, Maara);
         }
 
 
         //tarkistus ID:lle TODO
-        bool checkId(int Id)
-        {
-            if (Id < -1)
-            {
+        static bool checkId(int Id) {
+            if (Id < -1) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }
 
         //tarkistus varaajan nimelle, lähinnä ettei ole tyhjä ja on enemmän kuin vaikka "x"
-        bool checkVaraajanNimi(string VaraajanNimi)
-        {
-            if (VaraajanNimi == null || VaraajanNimi == "" || VaraajanNimi.Length < 2)
-            {
+        static bool checkVaraajanNimi(string VaraajanNimi) {
+            if (VaraajanNimi == null || VaraajanNimi == "" || VaraajanNimi.Length < 2) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }
 
         //tarkistus määrälle
-        bool checkMaara(int Maara)
-        {
-            if (Maara < 0)
-            {
+        static bool checkMaara(int Maara) {
+            if (Maara < 0) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }
 
         //tarkistus Materiaalin ID:lle TODO
-        bool checkMateriaaliId(int Id)
-        {
-            if (Id < 0)
-            {
+        static bool checkMateriaaliId(int Id) {
+            if (Id < 0) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }
