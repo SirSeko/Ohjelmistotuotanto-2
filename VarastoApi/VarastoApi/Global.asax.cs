@@ -16,10 +16,12 @@ namespace VarastoApi
         protected void Application_Start()
         {
 
-            /*
+            
             Backend.Test test = new Backend.Test(); //TESTILUOKKA BACKENDILLE
-            test.Run();
-            */
+            //test.Run();
+            //test.CallMeTwice(); //Leon tyhmä kokeilu
+            test.CreateException();
+            
 
 
             AreaRegistration.RegisterAllAreas();

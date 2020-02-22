@@ -7,9 +7,15 @@ using System.IO;
 
 namespace VarastoApi.Backend {
     public class Test {
+        
+        public Test() {
+            Directory.CreateDirectory("C:\\temp\\VarastoApi");
+        }
 
         public void Run() {
-            string path = "C:\\temp\\test.txt";
+            string path = "C:\\temp\\VarastoApi\\test.txt";
+
+
 
             List<Materiaali> materiaalit = new List<Materiaali>(); //Lista materiaaleista
             List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
@@ -78,5 +84,18 @@ namespace VarastoApi.Backend {
             }
         }
 
+        public void CallMe(object caller) {
+            StreamWriter sr = new StreamWriter("C:\\temp\\call.txt", true);
+            sr.WriteLine(caller.GetType().ToString());
+            sr.Close();
+        }
+
+        public void CallMeTwice() {
+            CallMe(this);
+        }
+
+        public void CreateException() {
+            ExceptionController.WriteException(this, "Suuri virhe, projekti tuhoutui. Koodi 69");
+        }
     }
 }
