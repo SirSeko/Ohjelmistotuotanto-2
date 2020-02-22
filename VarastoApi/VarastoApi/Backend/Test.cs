@@ -35,15 +35,15 @@ namespace VarastoApi.Backend {
                 varaukset = dmVar.SelectAll(varaukset);
 
                 //Kokeillaan nyt lisätä kantaan, muokata kantaa ja päivittää listaa 
-                Materiaali m = new Materiaali(-1, "Testi1", "Iso", 14.50f, 3);
-                Materiaali mU = new Materiaali(4, "Moottorisahat", "Kookas", 500f, 1);
+                Materiaali m = Materiaali.Create(-1, "Testi1", "Iso", 14.50f, 3);
+                Materiaali mU = Materiaali.Create(4, "Moottorisahat", "Kookas", 500f, 1);
                 dmMat.InsertInto(m);
                 dmMat.Update(mU);
                 materiaalit = new List<Materiaali>();
                 materiaalit = dmMat.SelectAll(materiaalit); //päivitetään lista
 
-                Tilaus t = new Tilaus(-1, "Tilaaja1", 666, materiaalit[materiaalit.Count - 1].Id);
-                Tilaus tU = new Tilaus(5 ,"Tilaaja4299", 1337, materiaalit[3].Id);
+                Tilaus t = Tilaus.Create(-1, "Tilaaja1", 666, materiaalit[materiaalit.Count - 1].Id);
+                Tilaus tU = Tilaus.Create(5 ,"Tilaaja4299", 1337, materiaalit[3].Id);
                 dmTil.InsertInto(t);
                 dmTil.Update(tU);
                 tilaukset = new List<Tilaus>();
