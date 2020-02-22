@@ -24,7 +24,7 @@ namespace VarastoApi.Backend {
         /// <param name="MateriaaliId"></param>
         /// <param name="Maara"></param>
         /// <returns>new Varaus || null, jos virhe</returns>
-        public static Varaus CreateVaraus(int Id, string VaraajanNimi, int MateriaaliId, int Maara) {
+        public static Varaus Create(int Id, string VaraajanNimi, int MateriaaliId, int Maara) {
             Varaus v = new Varaus(-1, "", -1, -1);
             if (!checkId(Id)) {
                 ExceptionController.WriteException(v, "Varausta luodessa huono ID.");

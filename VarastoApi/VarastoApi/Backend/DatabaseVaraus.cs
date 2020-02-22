@@ -30,7 +30,7 @@ namespace VarastoApi.Backend
                 varaajanNimi = dataReader.GetValue(1).ToString();
                 int.TryParse(dataReader.GetValue(2).ToString(), out materiaaliId);
                 int.TryParse(dataReader.GetValue(3).ToString(), out maara);
-                Varaus v = Varaus.CreateVaraus(id, varaajanNimi, materiaaliId, maara);
+                Varaus v = Varaus.Create(id, varaajanNimi, materiaaliId, maara);
                 varaukset.Add(v);
             }
             dataReader.Close();

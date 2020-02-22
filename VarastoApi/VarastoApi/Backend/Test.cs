@@ -49,8 +49,8 @@ namespace VarastoApi.Backend {
                 tilaukset = new List<Tilaus>();
                 tilaukset = dmTil.SelectAll(tilaukset);
 
-                Varaus v = Varaus.CreateVaraus(-1, "Varaaja1", materiaalit[materiaalit.Count - 1].Id, 69);
-                Varaus vU = Varaus.CreateVaraus(6, "Varaaja6069", materiaalit[4].Id, 21);
+                Varaus v = Varaus.Create(-1, "Varaaja1", materiaalit[materiaalit.Count - 1].Id, 69);
+                Varaus vU = Varaus.Create(6, "Varaaja6069", materiaalit[4].Id, 21);
                 dmVar.InsertInto(v);
                 dmVar.Update(vU);
                 varaukset = new List<Varaus>();
@@ -99,19 +99,19 @@ namespace VarastoApi.Backend {
         }
 
         public void TestFactoryPattern() {
-            Varaus v1 = Varaus.CreateVaraus(-2, "", -1, -1);
+            Varaus v1 = Varaus.Create(-2, "", -1, -1);
             if (v1 == null) write("v1=null");
             else write(v1.ToString());
-            Varaus v2 = Varaus.CreateVaraus(69, "", -1, -1);
+            Varaus v2 = Varaus.Create(69, "", -1, -1);
             if (v2 == null) write("v2=null");
             else write(v2.ToString());
-            Varaus v3 = Varaus.CreateVaraus(69, "nimi1", -1, -1);
+            Varaus v3 = Varaus.Create(69, "nimi1", -1, -1);
             if (v3 == null) write("v3=null");
             else write(v3.ToString());
-            Varaus v4 = Varaus.CreateVaraus(69, "nimi2", 420, -1);
+            Varaus v4 = Varaus.Create(69, "nimi2", 420, -1);
             if (v4 == null) write("v4=null");
             else write(v4.ToString());
-            Varaus v5 = Varaus.CreateVaraus(69, "toimii", 420, 366);
+            Varaus v5 = Varaus.Create(69, "toimii", 420, 366);
             if (v5 == null) write("v5=null");
             else write(v5.ToString());
             
