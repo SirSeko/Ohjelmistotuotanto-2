@@ -9,25 +9,37 @@ namespace VarastoApi.Backend {
         public string Kayttajanimi;
         public int Valtuus;
 
-        public Kayttaja(string kayttajanimi, int valtuus) {
-            if (checkKayttajanimi(kayttajanimi)) {
-                this.Kayttajanimi = kayttajanimi;
-            } else {
-                //TODO Virheilmoitus
+        private Kayttaja(string kayttajanimi, int valtuus) {
+            this.Kayttajanimi = kayttajanimi;
+            this.Valtuus = valtuus;
+        }
+        
+        /// <summary>
+        /// Tarkistaa parametrit ja luo uuden käyttäjän
+        /// </summary>
+        /// <param name="kayttajanimi">pituus vähintään 4</param>
+        /// <param name="valtuus">0...2</param>
+        /// <returns>Kayttaja. Virheellisellä sytteellä null</returns>
+        public static Kayttaja Create(string kayttajanimi, int valtuus) {
+            Kayttaja k = new Kayttaja("", -1);
+            if (!checkKayttajanimi(kayttajanimi)) {
+                ExceptionController.WriteException(k, "Käyttäjää luodessa huono käyttäjänimi.");
+                return null;
             }
-            if (checkValtuus(valtuus)) {
-                this.Valtuus = valtuus;
-            } else {
-                //TODO Virheilmoitus
+            if (!checkValtuus(valtuus)) {
+                ExceptionController.WriteException(k, "Käyttäjää luodessa huono valtuus.");
+                return null;
             }
+            return new Kayttaja(kayttajanimi, valtuus);
         }
 
-        bool checkValtuus(int valtuus) {
+
+        //tarkistukset
+        static bool checkValtuus(int valtuus) {
             if (valtuus < 0 || valtuus > 2) return false;
             else return true;
         }
-
-        bool checkKayttajanimi(string kayttajanimi) {
+        static bool checkKayttajanimi(string kayttajanimi) {
             if (kayttajanimi.Length < 4) return false;
             else return true;
         }
