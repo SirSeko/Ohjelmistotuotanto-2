@@ -127,6 +127,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Backend\Kayttaja.cs" />
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
     <Compile Include="Backend\Test.cs" />
