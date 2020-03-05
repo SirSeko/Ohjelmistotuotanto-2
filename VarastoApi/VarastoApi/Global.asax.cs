@@ -21,7 +21,7 @@ namespace VarastoApi
             //test.Run();
             //test.CallMeTwice(); //Leon tyhmä kokeilu
             //test.CreateException();
-            test.TestFactoryPattern();
+            //test.TestFactoryPattern();
             
 
 

@@ -34,7 +34,7 @@ namespace VarastoApi.Backend
                 koko = dataReader.GetValue(2).ToString();
                 float.TryParse(dataReader.GetValue(3).ToString(), out hinta);
                 int.TryParse(dataReader.GetValue(4).ToString(), out maara);
-                Materiaali m = new Materiaali(id, nimi, koko, hinta, maara);
+                Materiaali m = Materiaali.Create(id, nimi, koko, hinta, maara);
                 materiaalit.Add(m);
             }
             dataReader.Close();

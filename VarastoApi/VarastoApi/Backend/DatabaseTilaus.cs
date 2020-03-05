@@ -30,7 +30,7 @@ namespace VarastoApi.Backend
                 tilaajanNimi = dataReader.GetValue(1).ToString();
                 int.TryParse(dataReader.GetValue(2).ToString(), out maara);
                 int.TryParse(dataReader.GetValue(3).ToString(), out materiaaliId);
-                Tilaus t = new Tilaus(id, tilaajanNimi, maara, materiaaliId);
+                Tilaus t = Tilaus.Create(id, tilaajanNimi, maara, materiaaliId);
                 tilaukset.Add(t);
             }
             dataReader.Close();
