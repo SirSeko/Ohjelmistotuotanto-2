@@ -134,6 +134,7 @@
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
     <Compile Include="Backend\Test.cs" />
+    <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
