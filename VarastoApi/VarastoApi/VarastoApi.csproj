@@ -129,6 +129,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Backend\ExceptionController.cs" />
     <Compile Include="Backend\Kayttaja.cs" />
+    <Compile Include="Backend\Lauta.cs" />
     <Compile Include="Backend\Maali.cs" />
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
