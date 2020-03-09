@@ -27,7 +27,7 @@ namespace VarastoApi.Backend {
 
         public Vaneri Create(int id, string koko, float hinta, int maara, string yksikko, int sijainti, string kauppa, string lisatiedot) {
             if (checkHinta(hinta) && checkId(id) && checkKauppa(kauppa) && checkKoko(koko) && checkLisatiedot(lisatiedot) && checkMaara(maara) && checkSijainti(sijainti) && checkYksikko(yksikko)) {
-                return new Maali(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
+                return new Vaneri(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
             } else return null;
         }
 
