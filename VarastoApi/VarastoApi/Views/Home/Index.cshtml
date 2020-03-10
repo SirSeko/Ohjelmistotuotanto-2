@@ -62,7 +62,7 @@
                 </tr>
             }
         </table>
-        <hr/>
+        <hr />
     </div>
 </div>
 <!--Uuden tavaran/materiaalin lisäys varastoon-->
@@ -110,7 +110,7 @@
         </div>
     </fieldset>
 </form>
-<hr/>
+<hr />
 <!--Uuden tilauksen luonti-->
 <fieldset>
     <legend>Uuden tilauksen luonti</legend>
@@ -147,14 +147,45 @@
         </div>
     </div>
 
-        <form>
-            <div class="row">
-                <div class="col-25">
-                    <label for="Tilaaja">Tilaaja</label>
-                </div>
-                <div class="col-75">
-                    <input type="text" id="tilaaja" name="tilaaja"><input type="button" value="Lisää tilaus">
-                </div>
+    <form>
+        <div class="row">
+            <div class="col-25">
+                <label for="Tilaaja">Tilaaja :</label>
             </div>
-        </form>
+            <div class="col-75">
+                <input type="text" id="tilaaja" name="tilaaja"><input type="button" value="Lisää tilaus">
+            </div>
+        </div>
+    </form>
+</fieldset>
+
+<hr />
+
+<!--Tilausten tarkastelu-->
+<fieldset>
+    <legend>Tilaukset</legend>
+    <div class="row">
+        <div class="col-25">
+            <label for="tilaukset">Tilaukset :</label>
+        </div>
+        <div class="col-75">
+            <select id="tilaukset">
+                <option>tilaus 1</option>
+                <option>tilaus 2</option>
+                <option>tilaus 3</option>
+                <option>tilaus 4</option>
+                <option>tilaus 5</option>
+
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <p>Tilauksen tiedot</p>
+        </div>
+        <div class="col-75">
+            <textarea id="tilausinfo" rows="2" cols="20"></textarea>
+        </div>
+    </div>
+    <br />
 </fieldset>
