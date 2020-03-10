@@ -13,10 +13,9 @@ namespace VarastoApi.Backend
         SqlDataAdapter adapter = new SqlDataAdapter(); //käskynantoon liittyvä olio
         string sql, Output=""; 
         int id; //MateriaaliID
-        string nimi;
-        string koko; //Varmaan esim 6mm x 200mm x 200mm
-        float hinta;
-        int maara;
+        int maaliId; 
+        int vaneriId;
+        int lautaId; 
 
         public DatabaseMateriaali(SqlConnection cnn){
             this.cnn = cnn;
@@ -30,11 +29,10 @@ namespace VarastoApi.Backend
             dataReader = command.ExecuteReader();
             while(dataReader.Read()){
                 int.TryParse(dataReader.GetValue(0).ToString(), out id);
-                nimi = dataReader.GetValue(1).ToString();
-                koko = dataReader.GetValue(2).ToString();
-                float.TryParse(dataReader.GetValue(3).ToString(), out hinta);
-                int.TryParse(dataReader.GetValue(4).ToString(), out maara);
-                Materiaali m = Materiaali.Create(id, nimi, koko, hinta, maara);
+                int.TryParse(dataReader.GetValue(1).ToString(), out maaliId);
+                int.TryParse(dataReader.GetValue(2).ToString(), out vaneriId);
+                int.TryParse(dataReader.GetValue(3).ToString(), out lautaId);
+                Materiaali m = Materiaali.Create(id, maaliId, vaneriId, lautaId);
                 materiaalit.Add(m);
             }
             dataReader.Close();
@@ -44,7 +42,7 @@ namespace VarastoApi.Backend
         //Lisää materiaalin tauluun, palauttaa true jos onnistui ilman poikkeuksia, false jos tuli poikkeus
         public bool InsertInto(Materiaali m) {
             try {
-                sql = "Insert into mydb.Materiaali (Nimi, Koko, Hinta, Määrä) values ('" + m.Nimi + "', '" + m.Koko + "', '" + m.Hinta.ToString() + "', '" + m.Maara.ToString() + "');";
+                sql = "Insert into mydb.Materiaali (MateriaaliID, MaaliID, VaneriID, LautaID) values ('" + m.Id+ "', '" + m.MaaliId+ "', '" + m.VaneriId + "', '" + m.LautaId + "');";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein o.o
                 adapter.InsertCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.InsertCommand.ExecuteNonQuery();
@@ -59,7 +57,7 @@ namespace VarastoApi.Backend
         //Muokkaa ID:n mukaista Columnia. tark Vastaanottaa olion Materiaali ja korvaa tietokannasta MateriaaliID:n mukaisen columnin tiedot.
         public bool Update(Materiaali m){
             try {
-                sql = "UPDATE mydb.Materiaali SET Nimi='" + m.Nimi + "', Koko='" + m.Koko + "', Hinta='" + m.Hinta + "', Määrä='" + m.Maara + "' WHERE MateriaaliID ='" + m.Id + "';";
+                sql = "UPDATE mydb.Materiaali SET MateriaaliID='" + m.Id + "', MaaliID='" + m.MaaliId + "', VaneriID='" + m.VaneriId+ "', LautaID='" + m.LautaId+ "' WHERE MateriaaliID ='" + m.Id + "';";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein UwU
                 adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.UpdateCommand.ExecuteNonQuery();

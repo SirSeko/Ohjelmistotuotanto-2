@@ -35,8 +35,8 @@ namespace VarastoApi.Backend {
                 varaukset = dmVar.SelectAll(varaukset);
 
                 //Kokeillaan nyt lisätä kantaan, muokata kantaa ja päivittää listaa 
-                Materiaali m = Materiaali.Create(-1, "Testi1", "Iso", 14.50f, 3);
-                Materiaali mU = Materiaali.Create(4, "Moottorisahat", "Kookas", 500f, 1);
+                Materiaali m = Materiaali.Create(-1, 2, 3, 4);
+                Materiaali mU = Materiaali.Create(5, 6, 7, 8);
                 dmMat.InsertInto(m);
                 dmMat.Update(mU);
                 materiaalit = new List<Materiaali>();
@@ -68,7 +68,7 @@ namespace VarastoApi.Backend {
                 StreamWriter sw = new StreamWriter(path);
                 sw.WriteLine("Materiaalit:");
                 foreach (Materiaali m in mat) {
-                    sw.WriteLine(m.Hinta + " - " + m.Id + " - " + m.Koko + " - " + m.Maara + " - " + m.Nimi);
+                    sw.WriteLine(m.Id + " - " + m.MaaliId+ " - " + m.VaneriId+ " - " + m.LautaId);
                 }
                 sw.WriteLine("Tilaukset:");
                 foreach (Tilaus t in til) {

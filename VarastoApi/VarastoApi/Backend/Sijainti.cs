@@ -21,7 +21,7 @@ namespace VarastoApi.Backend {
 
         public Sijainti Create(int id, string nimi, string kaappi, string hylly, string lisatiedot) {
             if (checkId(id) && checkNimi(nimi) && checkKaappi(kaappi) && checkHylly(hylly) && checkLisatiedot(lisatiedot)) {
-                return new Sijainti(id, nimi, kaappi, hylly, lisatiedot)
+                return new Sijainti(id, nimi, kaappi, hylly, lisatiedot);
             } else return null;
         }
 
