@@ -127,11 +127,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Backend\DatabaseVaraus.cs" />
     <Compile Include="Backend\ExceptionController.cs" />
     <Compile Include="Backend\Kayttaja.cs" />
     <Compile Include="Backend\Lauta.cs" />
     <Compile Include="Backend\Maali.cs" />
     <Compile Include="Backend\Materiaali.cs" />
+    <Compile Include="Backend\MateriaaliKoonti.cs" />
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\Sijainti.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
@@ -144,7 +146,6 @@
     <Compile Include="Backend\DatabaseManager.cs" />
     <Compile Include="Backend\DatabaseMateriaali.cs" />
     <Compile Include="Backend\DatabaseTilaus.cs" />
-    <Compile Include="Backend\DatabaseVaraus.cs" />
     <Compile Include="Backend\Tilaus.cs" />
     <Compile Include="Backend\Varaus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
