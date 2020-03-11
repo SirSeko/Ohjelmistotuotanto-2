@@ -19,43 +19,43 @@ namespace VarastoApi.Backend {
             Lisatiedot = lisatiedot;
         }
 
-        public Sijainti Create(int id, string nimi, string kaappi, string hylly, string lisatiedot) {
+        public static Sijainti Create(int id, string nimi, string kaappi, string hylly, string lisatiedot) {
             if (checkId(id) && checkNimi(nimi) && checkKaappi(kaappi) && checkHylly(hylly) && checkLisatiedot(lisatiedot)) {
                 return new Sijainti(id, nimi, kaappi, hylly, lisatiedot);
             } else return null;
         }
 
-        bool checkId(int id) {
+        static bool checkId(int id) {
             if (id < -1) {
-                ExceptionController.WriteException(this, "Virhe id:ssä.");
+               // ExceptionController.WriteException(this, "Virhe id:ssä.");
                 return false;
             } else return true;
         }
 
-        bool checkNimi(string nimi) {
+        static bool checkNimi(string nimi) {
             if (nimi.Length > 50 || nimi == null || nimi == "") {
-                ExceptionController.WriteException(this, "Virhe nimessä.");
+               // ExceptionController.WriteException(this, "Virhe nimessä.");
                 return false;
             } else return true;
         }
 
-        bool checkKaappi(string kaappi) {
+        static bool checkKaappi(string kaappi) {
             if (kaappi.Length > 50 || kaappi == null || kaappi == "") {
-                ExceptionController.WriteException(this, "Virhe kaapin nimessä.");
+               // ExceptionController.WriteException(this, "Virhe kaapin nimessä.");
                 return false;
             } else return true;
         }
 
-        bool checkHylly(string hylly) {
+        static bool checkHylly(string hylly) {
             if (hylly.Length > 50 || hylly == null || hylly == "") {
-                ExceptionController.WriteException(this, "Virhe hyllyn nimessä.");
+               // ExceptionController.WriteException(this, "Virhe hyllyn nimessä.");
                 return false;
             } else return true;
         }
 
-        bool checkLisatiedot(string lisatiedot) {
+        static bool checkLisatiedot(string lisatiedot) {
             if (lisatiedot.Length > 100) {
-                ExceptionController.WriteException(this, "Lisätiedoissa liian monta merkkiä.");
+               // ExceptionController.WriteException(this, "Lisätiedoissa liian monta merkkiä.");
                 return false;
             } else return true;
         }
