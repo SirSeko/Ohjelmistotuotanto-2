@@ -17,6 +17,7 @@ namespace VarastoApi.Controllers
         public ActionResult Index()
         {
             List<Materiaali> materiaalit = new List<Materiaali>(); //Lista materiaaleista
+            List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
            
 
             List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
@@ -54,7 +55,7 @@ namespace VarastoApi.Controllers
                 return View(myPokemon);
                 */
             }
-            return View(materiaalit);
+            return View(mk);
         }
     }
 }
