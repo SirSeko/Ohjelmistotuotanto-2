@@ -25,64 +25,64 @@ namespace VarastoApi.Backend {
             Lisatiedot = lisatiedot;
         }
 
-        public Maali Create(int id, string koko, float hinta, int maara, string yksikko, int sijainti, string kauppa, string lisatiedot) {
+        public static Maali Create(int id, string koko, float hinta, int maara, string yksikko, int sijainti, string kauppa, string lisatiedot) {
             if (checkHinta(hinta) && checkId(id) && checkKauppa(kauppa) && checkKoko(koko) && checkLisatiedot(lisatiedot) && checkMaara(maara) && checkSijainti(sijainti) && checkYksikko(yksikko)) {
                 return new Maali(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
             } else return null;
         }
 
-        bool checkId(int id) {
+        static bool checkId(int id) {
             if (id < -1) {
-                ExceptionController.WriteException(this, "Virhe ID:ssä.");
+                //ExceptionController.WriteException(this, "Virhe ID:ssä.");
                 return false;
             } else return true;
         }
 
-        bool checkKoko(string koko) {
+        static bool checkKoko(string koko) {
             if (koko.Length > 45 || koko == null || koko == "") {
-                ExceptionController.WriteException(this, "Virhe koossa.");
+                //ExceptionController.WriteException(this, "Virhe koossa.");
                 return false;
             } else return true;
         }
 
-        bool checkHinta(float hinta) {
+        static bool checkHinta(float hinta) {
             if (hinta < 0.0f) {
-                ExceptionController.WriteException(this, "Virhe hinnassa.");
+                //ExceptionController.WriteException(this, "Virhe hinnassa.");
                 return false;
             } else return true;
         }
 
-        bool checkMaara(int maara) {
+        static bool checkMaara(int maara) {
             if (maara < -1) {
-                ExceptionController.WriteException(this, "Virhe määrässä.");
+                //ExceptionController.WriteException(this, "Virhe määrässä.");
                 return false;
             } else return true;
         }
 
-        bool checkYksikko(string yksikko) {
+        static bool checkYksikko(string yksikko) {
             if (yksikko.Length > 45 || yksikko == null || yksikko == "") {
-                ExceptionController.WriteException(this, "Virhe yksikössä.");
+                //ExceptionController.WriteException(this, "Virhe yksikössä.");
                 return false;
             } else return true;
         }
 
-        bool checkSijainti(int sijainti) {
+        static bool checkSijainti(int sijainti) {
             if (sijainti < -1) {
-                ExceptionController.WriteException(this, "Virhe sijainnissa.");
+                //ExceptionController.WriteException(this, "Virhe sijainnissa.");
                 return false;
             } else return true;
         }
 
-        bool checkKauppa(string kauppa) {
+        static bool checkKauppa(string kauppa) {
             if (kauppa.Length > 50) {
-                ExceptionController.WriteException(this, "Kaupan nimi liian pitkä.");
+                //ExceptionController.WriteException(this, "Kaupan nimi liian pitkä.");
                 return false;
             } else return true;
         }
 
-        bool checkLisatiedot(string lisatiedot) {
+        static bool checkLisatiedot(string lisatiedot) {
             if (lisatiedot.Length > 100) {
-                ExceptionController.WriteException(this, "Lisatiedoissa liikaa merkkejä.");
+                //ExceptionController.WriteException(this, "Lisatiedoissa liikaa merkkejä.");
                 return false;
             } else return true;
         }
