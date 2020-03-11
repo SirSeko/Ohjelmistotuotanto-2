@@ -1,5 +1,5 @@
 ﻿
-@model List<VarastoApi.Backend.Materiaali>
+@model List<VarastoApi.Backend.MateriaaliKoonti>
 
 <!--Nämä sitten erilliseen tyylitiedostoon sitten-->
 <style>
@@ -51,16 +51,38 @@
                 <th>Kommentit</th>
             </tr>
             <!--Täytetään taulu-->
-            @foreach (var item in @Model)
-            {
+            <!--@foreach (var item in @Model)
+                {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Nimi</td>
-                    <td>@item.Koko</td>
-                    <td>@item.Maara</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>-</td>
                 </tr>
-            }
+                }-->
+            <!--Nämä pois sitten kun saadaan ylempi looppi pelittämään-->
+            <tr>
+                <td>1</td>
+                <td>Kirves</td>
+                <td>Iso</td>
+                <td>4</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Saha</td>
+                <td>Pieni</td>
+                <td>7</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Meisseli</td>
+                <td>Kookas</td>
+                <td>2</td>
+                <td>-</td>
+            </tr>
         </table>
         <hr />
     </div>
@@ -153,7 +175,14 @@
                 <label for="Tilaaja">Tilaaja :</label>
             </div>
             <div class="col-75">
-                <input type="text" id="tilaaja" name="tilaaja"><input type="button" value="Lisää tilaus">
+                <input type="text" id="tilaaja" name="tilaaja">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="button" value="Lisää tilaus">
             </div>
         </div>
     </form>
@@ -181,10 +210,10 @@
     </div>
     <div class="row">
         <div class="col-25">
-            <p>Tilauksen tiedot</p>
+            <label for="tt">Tilauksen tiedot :</label>
         </div>
         <div class="col-75">
-            <textarea id="tilausinfo" rows="2" cols="20"></textarea>
+            <textarea id="tilausinfo" style="width:240px; height:120px"></textarea>
         </div>
     </div>
     <br />
