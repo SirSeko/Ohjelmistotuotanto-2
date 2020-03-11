@@ -30,6 +30,7 @@ namespace VarastoApi.Backend {
                 return new Vaneri(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
             } else return null;
         }
+        public Vaneri() { }
 
         static bool checkId(int id) {
             if (id < -1) {

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using VarastoApi.Backend;
 using System;
+using System.Net.Http;
 
 namespace VarastoApi.Controllers
 {
@@ -17,8 +18,12 @@ namespace VarastoApi.Controllers
         public ActionResult Index()
         {
             List<Materiaali> materiaalit = new List<Materiaali>(); //Lista materiaaleista
-            List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
-           
+
+            //List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
+            var mk = new MateriaaliKoonti(); //Luodaan koonti-olio. Listan tuominen aiheutti herjan.
+
+            List<Vaneri> vaneri = new List<Vaneri>();
+            List<Maali> maali = new List<Maali>();
 
             List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
             List<Varaus> varaukset = new List<Varaus>();
@@ -28,34 +33,48 @@ namespace VarastoApi.Controllers
             cnn = dm.OpenConnection(); //yhdistetään kantaan
             if (cnn != null)
             {
-                DatabaseMateriaali dmMat = new DatabaseMateriaali(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
-                materiaalit = dmMat.SelectAll(materiaalit); //haetaan kaikki materiaalit kannasta listaan
+                DatabaseVaneri dmVan = new DatabaseVaneri(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
+                vaneri = dmVan.SelectAll(vaneri); //haetaan kaikki materiaalit kannasta listaan
+                DatabaseMaali dmMaa = new DatabaseMaali(cnn); // sama maaleille
+                maali = dmMaa.SelectAll(maali);
+                mk.Vanerit = vaneri; //Lisätään vanerit koontilistaan
+                mk.Maalit = maali; //Lisätään maalit koontilistaan
 
-                // !! TÄYTYY SAADA LISTA TAKAISIN OBJEKTIKSI !! 
+                // SAMALLA PERIAATTEELLA VOI LISÄTÄ MUUT MATERIAALIT //
 
-                /*
-                 * @model List<VarastoApi.Backend.Materiaali>
-                //Luodaan API kutsu
-                WebRequest request = WebRequest.Create("https://pokeapi.co/api/v2/pokemon/1/");
-                //Lähetä API kutsu
-                WebResponse response = request.GetResponse();
-                //Saa takaisin vastaus streami
-                Stream stream = response.GetResponseStream();
-                //Lukee streamin
-                StreamReader reader = new StreamReader(stream);
-                //Luetaan stringiin
-                string responseFromServer = reader.ReadToEnd();
 
-                //Muutaan Json objektiksi joka on paremmin luettavissa
-                JObject parsedString = JObject.Parse(responseFromServer);
-                Pokemon myPokemon = parsedString.ToObject<Pokemon>();
 
-                Debug.WriteLine(myPokemon.moves[0].move.name);
+                
 
-                return View(myPokemon);
-                */
+
             }
             return View(mk);
+
         }
+        // TÄMÄ ON TESTAILUA 
+        public ActionResult Vaneri()
+        {
+            IEnumerable<VarastoApi.Backend.Vaneri> vanerit = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:54434/api/");
+                //HTTP GET
+                var responseTask = client.GetAsync("materiaali");
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+
+                    var readTask = result.Content.ReadAsAsync<IList<VarastoApi.Backend.Vaneri>>();
+                    readTask.Wait();
+
+                    vanerit = readTask.Result;
+                }
+            }
+            
+            return View(vanerit);
+        }
+
     }
 }

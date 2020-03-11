@@ -1,0 +1,39 @@
+﻿@model IEnumerable<VarastoApi.Backend.Vaneri>
+
+@{
+    ViewBag.Title = "Vaneri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vaneri</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Koko</th>
+        <th>Määrä</th>
+        <th>Hinta</th>
+        <th>Sijaiti</th>
+        <th>Lisätiedot</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.Koko</td>
+        <td>@item.Maara</td>
+        <td>@item.Hinta</td>
+        <td>@item.Sijainti</td>
+        <td>@item.Lisatiedot</td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
