@@ -10,24 +10,32 @@ using System.Data.SqlClient;
 using VarastoApi.Backend;
 using System;
 using System.Net.Http;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Collections;
 
 namespace VarastoApi.Controllers
+
 {
+    
+
     public class HomeController : Controller
     {
+
+        List<Vaneri> vaneri = new List<Vaneri>();
+        SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
+
         public ActionResult Index()
         {
-            List<Materiaali> materiaalit = new List<Materiaali>(); //Lista materiaaleista
+         
 
             //List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
             var mk = new MateriaaliKoonti(); //Luodaan koonti-olio. Listan tuominen aiheutti herjan.
 
-            List<Vaneri> vaneri = new List<Vaneri>();
             List<Maali> maali = new List<Maali>();
-
             List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
             List<Varaus> varaukset = new List<Varaus>();
-            SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
+            
             DatabaseManager dm = new DatabaseManager(); //tietokannanhallinta-olio, mm. yhdistys kantaan
 
             cnn = dm.OpenConnection(); //yhdistetään kantaan
@@ -51,30 +59,30 @@ namespace VarastoApi.Controllers
             return View(mk);
 
         }
-        // TÄMÄ ON TESTAILUA 
-        public ActionResult Vaneri()
+        //TÄMÄ ON TESTAILUA
+
+
+
+        [HttpGet]
+        public ActionResult Edit(int id)
         {
-            IEnumerable<VarastoApi.Backend.Vaneri> vanerit = null;
+            List<Vaneri> ID = new List<Vaneri>();
 
-            using (var client = new HttpClient())
+            DatabaseManager dm = new DatabaseManager(); //tietokannanhallinta-olio, mm. yhdistys kantaan
+
+            cnn = dm.OpenConnection(); //yhdistetään kantaan
+            if (cnn != null)
             {
-                client.BaseAddress = new Uri("http://localhost:54434/api/");
-                //HTTP GET
-                var responseTask = client.GetAsync("materiaali");
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
+                DatabaseVaneri dmVan = new DatabaseVaneri(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
+                ID = dmVan.SelectId(ID, id); //haetaan vaneri joiden ID == id
+                
+               
 
-                    var readTask = result.Content.ReadAsAsync<IList<VarastoApi.Backend.Vaneri>>();
-                    readTask.Wait();
 
-                    vanerit = readTask.Result;
-                }
             }
+            return PartialView(ID);
             
-            return View(vanerit);
         }
-
+        
     }
 }

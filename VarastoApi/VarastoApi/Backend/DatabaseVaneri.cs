@@ -44,6 +44,28 @@ namespace VarastoApi.Backend {
             dataReader.Close();
             return vanerit;
         }
+        //Hakee IDn perusteella datan
+        public List<Vaneri> SelectId(List<Vaneri> vanerit, int id)
+        {
+            sql = "Select * from mydb.Vaneri Where VaneriId='"+ id + "';";
+            command = new SqlCommand(sql, cnn);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                int.TryParse(dataReader.GetValue(0).ToString(), out id);
+                koko = dataReader.GetValue(1).ToString();
+                float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
+                int.TryParse(dataReader.GetValue(3).ToString(), out maara);
+                yksikko = dataReader.GetValue(4).ToString();
+                int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
+                kauppa = dataReader.GetValue(6).ToString();
+                lisatiedot = dataReader.GetValue(7).ToString();
+                Vaneri v = Vaneri.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
+                vanerit.Add(v);
+            }
+            dataReader.Close();
+            return vanerit;
+        }
 
         //Lisää tilauksen tauluun, palauttaa true jos ei tule poikkeusta, muuten false
         public bool InsertInto(Vaneri v) {

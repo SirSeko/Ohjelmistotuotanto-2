@@ -6,6 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using VarastoApi.Backend;
 using System.Data.SqlClient;
+using System.Collections;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 // Tämä on Testausvaiheessa
 
@@ -23,20 +26,16 @@ namespace VarastoApi.Controllers
             {
                 DatabaseVaneri dmVan = new DatabaseVaneri(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
                 vaneri = dmVan.SelectAll(vaneri); // Valitaan kaikki tiedot vaneritaulusta listaan
+                
             }
+            
+
         }
 
-        // GET: api/Materiaali esimerkki, palauttaa kaikki vanerit
-        public List<Vaneri> Get()
-        {
-                return vaneri;
-        }
+        
+        
 
-        // GET: api/Materiaali/5 esimerkki
-        public string Get(int id)
-        {
-            return "value";
-        }
+      
 
         // POST: api/Materiaali esimerkki
         public void Post([FromBody]string value)
@@ -49,8 +48,8 @@ namespace VarastoApi.Controllers
         }
 
         //Voidaan määrittää route (osoite) eri komennoille esim. jos halutaan vain lisätiedot
-        [Route("api/Materiaali/VaneriTiedot")] //Kun käyttäjä painaa linkkiä johon tämä osoite on määritelty, osaa sivu automaagisesti ohjata tähän.
-        [HttpGet] //Määritetään mikä komento on kyseessä. tässä tapauksessa GET
+        //[Route("api/Materiaali/VaneriTiedot")] //Kun käyttäjä painaa linkkiä johon tämä osoite on määritelty, osaa sivu automaagisesti ohjata tähän.
+        //[HttpGet] //Määritetään mikä komento on kyseessä. tässä tapauksessa GET
         public List<string> HaeVaneriTiedot()
         {
             List<string> output = new List<string>(); //Luodaan tulostettava lista
@@ -64,17 +63,28 @@ namespace VarastoApi.Controllers
 
         }
         // Esimerkki
-        [Route("api/Materiaali/VaneriID/{VaneriID:int}")] //  Routeen voidaan myös määrittää joku arvo esim. VaneriID ja määritetään että se on int.
-        [HttpGet] //Määritetään mikä komento on kyseessä. tässä tapauksessa GET
-        public List<string> HaeVaneriID(int VaneriID) // Silloin myös tähän pitää hakea VaneriID
+        //[Route("Home/MateriaaliMuokkaus/{VaneriID:int}")] //  Routeen voidaan myös määrittää joku arvo esim. VaneriID ja määritetään että se on int.
+        //[HttpGet] //Määritetään mikä komento on kyseessä. tässä tapauksessa GET
+        public object HaeVaneriID(int VaneriID) // Silloin myös tähän pitää hakea VaneriID
         {
-            List<string> output = new List<string>(); //Luodaan tulostettava lista
-            output.Add("Koko: ");
-            output.Add(vaneri[0].Koko);
+            //IEnumerable<VarastoApi.Backend.Vaneri> output = null;  //Luodaan tulostettava lista
+            List<Vaneri> seppo = new List<Vaneri>().ToList();
 
-            return output;
+            vaneri.ToList();
+            var result = ((IEnumerable)vaneri).Cast<object>().ToList();
+            result.Clear();
+            int van = vaneri.FindIndex(x => x.Id == VaneriID);
+            //pertti = vaneri.Where(x => x.Id == van);
+            result.Add(vaneri.Where(p => p.Id == VaneriID).Select(p => p.Id));
+            //result.Add(vaneri.Where(x => x.Id == VaneriID));
+            //seppo.Add(seppo);
+           
 
+            return result; //("_PartialMateriaali", output);
+            
         }
+        
+       
 
     }
 }

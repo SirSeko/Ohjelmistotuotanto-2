@@ -1,7 +1,39 @@
 ﻿
 @model VarastoApi.Backend.MateriaaliKoonti
 
-    
+<!--Datatables scriptit-->
+@section scripts{
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('table.display').DataTable({
+                select: true,
+                ordering: true,
+                paging: false
+            });
+        });
+        $('a.edit').on('click', function () {
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: false,
+                success: function (result) {
+                    $('#myModal').html(result).find('.modal').modal({
+                        show: true
+                    });
+                }
+            });
+
+            return false;
+        });
+
+
+    </script>
+}
+
 <!--Nämä sitten erilliseen tyylitiedostoon sitten-->
 <style>
     /*Taulujen tyyli*/
@@ -44,205 +76,232 @@
 <!--Taulu varastossa oleville tavaroille-->
 <div class="row">
     <div class="col-75">
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Koko</th>
-                <th>Hinta</th>
-                <th>Määrä</th>
-                <th>Lisätiedot</th>
-            </tr>
-            <!--Täytetään taulu-->
-            @foreach (var item in @Model.Vanerit)
-            {
+        <table id="" class="display">
+            <thead>
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Koko</td>
-                    <td>@item.Hinta</td>
-                    <td>@item.Maara;</td>
-                    <td>@item.Lisatiedot</td>
+                    <th>ID</th>
+                    <th>Koko</th>
+                    <th>Hinta</th>
+                    <th>Määrä</th>
+                    <th>Lisätiedot</th>
+                    <th>Muokkaa</th>
                 </tr>
-            }
+            </thead>
+            <!--Täytetään taulu-->
+            <tbody>
+                @foreach (var item in @Model.Vanerit)
+                {
+
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Koko</td>
+                        <td>@item.Hinta</td>
+                        <td>@item.Maara;</td>
+                        <td>@item.Lisatiedot</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
+
+                            @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
         </table>
+    </div>
+</div>
+<div id="myModal"></div>
+<h3>Maalit</h3>
+<!--Taulu varastossa oleville tavaroille-->
+<div class="row">
+    <div class="col-75">
+        <table id="" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Koko</th>
+                    <th>Hinta</th>
+                    <th>Määrä</th>
+                    <th>Lisätiedot</th>
+                    <th>Muokkaa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Täytetään taulu-->
+                @foreach (var item in @Model.Maalit)
+                {
+
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Koko</td>
+                        <td>@item.Hinta</td>
+                        <td>@item.Maara;</td>
+                        <td>@item.Lisatiedot</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+        <!--Nämä pois sitten kun saadaan ylempi looppi pelittämään
+        <tr>
+            <td>1</td>
+            <td>Kirves</td>
+            <td>Iso</td>
+            <td>4</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Saha</td>
+            <td>Pieni</td>
+            <td>7</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Meisseli</td>
+            <td>Kookas</td>
+            <td>2</td>
+            <td>-</td>
+        </tr>-->
+
+        <hr />
+    </div>
+</div>
+<!--Uuden tavaran/materiaalin lisäys varastoon-->
+<form>
+    <fieldset>
+        <legend>Uusi tavara/materiaali</legend>
+        <div class="row">
+            <div class="col-25">
+                <label for="nimi">Nimi :</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="nimi" name="nimi"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="maara">Määrä :</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="maara" name="maara"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="koko">Koko :</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="koko" name="koko"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="komm">Kommentit :</label><br>
+            </div>
+            <div class="col-75">
+                <textarea name="komm" id="komm" style="width:240px; height:120px"></textarea><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="submit" onclick="alert('Ilmoitus')" value="OK">
+            </div>
+        </div>
+    </fieldset>
+</form>
+<hr />
+<!--Uuden tilauksen luonti-->
+<fieldset>
+    <legend>Uuden tilauksen luonti</legend>
+    <form action="/action_page.php">
+        <div class="row">
+            <div class="col-25">
+                <label for="materiaalitavara">Materiaali/tavara :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="maara">Määrä :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="maara" name="maara"><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="button" value="Lisaa materiaali/tavara"><br>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-25">
+        </div>
+        <div class="col-75">
+            <textarea disabled style="width:240px; height:120px"></textarea><br><br>
         </div>
     </div>
-            <h3>Maalit</h3>
-            <!--Taulu varastossa oleville tavaroille-->
-            <div class="row">
-                <div class="col-75">
-                    <table>
-                        <tr>
-                            <th>ID</th>
-                            <th>Koko</th>
-                            <th>Hinta</th>
-                            <th>Määrä</th>
-                            <th>Lisätiedot</th>
-                        </tr>
-                        <!--Täytetään taulu-->
-                        @foreach (var item in @Model.Maalit)
-                        {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.Koko</td>
-                                <td>@item.Hinta</td>
-                                <td>@item.Maara;</td>
-                                <td>@item.Lisatiedot</td>
-                            </tr>
-                        }
-                        <!--Nämä pois sitten kun saadaan ylempi looppi pelittämään
-                <tr>
-                    <td>1</td>
-                    <td>Kirves</td>
-                    <td>Iso</td>
-                    <td>4</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Saha</td>
-                    <td>Pieni</td>
-                    <td>7</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Meisseli</td>
-                    <td>Kookas</td>
-                    <td>2</td>
-                    <td>-</td>
-                </tr>-->
-                    </table>
-                    <hr />
-                </div>
+
+    <form>
+        <div class="row">
+            <div class="col-25">
+                <label for="Tilaaja">Tilaaja :</label>
             </div>
-            <!--Uuden tavaran/materiaalin lisäys varastoon-->
-            <form>
-                <fieldset>
-                    <legend>Uusi tavara/materiaali</legend>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="nimi">Nimi :</label><br>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="nimi" name="nimi"><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="maara">Määrä :</label><br>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="maara" name="maara"><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="koko">Koko :</label><br>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="koko" name="koko"><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="komm">Kommentit :</label><br>
-                        </div>
-                        <div class="col-75">
-                            <textarea name="komm" id="komm" style="width:240px; height:120px"></textarea><br><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                        </div>
-                        <div class="col-75">
-                            <input type="submit" onclick="alert('Ilmoitus')" value="OK">
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-            <hr />
-            <!--Uuden tilauksen luonti-->
-            <fieldset>
-                <legend>Uuden tilauksen luonti</legend>
-                <form action="/action_page.php">
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="materiaalitavara">Materiaali/tavara :</label>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="maara">Määrä :</label>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="maara" name="maara"><br><br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                        </div>
-                        <div class="col-75">
-                            <input type="button" value="Lisaa materiaali/tavara"><br>
-                        </div>
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col-25">
-                    </div>
-                    <div class="col-75">
-                        <textarea disabled style="width:240px; height:120px"></textarea><br><br>
-                    </div>
-                </div>
+            <div class="col-75">
+                <input type="text" id="tilaaja" name="tilaaja">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="button" value="Lisää tilaus">
+            </div>
+        </div>
+    </form>
+</fieldset>
 
-                <form>
-                    <div class="row">
-                        <div class="col-25">
-                            <label for="Tilaaja">Tilaaja :</label>
-                        </div>
-                        <div class="col-75">
-                            <input type="text" id="tilaaja" name="tilaaja">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-25">
-                        </div>
-                        <div class="col-75">
-                            <input type="button" value="Lisää tilaus">
-                        </div>
-                    </div>
-                </form>
-            </fieldset>
+<hr />
 
-            <hr />
+<!--Tilausten tarkastelu-->
+<fieldset>
+    <legend>Tilaukset</legend>
+    <div class="row">
+        <div class="col-25">
+            <label for="tilaukset">Tilaukset :</label>
+        </div>
+        <div class="col-75">
+            <select id="tilaukset">
+                <option>tilaus 1</option>
+                <option>tilaus 2</option>
+                <option>tilaus 3</option>
+                <option>tilaus 4</option>
+                <option>tilaus 5</option>
 
-            <!--Tilausten tarkastelu-->
-            <fieldset>
-                <legend>Tilaukset</legend>
-                <div class="row">
-                    <div class="col-25">
-                        <label for="tilaukset">Tilaukset :</label>
-                    </div>
-                    <div class="col-75">
-                        <select id="tilaukset">
-                            <option>tilaus 1</option>
-                            <option>tilaus 2</option>
-                            <option>tilaus 3</option>
-                            <option>tilaus 4</option>
-                            <option>tilaus 5</option>
-
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label for="tt">Tilauksen tiedot :</label>
-                    </div>
-                    <div class="col-75">
-                        <textarea id="tilausinfo" style="width:240px; height:120px"></textarea>
-                    </div>
-                </div>
-                <br />
-            </fieldset>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="tt">Tilauksen tiedot :</label>
+        </div>
+        <div class="col-75">
+            <textarea id="tilausinfo" style="width:240px; height:120px"></textarea>
+        </div>
+    </div>
+    <br />
+</fieldset>
