@@ -19,7 +19,7 @@
             $.ajax({
                 url: this.href,
                 type: 'GET',
-                cache: false,
+                cache: true,
                 success: function (result) {
                     $('#myModal').html(result).find('.modal').modal({
                         show: true
@@ -101,8 +101,8 @@
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
 
-                            @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Tiedot", "Vaneri", new { id=item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
                         </td>
                     </tr>
 

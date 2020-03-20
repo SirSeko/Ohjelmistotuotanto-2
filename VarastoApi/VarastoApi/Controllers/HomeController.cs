@@ -13,11 +13,13 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Collections;
+using System.Web.Http;
+using HttpGetAttribute = System.Web.Mvc.HttpGetAttribute;
 
 namespace VarastoApi.Controllers
 
 {
-    
+
 
     public class HomeController : Controller
     {
@@ -28,15 +30,14 @@ namespace VarastoApi.Controllers
 
         public ActionResult Index()
         {
-         
+
 
             //List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
             var mk = new MateriaaliKoonti(); //Luodaan koonti-olio. Listan tuominen aiheutti herjan.
 
             List<Maali> maali = new List<Maali>();
-            List<Tilaus> tilaukset = new List<Tilaus>(); //Lista tilauksista
-            List<Varaus> varaukset = new List<Varaus>();
             
+
             DatabaseManager dm = new DatabaseManager(); //tietokannanhallinta-olio, mm. yhdistys kantaan
 
             cnn = dm.OpenConnection(); //yhdistetään kantaan
@@ -53,7 +54,7 @@ namespace VarastoApi.Controllers
 
 
 
-                
+
 
 
             }
@@ -68,6 +69,7 @@ namespace VarastoApi.Controllers
         public ActionResult Edit(int id)  //Edit napilla palauttaa LISTAN???????????? edit.cshtml:ään
         {
             vanerit = matko.Vanerit;
+            
             foreach (Vaneri v in vanerit) {
                 if (v.Id == id) {
                     List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
@@ -77,6 +79,39 @@ namespace VarastoApi.Controllers
             }
             return PartialView(null); //nullll
         }
-        
+
+
+
+
+
+        [System.Web.Mvc.HttpPost]
+        public ActionResult EditInfo(FormCollection form)
+        {
+            Vaneri van = new Vaneri();
+            int i = 0;
+            while (form["Tid"] != null) {
+
+
+
+                van.Id = Convert.ToInt32(form[String.Format("Tid", i)]);
+                van.Koko = form[String.Format("TKoko", i)];
+                van.Hinta = 500;
+                van.Kauppa = "Paska";
+                van.Lisatiedot = "Tämä on Posti";
+                van.Sijainti = 1;
+                van.Yksikko = "cm";
+                van.Maara = 666;
+                break;
+               
+            
+            };
+            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
+            
+            dmVan.Update(van);
+            /*
+           
+            //https://www.c-sharpcorner.com/UploadFile/3d39b4/getting-data-from-view-to-controller-in-mvc/ */
+            return RedirectToAction("Index");
+        }
     }
 }

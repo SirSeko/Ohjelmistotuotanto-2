@@ -40,6 +40,7 @@ namespace VarastoApi.Controllers
         // POST: api/Materiaali esimerkki
         public void Post([FromBody]string value)
         {
+
         }
 
         // DELETE: api/Materiaali/5 esimerkki
