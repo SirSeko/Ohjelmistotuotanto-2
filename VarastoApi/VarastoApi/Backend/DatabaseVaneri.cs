@@ -45,32 +45,28 @@ namespace VarastoApi.Backend {
             return vanerit;
         }
         //Hakee IDn perusteella datan
-        public List<Vaneri> SelectId(List<Vaneri> vanerit, int id)
-        {
-            sql = "Select * from mydb.Vaneri Where VaneriId='"+ id + "';";
+        public Vaneri SelectId(int id) {
+            sql = "Select * from mydb.Vaneri Where VaneriId='" + id + "';";
             command = new SqlCommand(sql, cnn);
             dataReader = command.ExecuteReader();
-            while (dataReader.Read())
-            {
-                int.TryParse(dataReader.GetValue(0).ToString(), out id);
-                koko = dataReader.GetValue(1).ToString();
-                float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
-                int.TryParse(dataReader.GetValue(3).ToString(), out maara);
-                yksikko = dataReader.GetValue(4).ToString();
-                int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
-                kauppa = dataReader.GetValue(6).ToString();
-                lisatiedot = dataReader.GetValue(7).ToString();
-                Vaneri v = Vaneri.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
-                vanerit.Add(v);
-            }
+            dataReader.Read();
+            int.TryParse(dataReader.GetValue(0).ToString(), out id);
+            koko = dataReader.GetValue(1).ToString();
+            float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
+            int.TryParse(dataReader.GetValue(3).ToString(), out maara);
+            yksikko = dataReader.GetValue(4).ToString();
+            int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
+            kauppa = dataReader.GetValue(6).ToString();
+            lisatiedot = dataReader.GetValue(7).ToString();
             dataReader.Close();
-            return vanerit;
+            Vaneri v = Vaneri.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
+            return v;
         }
 
         //Lisää tilauksen tauluun, palauttaa true jos ei tule poikkeusta, muuten false
         public bool InsertInto(Vaneri v) {
             try {
-                sql = "Insert into mydb.Vaneri(Koko, Hinta, Määrä, Yksikkö, Sijainti, Kauppa, Lisätiedot) values ('" + v.Koko + "', '" + v.Hinta + "', '" + v.Maara + "', '" + v.Yksikko + "', '" + v.Sijainti + "', '" +v.Sijainti + "', '" + v.Kauppa + "', '" + v.Lisatiedot + "');";
+                sql = "Insert into mydb.Vaneri(Koko, Hinta, Määrä, Yksikkö, Sijainti, Kauppa, Lisätiedot) values ('" + v.Koko + "', '" + v.Hinta + "', '" + v.Maara + "', '" + v.Yksikko + "', '" + v.Sijainti + "', '" + v.Sijainti + "', '" + v.Kauppa + "', '" + v.Lisatiedot + "');";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein o.o
                 adapter.InsertCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.InsertCommand.ExecuteNonQuery();

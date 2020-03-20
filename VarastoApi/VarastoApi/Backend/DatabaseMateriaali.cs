@@ -22,6 +22,7 @@ namespace VarastoApi.Backend
         }
 
 
+
         //Lukee kaiken datan taulusta
         public List<Materiaali> SelectAll(List<Materiaali> materiaalit){
             sql = "Select * from mydb.Materiaali;";

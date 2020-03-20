@@ -72,9 +72,10 @@ namespace VarastoApi.Controllers
             
             foreach (Vaneri v in vanerit) {
                 if (v.Id == id) {
-                    List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
+                    /*List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
                     PerkeleenPaskaListaHelvettiin.Add(v);
-                    return PartialView(PerkeleenPaskaListaHelvettiin);
+                    return PartialView(PerkeleenPaskaListaHelvettiin);*/
+                    return PartialView(v);
                 }
             }
             return PartialView(null); //nullll
@@ -113,5 +114,7 @@ namespace VarastoApi.Controllers
             //https://www.c-sharpcorner.com/UploadFile/3d39b4/getting-data-from-view-to-controller-in-mvc/ */
             return RedirectToAction("Index");
         }
+
+        
     }
 }
