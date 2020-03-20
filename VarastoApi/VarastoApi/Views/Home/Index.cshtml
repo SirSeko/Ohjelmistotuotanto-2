@@ -102,7 +102,7 @@
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
 
                             @Html.ActionLink("Tiedot", "Vaneri", new { id=item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
                     </tr>
 
@@ -131,7 +131,6 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Maalit)
                 {
-
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Koko</td>
@@ -139,38 +138,15 @@
                         <td>@item.Maara;</td>
                         <td>@item.Lisatiedot</td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
                             @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
                             @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                         </td>
                     </tr>
-
                 }
             </tbody>
         </table>
-        <!--Nämä pois sitten kun saadaan ylempi looppi pelittämään
-        <tr>
-            <td>1</td>
-            <td>Kirves</td>
-            <td>Iso</td>
-            <td>4</td>
-            <td>-</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Saha</td>
-            <td>Pieni</td>
-            <td>7</td>
-            <td>-</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Meisseli</td>
-            <td>Kookas</td>
-            <td>2</td>
-            <td>-</td>
-        </tr>-->
-
+      
         <hr />
     </div>
 </div>

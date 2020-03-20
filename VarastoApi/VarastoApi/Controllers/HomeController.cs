@@ -72,7 +72,9 @@ namespace VarastoApi.Controllers
             
             foreach (Vaneri v in vanerit) {
                 if (v.Id == id) {
-                    return PartialView(v);
+                    List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
+                    PerkeleenPaskaListaHelvettiin.Add(v);
+                    return PartialView(PerkeleenPaskaListaHelvettiin);
                 }
             }
             return PartialView(null); //nullll
@@ -82,36 +84,60 @@ namespace VarastoApi.Controllers
 
 
 
-        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.HttpPost] // Muokataan tietuetta
         public ActionResult EditInfo(FormCollection form)
         {
+            //luodaan uusi vaneri olio
             Vaneri van = new Vaneri();
             int i = 0;
-            while (form["Tid"] != null) {
+            if (form["Tid"] != null) {
+
+                //Haetaan formista tiedot olioon jos id ei ole null 
+
+                van.Id = Convert.ToInt32(form[String.Format("Tid")]);
+                van.Koko = form[String.Format("TKoko")];
+                van.Hinta = float.Parse(form[String.Format("THinta")]);
+                van.Kauppa = form[String.Format("TYksikko")];
+                van.Lisatiedot = form[String.Format("TLisatiedot")];
+                van.Sijainti = Convert.ToInt32(form[String.Format("TSijainti")]);
+                string valittu = Request.Form["TYksikko"].ToString();
+                van.Yksikko = valittu;
+                van.Maara = Convert.ToInt32(form[String.Format("TMaara")]);
 
 
 
-                van.Id = Convert.ToInt32(form[String.Format("Tid", i)]);
-                van.Koko = form[String.Format("TKoko", i)];
-                van.Hinta = 500;
-                van.Kauppa = "Paska";
-                van.Lisatiedot = "Tämä on Posti";
-                van.Sijainti = 1;
-                van.Yksikko = "cm";
-                van.Maara = 666;
-                break;
-               
-            
             };
+            //Avataan yhteys
+            DatabaseManager mm = new DatabaseManager();
+            cnn = mm.OpenConnection();
             DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-            
+            //Pusketaan tiedot
             dmVan.Update(van);
-            /*
+            mm.CloseConnection();
+            
            
-            //https://www.c-sharpcorner.com/UploadFile/3d39b4/getting-data-from-view-to-controller-in-mvc/ */
+            //Palataan Indexiin
             return RedirectToAction("Index");
         }
 
-        
+        [HttpGet] // Poistetaan tietueet tällä Getillä
+        public ActionResult Delete(int id) {
+
+            // Otetaan yhteys tietokantaan
+            DatabaseManager mm = new DatabaseManager();
+            cnn = mm.OpenConnection();
+            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
+            //Poistetaan tietue
+            dmVan.Delete(id);
+            mm.CloseConnection();
+           
+           
+          //Palataan indexiin
+            return RedirectToAction("Index");
+        }
+
+
+
+
     }
 }
