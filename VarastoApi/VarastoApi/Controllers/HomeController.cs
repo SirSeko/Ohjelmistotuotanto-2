@@ -84,14 +84,15 @@ namespace VarastoApi.Controllers
 
 
 
-        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.HttpPost] // Muokataan tietuetta
         public ActionResult EditInfo(FormCollection form)
         {
+            //luodaan uusi vaneri olio
             Vaneri van = new Vaneri();
             int i = 0;
             if (form["Tid"] != null) {
 
-
+                //Haetaan formista tiedot olioon jos id ei ole null 
 
                 van.Id = Convert.ToInt32(form[String.Format("Tid")]);
                 van.Koko = form[String.Format("TKoko")];
@@ -106,31 +107,32 @@ namespace VarastoApi.Controllers
 
 
             };
+            //Avataan yhteys
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();
             DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-            
+            //Pusketaan tiedot
             dmVan.Update(van);
             mm.CloseConnection();
-            /*
+            
            
-            //https://www.c-sharpcorner.com/UploadFile/3d39b4/getting-data-from-view-to-controller-in-mvc/ */
+            //Palataan Indexiin
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [HttpGet] // Poistetaan tietueet tällä Getillä
         public ActionResult Delete(int id) {
 
-            
+            // Otetaan yhteys tietokantaan
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();
             DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-
+            //Poistetaan tietue
             dmVan.Delete(id);
             mm.CloseConnection();
            
            
-          
+          //Palataan indexiin
             return RedirectToAction("Index");
         }
 

@@ -97,7 +97,7 @@ namespace VarastoApi.Backend {
             }
 
         }
-
+        // Tällä poistetaan tietue tietokannasta
         public bool Delete(int id)
         {
             try

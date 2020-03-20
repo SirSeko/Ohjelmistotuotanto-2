@@ -1,46 +1,47 @@
 ﻿@model IEnumerable<VarastoApi.Backend.Vaneri>
 
-
+<!-- Muokkaus formi -->
 @using (Html.BeginForm("EditInfo","Home", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+<div class="form-horizontal">
+    <hr />
+
+
+    @foreach (var item in Model)
+    {
+        <!-- Haetaan tiedot formiin -->
+        <label for="Tid">Tuote Id: @item.Id </label> <br />
+        <input type="hidden" id="Tid" name="Tid" value="@item.Id" />
         <hr />
-       
+        <label for="TKoko">Koko:</label>
+        <input type="text" id="TKoko" name="TKoko" value="@item.Koko">
 
-            @foreach (var item in Model)
-            {
+        <select id="TYksikko" name="TYksikko">
+            <option value="">@item.Yksikko</option>
+            <option value="">m</option>
+            <option value="">mm</option>
+        </select>
+        <input type="text" id="THinta" name="THinta" value="@item.Hinta" />
+        <input type="text" id="TKauppa" name="TKauppa" value="@item.Kauppa" />
+        <input type="text" id="TLisatiedot" name="TLisatiedot" value="@item.Lisatiedot" />
+        <input type="text" id="TSijainti" name="TSijainti" value="@item.Sijainti" />
+        <input type="text" id="TMaara" name="TMaara" value="@item.Maara" />
 
-                <label for="Tid">Tuote Id: @item.Id </label> <br />
-                <input type="hidden" id="Tid" name="Tid" value="@item.Id" />
-                <hr/>
-                <label for="TKoko">Koko:</label>
-                <input type="text" id="TKoko" name="TKoko" value="@item.Koko">
-               
-                <select id="TYksikko" name="TYksikko">
-                    <option value="">@item.Yksikko</option>
-                    <option value="">m</option>
-                    <option value="">mm</option>
-                </select>
-                <input type="text" id="THinta" name="THinta" value="@item.Hinta" />
-                <input type="text" id="TKauppa" name="TKauppa" value="@item.Kauppa" />
-                <input type="text" id="TLisatiedot" name="TLisatiedot" value="@item.Lisatiedot" />
-                <input type="text" id="TSijainti" name="TSijainti" value="@item.Sijainti" />
-                <input type="text" id="TMaara" name="TMaara" value="@item.Maara" />
-                
-            }
+    }
 
 
 
-        
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
+            <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
+</div>
 }
 
 <div>
