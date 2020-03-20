@@ -23,42 +23,16 @@ namespace VarastoApi.Controllers
 
     public class HomeController : Controller
     {
-
+        DatabaseManager dbMan;
+        DatabaseVaneri dbVan;
         List<Vaneri> vanerit = new List<Vaneri>();
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
 
         public ActionResult Index()
         {
-
-
-            //List<MateriaaliKoonti> mk = new List<MateriaaliKoonti>(); //Lista materiaalikoonnista
-            var mk = new MateriaaliKoonti(); //Luodaan koonti-olio. Listan tuominen aiheutti herjan.
-
-            List<Maali> maali = new List<Maali>();
-            
-
-            DatabaseManager dm = new DatabaseManager(); //tietokannanhallinta-olio, mm. yhdistys kantaan
-
-            cnn = dm.OpenConnection(); //yhdistetään kantaan
-            if (cnn != null)
-            {
-                DatabaseVaneri dmVan = new DatabaseVaneri(cnn); //luodaan olio, jolla käsitellään materiaaleja tietokannassa
-                vanerit = dmVan.SelectAll(vanerit); //haetaan kaikki materiaalit kannasta listaan
-                DatabaseMaali dmMaa = new DatabaseMaali(cnn); // sama maaleille
-                maali = dmMaa.SelectAll(maali);
-                mk.Vanerit = vanerit; //Lisätään vanerit koontilistaan
-                mk.Maalit = maali; //Lisätään maalit koontilistaan
-
-                // SAMALLA PERIAATTEELLA VOI LISÄTÄ MUUT MATERIAALIT //
-
-
-
-
-
-
-            }
-            return View(mk);
+            matko.Initiate();
+            return View(matko);
 
         }
         //TÄMÄ ON TESTAILUA
@@ -68,14 +42,12 @@ namespace VarastoApi.Controllers
         [HttpGet]
         public ActionResult Edit(int id)  //Edit napilla palauttaa vanerin
         {
-            vanerit = matko.Vanerit;
-            
-            foreach (Vaneri v in vanerit) {
-                if (v.Id == id) {
-                    return PartialView(v);
-                }
-            }
-            return PartialView(null); //nullll
+            dbMan = new DatabaseManager();
+            cnn = dbMan.OpenConnection();
+            dbVan = new DatabaseVaneri(cnn);
+            Vaneri v = dbVan.SelectId(id);
+            dbMan.CloseConnection();
+            return PartialView(v);
         }
 
 
@@ -118,7 +90,7 @@ namespace VarastoApi.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet] // Poistetaan tietueet tällä Getillä
+        [HttpGet] // Poistetaan tietueet tällä Getillä  
         public ActionResult Delete(int id) {
 
             // Otetaan yhteys tietokantaan

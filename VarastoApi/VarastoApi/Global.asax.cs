@@ -17,7 +17,7 @@ namespace VarastoApi
         {
 
             
-            Backend.Test test = new Backend.Test(); //TESTILUOKKA BACKENDILLE
+            //Backend.Test test = new Backend.Test(); //TESTILUOKKA BACKENDILLE
             //test.Run();
             //test.CallMeTwice(); //Leon tyhmä kokeilu
             //test.CreateException();

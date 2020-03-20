@@ -29,6 +29,11 @@ namespace VarastoApi.Backend {
             Laudat = new List<Lauta>();
 
             dbMan = new DatabaseManager();
+
+            
+        }
+
+        public void Initiate() {
             cnn = dbMan.OpenConnection();
 
             dbMat = new DatabaseMateriaali(cnn);
@@ -36,18 +41,12 @@ namespace VarastoApi.Backend {
             dbMaa = new DatabaseMaali(cnn);
             dbVan = new DatabaseVaneri(cnn);
             dbSij = new DatabaseSijainti(cnn);
-
-            initiate();
-            dbMan.CloseConnection();
-            
-        }
-
-        void initiate() {
             Materiaalit = dbMat.SelectAll(Materiaalit);
             Vanerit = dbVan.SelectAll(Vanerit);
             Sijainnit = dbSij.SelectAll(Sijainnit);
             Maalit = dbMaa.SelectAll(Maalit);
             Laudat = dbLau.SelectAll(Laudat);
+            dbMan.CloseConnection();
         }
     }
 }

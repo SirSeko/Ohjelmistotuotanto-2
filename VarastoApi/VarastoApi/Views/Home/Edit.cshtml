@@ -1,15 +1,14 @@
 ﻿@model VarastoApi.Backend.Vaneri
 
 <!-- Muokkaus formi -->
-@using (Html.BeginForm("EditInfo","Home", FormMethod.Post))
-{
+@using (Html.BeginForm("EditInfo", "Home", FormMethod.Post)) {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <hr />
+    <div class="form-horizontal">
+        <hr />
 
 
-    
+
         <!-- Haetaan tiedot formiin -->
         <label for="Tid">Tuote Id: @Model.Id </label> <br />
         <input type="hidden" id="Tid" name="Tid" value="@Model.Id" />
@@ -28,19 +27,19 @@
         <input type="text" id="TSijainti" name="TSijainti" value="@Model.Sijainti" />
         <input type="text" id="TMaara" name="TMaara" value="@Model.Maara" />
 
-    
 
 
 
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
-            <input type="submit" value="Save" class="btn btn-default" />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
 }
 
 <div>
