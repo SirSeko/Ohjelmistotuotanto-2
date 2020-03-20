@@ -66,15 +66,13 @@ namespace VarastoApi.Controllers
 
 
         [HttpGet]
-        public ActionResult Edit(int id)  //Edit napilla palauttaa LISTAN???????????? edit.cshtml:ään
+        public ActionResult Edit(int id)  //Edit napilla palauttaa vanerin
         {
             vanerit = matko.Vanerit;
             
             foreach (Vaneri v in vanerit) {
                 if (v.Id == id) {
-                    List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
-                    PerkeleenPaskaListaHelvettiin.Add(v);
-                    return PartialView(PerkeleenPaskaListaHelvettiin);
+                    return PartialView(v);
                 }
             }
             return PartialView(null); //nullll

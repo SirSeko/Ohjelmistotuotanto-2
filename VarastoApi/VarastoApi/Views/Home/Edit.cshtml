@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VarastoApi.Backend.Vaneri>
+﻿@model VarastoApi.Backend.Vaneri
 
 <!-- Muokkaus formi -->
 @using (Html.BeginForm("EditInfo","Home", FormMethod.Post))
@@ -9,27 +9,26 @@
     <hr />
 
 
-    @foreach (var item in Model)
-    {
+    
         <!-- Haetaan tiedot formiin -->
-        <label for="Tid">Tuote Id: @item.Id </label> <br />
-        <input type="hidden" id="Tid" name="Tid" value="@item.Id" />
+        <label for="Tid">Tuote Id: @Model.Id </label> <br />
+        <input type="hidden" id="Tid" name="Tid" value="@Model.Id" />
         <hr />
         <label for="TKoko">Koko:</label>
-        <input type="text" id="TKoko" name="TKoko" value="@item.Koko">
+        <input type="text" id="TKoko" name="TKoko" value="@Model.Koko">
 
         <select id="TYksikko" name="TYksikko">
-            <option value="">@item.Yksikko</option>
+            <option value="">@Model.Yksikko</option>
             <option value="">m</option>
             <option value="">mm</option>
         </select>
-        <input type="text" id="THinta" name="THinta" value="@item.Hinta" />
-        <input type="text" id="TKauppa" name="TKauppa" value="@item.Kauppa" />
-        <input type="text" id="TLisatiedot" name="TLisatiedot" value="@item.Lisatiedot" />
-        <input type="text" id="TSijainti" name="TSijainti" value="@item.Sijainti" />
-        <input type="text" id="TMaara" name="TMaara" value="@item.Maara" />
+        <input type="text" id="THinta" name="THinta" value="@Model.Hinta" />
+        <input type="text" id="TKauppa" name="TKauppa" value="@Model.Kauppa" />
+        <input type="text" id="TLisatiedot" name="TLisatiedot" value="@Model.Lisatiedot" />
+        <input type="text" id="TSijainti" name="TSijainti" value="@Model.Sijainti" />
+        <input type="text" id="TMaara" name="TMaara" value="@Model.Maara" />
 
-    }
+    
 
 
 
