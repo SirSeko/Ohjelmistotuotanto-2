@@ -107,7 +107,11 @@ namespace VarastoApi.Controllers
         }
 
 
-
+        [HttpGet] //Esimerkki modulaarisesta sivun rakennuksesta
+        public ActionResult Vanerit() {
+            Models.Vanerit v = new Models.Vanerit();
+            return View(v);
+        }
 
     }
 }

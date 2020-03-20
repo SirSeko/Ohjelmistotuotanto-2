@@ -1,0 +1,45 @@
+﻿
+@model VarastoApi.Models.Vanerit
+
+
+<h1>VarastoApi</h1>
+<hr />
+<h2>Varaston sisältö</h2>
+<h3>Vanerit</h3>
+<!--Taulu varastossa oleville tavaroille-->
+<div class="row">
+    <div class="col-75">
+        <table id="" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Koko</th>
+                    <th>Hinta</th>
+                    <th>Määrä</th>
+                    <th>Lisätiedot</th>
+                    <th>Muokkaa</th>
+                </tr>
+            </thead>
+            <!--Täytetään taulu-->
+            <tbody>
+                @foreach (var item in @Model.Lista) {
+
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Koko</td>
+                        <td>@item.Hinta</td>
+                        <td>@item.Maara;</td>
+                        <td>@item.Lisatiedot</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
+
+                            @Html.ActionLink("Tiedot", "Vaneri", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
