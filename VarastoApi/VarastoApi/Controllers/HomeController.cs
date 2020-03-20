@@ -89,29 +89,53 @@ namespace VarastoApi.Controllers
         {
             Vaneri van = new Vaneri();
             int i = 0;
-            while (form["Tid"] != null) {
+            if (form["Tid"] != null) {
 
 
 
-                van.Id = Convert.ToInt32(form[String.Format("Tid", i)]);
-                van.Koko = form[String.Format("TKoko", i)];
-                van.Hinta = 500;
-                van.Kauppa = "Paska";
-                van.Lisatiedot = "Tämä on Posti";
-                van.Sijainti = 1;
-                van.Yksikko = "cm";
-                van.Maara = 666;
-                break;
-               
-            
+                van.Id = Convert.ToInt32(form[String.Format("Tid")]);
+                van.Koko = form[String.Format("TKoko")];
+                van.Hinta = float.Parse(form[String.Format("THinta")]);
+                van.Kauppa = form[String.Format("TYksikko")];
+                van.Lisatiedot = form[String.Format("TLisatiedot")];
+                van.Sijainti = Convert.ToInt32(form[String.Format("TSijainti")]);
+                string valittu = Request.Form["TYksikko"].ToString();
+                van.Yksikko = valittu;
+                van.Maara = Convert.ToInt32(form[String.Format("TMaara")]);
+
+
+
             };
+            DatabaseManager mm = new DatabaseManager();
+            cnn = mm.OpenConnection();
             DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
             
             dmVan.Update(van);
+            mm.CloseConnection();
             /*
            
             //https://www.c-sharpcorner.com/UploadFile/3d39b4/getting-data-from-view-to-controller-in-mvc/ */
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult Delete(int id) {
+
+            
+            DatabaseManager mm = new DatabaseManager();
+            cnn = mm.OpenConnection();
+            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
+
+            dmVan.Delete(id);
+            mm.CloseConnection();
+           
+           
+          
+            return RedirectToAction("Index");
+        }
+
+
+
+
     }
 }

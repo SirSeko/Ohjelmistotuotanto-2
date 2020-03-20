@@ -12,15 +12,22 @@
             @foreach (var item in Model)
             {
 
-                <label for="Tid">Tuote Id:</label>
-                <input type="text" id="Tid" name="Tid" value="@item.Id"><br><br>
+                <label for="Tid">Tuote Id: @item.Id </label> <br />
+                <input type="hidden" id="Tid" name="Tid" value="@item.Id" />
+                <hr/>
                 <label for="TKoko">Koko:</label>
-                <input type="text" id="TKoko" name="TKoko" value="@item.Koko"><br><br>
-                <select id="TYksikko">
+                <input type="text" id="TKoko" name="TKoko" value="@item.Koko">
+               
+                <select id="TYksikko" name="TYksikko">
                     <option value="">@item.Yksikko</option>
                     <option value="">m</option>
                     <option value="">mm</option>
                 </select>
+                <input type="text" id="THinta" name="THinta" value="@item.Hinta" />
+                <input type="text" id="TKauppa" name="TKauppa" value="@item.Kauppa" />
+                <input type="text" id="TLisatiedot" name="TLisatiedot" value="@item.Lisatiedot" />
+                <input type="text" id="TSijainti" name="TSijainti" value="@item.Sijainti" />
+                <input type="text" id="TMaara" name="TMaara" value="@item.Maara" />
                 
             }
 
