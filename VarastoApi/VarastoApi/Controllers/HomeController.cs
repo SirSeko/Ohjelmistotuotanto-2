@@ -72,9 +72,6 @@ namespace VarastoApi.Controllers
             
             foreach (Vaneri v in vanerit) {
                 if (v.Id == id) {
-                    /*List<Vaneri> PerkeleenPaskaListaHelvettiin = new List<Vaneri>();
-                    PerkeleenPaskaListaHelvettiin.Add(v);
-                    return PartialView(PerkeleenPaskaListaHelvettiin);*/
                     return PartialView(v);
                 }
             }

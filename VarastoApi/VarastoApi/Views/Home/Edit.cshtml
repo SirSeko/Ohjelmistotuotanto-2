@@ -1,32 +1,29 @@
-﻿@model IEnumerable<VarastoApi.Backend.Vaneri>
+﻿@Model VarastoApi.Backend.Vaneri
 
 
-@using (Html.BeginForm("EditInfo","Home", FormMethod.Post))
-{
+@using (Html.BeginForm("EditInfo", "Home", FormMethod.Post)) {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <hr />
-       
-
-            @foreach (var item in Model)
-            {
-
-                <label for="Tid">Tuote Id:</label>
-                <input type="text" id="Tid" name="Tid" value="@item.Id"><br><br>
-                <label for="TKoko">Koko:</label>
-                <input type="text" id="TKoko" name="TKoko" value="@item.Koko"><br><br>
-                <select id="TYksikko">
-                    <option value="">@item.Yksikko</option>
-                    <option value="">m</option>
-                    <option value="">mm</option>
-                </select>
-                
-            }
 
 
 
-        
+        <label for="Tid">Tuote Id:</label>
+        <input type="text" id="Tid" name="Tid" value="@Model.Id"><br><br>
+        <label for="TKoko">Koko:</label>
+        <input type="text" id="TKoko" name="TKoko" value="@Model.Koko"><br><br>
+        <select id="TYksikko">
+            <option value="">@Model.Yksikko</option>
+            <option value="">m</option>
+            <option value="">mm</option>
+        </select>
+
+
+
+
+
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
