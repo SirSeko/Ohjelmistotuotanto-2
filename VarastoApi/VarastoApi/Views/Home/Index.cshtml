@@ -1,11 +1,8 @@
 ﻿
 @model VarastoApi.Backend.MateriaaliKoonti
-
 <!--Datatables scriptit-->
 @section scripts{
-
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script>
         $(document).ready(function () {
@@ -33,9 +30,9 @@
 
     </script>
 }
-
 <!--Nämä sitten erilliseen tyylitiedostoon sitten-->
 <style>
+
     /*Taulujen tyyli*/
     table, th, td {
         border: 1px solid black;
@@ -68,10 +65,10 @@
         clear: both;
     }
 </style>
-
 <h1>VarastoApi</h1>
 <hr />
 <h2>Varaston sisältö</h2>
+<hr />
 <h3>Vanerit</h3>
 <!--Taulu varastossa oleville tavaroille-->
 <div class="row">
@@ -92,19 +89,19 @@
                 @foreach (var item in @Model.Vanerit)
                 {
 
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Koko</td>
-                        <td>@item.Hinta</td>
-                        <td>@item.Maara</td>
-                        <td>@item.Lisatiedot</td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
 
-                            @Html.ActionLink("Tiedot", "Vaneri", new { id=item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-                        </td>
-                    </tr>
+                        @Html.ActionLink("Tiedot", "Vaneri", new { id=item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                    </td>
+                </tr>
 
                 }
             </tbody>
@@ -112,11 +109,9 @@
     </div>
 </div>
 
-
 <!--TESTIN ALKU-->
 <!--(at)Html.Action("Vanerit")-->
 <!--TESTIN LOPPU-->
-
 
 <div id="myModal"></div>
 <h3>Maalit</h3>
@@ -138,22 +133,21 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Maalit)
                 {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Koko</td>
-                        <td>@item.Hinta</td>
-                        <td>@item.Maara</td>
-                        <td>@item.Lisatiedot</td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
-                            @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                        </td>
-                    </tr>
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
+                        @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
-      
         <hr />
     </div>
 </div>
@@ -163,10 +157,32 @@
         <legend>Uusi tavara/materiaali</legend>
         <div class="row">
             <div class="col-25">
+                <label for="tyyppi">Tyyppi :</label>
+            </div>
+            <div class="col-75">
+                <select id="tyyppi" style="width:240px;">
+                    <option>Maali</option>
+                    <option>Vaneri</option>
+                    <option>Lauta</option>
+                    <option>Naula</option>
+                    <option>Muu</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
                 <label for="nimi">Nimi :</label><br>
             </div>
             <div class="col-75">
                 <input type="text" id="nimi" name="nimi"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="hinta">Hinta :</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="hinta" name="hinta"><br>
             </div>
         </div>
         <div class="row">
@@ -187,7 +203,35 @@
         </div>
         <div class="row">
             <div class="col-25">
-                <label for="komm">Kommentit :</label><br>
+                <label for="sijainti">Sijainti :</label>
+            </div>
+            <div class="col-75">
+                <select id="snimi" style="width:160px;">
+                    <option>Huone 1</option>
+                    <option>Huone 2</option>
+                    <option>Huone 3</option>
+                    <option>Huone 4</option>
+                    <option>Huone 5</option>
+                </select>
+                <select id="skaappi" style="width:160px;">
+                    <option>Kaappi 1</option>
+                    <option>Kaappi 2</option>
+                    <option>Kaappi 3</option>
+                    <option>Kaappi 4</option>
+                    <option>Kaappi 5</option>
+                </select>
+                <select id="shylly" style="width:160px;">
+                    <option>Hylly 1</option>
+                    <option>Hylly 2</option>
+                    <option>Hylly 3</option>
+                    <option>Hylly 4</option>
+                    <option>Hylly 5</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="komm">Lisätiedot :</label><br>
             </div>
             <div class="col-75">
                 <textarea name="komm" id="komm" style="width:240px; height:120px"></textarea><br><br>
@@ -235,10 +279,9 @@
         <div class="col-25">
         </div>
         <div class="col-75">
-            <textarea disabled style="width:240px; height:120px"></textarea><br><br> 
+            <textarea disabled style="width:240px; height:120px"></textarea><br><br>
         </div>
     </div>
-
     <form>
         <div class="row">
             <div class="col-25">
@@ -257,9 +300,7 @@
         </div>
     </form>
 </fieldset>
-
 <hr />
-
 <!--Tilausten tarkastelu-->
 <fieldset>
     <legend>Tilaukset</legend>
@@ -268,13 +309,12 @@
             <label for="tilaukset">Tilaukset :</label>
         </div>
         <div class="col-75">
-            <select id="tilaukset">
+            <select id="tilaukset" style="width:240px;">
                 <option>tilaus 1</option>
                 <option>tilaus 2</option>
                 <option>tilaus 3</option>
                 <option>tilaus 4</option>
                 <option>tilaus 5</option>
-
             </select>
         </div>
     </div>
