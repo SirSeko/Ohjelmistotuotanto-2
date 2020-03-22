@@ -63,17 +63,45 @@ namespace VarastoApi.Controllers
             if (form["Tid"] != null) {
 
                 //Haetaan formista tiedot olioon jos id ei ole null 
-
-                van.Id = Convert.ToInt32(form[String.Format("Tid")]);
+                
+                    if (!int.TryParse(form[String.Format("Tid")], out van.Id)) {
+                        ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
+                        return RedirectToAction("Index");
+                    }
                 van.Koko = form[String.Format("TKoko")];
-                van.Hinta = float.Parse(form[String.Format("THinta")]);
+                if (!SQLFilter.checkInput(van.Koko)) {
+                    ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!float.TryParse(form[String.Format("THinta")], out van.Hinta)) {
+                    ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
+                    return RedirectToAction("Index");
+                }
                 van.Kauppa = form[String.Format("TYksikko")];
+                if (!SQLFilter.checkInput(van.Kauppa)) {
+                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
                 van.Lisatiedot = form[String.Format("TLisatiedot")];
-                van.Sijainti = Convert.ToInt32(form[String.Format("TSijainti")]);
+                if (!SQLFilter.checkInput(van.Lisatiedot)) {
+                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!int.TryParse(form[String.Format("TSijainti")], out van.Sijainti)) {
+                    ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
                 string valittu = Request.Form["TYksikko"].ToString();
-                van.Yksikko = valittu;
-                van.Maara = Convert.ToInt32(form[String.Format("TMaara")]);
-
+                if (!SQLFilter.checkInput(valittu)) {
+                    ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                van.Yksikko = valittu; //onko jokin syy, että on aiemmin string valittu ja nyt laitetaan vanerin attribuutiksi?
+                
+                if (!int.TryParse(form[String.Format("TMaara")], out van.Maara)) {
+                    ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
 
 
             };
