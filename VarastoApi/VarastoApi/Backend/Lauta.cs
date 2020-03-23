@@ -25,6 +25,10 @@ namespace VarastoApi.Backend {
             Lisatiedot = lisatiedot;
         }
 
+        public Lauta()
+        {
+        }
+
         public static Lauta Create(int id, string koko, float hinta, int maara, string yksikko, int sijainti, string kauppa, string lisatiedot) {
             if (checkHinta(hinta) && checkId(id) && checkKauppa(kauppa) && checkKoko(koko) && checkLisatiedot(lisatiedot) && checkMaara(maara) && checkSijainti(sijainti) && checkYksikko(yksikko)) {
                 return new Lauta(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);

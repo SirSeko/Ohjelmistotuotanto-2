@@ -66,7 +66,7 @@ namespace VarastoApi.Backend {
         //Lisää tilauksen tauluun, palauttaa true jos ei tule poikkeusta, muuten false
         public bool InsertInto(Vaneri v) {
             try {
-                sql = "Insert into mydb.Vaneri(Koko, Hinta, Määrä, Yksikkö, Sijainti, Kauppa, Lisätiedot) values ('" + v.Koko + "', '" + v.Hinta + "', '" + v.Maara + "', '" + v.Yksikko + "', '" + v.Sijainti + "', '" + v.Sijainti + "', '" + v.Kauppa + "', '" + v.Lisatiedot + "');";
+                sql = "Insert into mydb.Vaneri(Koko, Hinta, Määrä, Yksikkö, Sijainti, Kauppa, Lisätiedot) values ('" + v.Koko + "', '" + v.Hinta + "', '" + v.Maara + "', '" + v.Yksikko + "', '" + v.Sijainti + "', '" + v.Kauppa + "', '" + v.Lisatiedot + "');";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein o.o
                 adapter.InsertCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.InsertCommand.ExecuteNonQuery();

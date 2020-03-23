@@ -63,11 +63,11 @@ namespace VarastoApi.Controllers
             if (form["Tid"] != null) {
 
                 //Haetaan formista tiedot olioon jos id ei ole null 
-                
-                    if (!int.TryParse(form[String.Format("Tid")], out van.Id)) {
-                        ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
-                        return RedirectToAction("Index");
-                    }
+
+                if (!int.TryParse(form[String.Format("Tid")], out van.Id)) {
+                    ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
                 van.Koko = form[String.Format("TKoko")];
                 if (!SQLFilter.checkInput(van.Koko)) {
                     ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
@@ -97,7 +97,7 @@ namespace VarastoApi.Controllers
                     return RedirectToAction("Index");
                 }
                 van.Yksikko = valittu; //onko jokin syy, että on aiemmin string valittu ja nyt laitetaan vanerin attribuutiksi?
-                
+
                 if (!int.TryParse(form[String.Format("TMaara")], out van.Maara)) {
                     ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
@@ -112,8 +112,8 @@ namespace VarastoApi.Controllers
             //Pusketaan tiedot
             dmVan.Update(van);
             mm.CloseConnection();
-            
-           
+
+
             //Palataan Indexiin
             return RedirectToAction("Index");
         }
@@ -128,9 +128,9 @@ namespace VarastoApi.Controllers
             //Poistetaan tietue
             dmVan.Delete(id);
             mm.CloseConnection();
-           
-           
-          //Palataan indexiin
+
+
+            //Palataan indexiin
             return RedirectToAction("Index");
         }
 
@@ -141,5 +141,122 @@ namespace VarastoApi.Controllers
             return View(v);
         }
 
-    }
+
+        [HttpGet]
+        public ActionResult AddNew()
+        {
+            return PartialView();
+
+
+        }
+
+        public object GetValinta(string tyyppi)
+        {
+            
+            switch (tyyppi) //Luodaan asianmukainen olio
+            {
+                case "1":
+                    {
+                        Vaneri obj = new Vaneri();
+                        return obj;
+                    }
+
+
+                case "2":
+                    {
+                        Maali obj = new Maali();
+                        return obj;
+                    }
+
+
+                case "3":
+                    {
+                        Lauta obj = new Lauta();
+                        return obj;
+                    }
+
+
+            };
+            return null;
+
+           
+        }
+      
+        [System.Web.Mvc.HttpPost] // Muokataan tietuetta
+        public ActionResult AddNew(FormCollection form)
+        {
+            //Tarkistetaan mikä materiaali on kyseesssä
+            string tyyppi = form[String.Format("tyyppi")];
+            object obj = GetValinta(tyyppi);
+           
+            //Haetaan formista tiedot olioon jos id ei ole null 
+            
+
+            string Koko = form[String.Format("koko")];
+                if (!SQLFilter.checkInput(Koko))
+                {
+                    ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!float.TryParse(form[String.Format("hinta")], out float Hinta))
+                {
+                    ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string Kauppa = form[String.Format("kauppa")];
+                if (!SQLFilter.checkInput(Kauppa))
+                {
+                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                string Lisatiedot = form[String.Format("komm")];
+                if (!SQLFilter.checkInput(Lisatiedot))
+                {
+                    ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti))
+                {
+                    ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string valittu = Request.Form["yksikko"].ToString();
+                if (!SQLFilter.checkInput(valittu))
+                {
+                    ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                //van.Yksikko = valittu; //onko jokin syy, että on aiemmin string valittu ja nyt laitetaan vanerin attribuutiksi?
+
+                if (!int.TryParse(form[String.Format("maara")], out int Maara))
+                {
+                    ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
+
+            obj.Koko = Koko;
+            
+        
+
+        
+            
+            DatabaseManager mm = new DatabaseManager();
+            cnn = mm.OpenConnection();    //Avataan yhteys
+
+          
+            Vaneri van = new Vaneri();
+            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
+            dmVan.InsertInto(van);
+            mm.CloseConnection(); //SUljetaan yhteys
+
+         
+
+
+
+            //Palataan Indexiin
+            return RedirectToAction("Index");
+            
+        }
+
+        }
 }
