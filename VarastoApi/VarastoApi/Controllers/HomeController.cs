@@ -150,49 +150,21 @@ namespace VarastoApi.Controllers
 
         }
 
-        public object GetValinta(string tyyppi)
-        {
-            
-            switch (tyyppi) //Luodaan asianmukainen olio
-            {
-                case "1":
-                    {
-                        Vaneri obj = new Vaneri();
-                        return obj;
-                    }
-
-
-                case "2":
-                    {
-                        Maali obj = new Maali();
-                        return obj;
-                    }
-
-
-                case "3":
-                    {
-                        Lauta obj = new Lauta();
-                        return obj;
-                    }
-
-
-            };
-            return null;
-
-           
-        }
       
         [System.Web.Mvc.HttpPost] // Muokataan tietuetta
         public ActionResult AddNew(FormCollection form)
         {
+
+
+
             //Tarkistetaan mikä materiaali on kyseesssä
             string tyyppi = form[String.Format("tyyppi")];
-            object obj = GetValinta(tyyppi);
-           
-            //Haetaan formista tiedot olioon jos id ei ole null 
-            
 
-            string Koko = form[String.Format("koko")];
+
+            //Haetaan formista tiedot olioon jos id ei ole null 
+            int id = 1;
+            
+                string Koko = form[String.Format("koko")];
                 if (!SQLFilter.checkInput(Koko))
                 {
                     ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
@@ -220,8 +192,8 @@ namespace VarastoApi.Controllers
                     ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
-                string valittu = Request.Form["yksikko"].ToString();
-                if (!SQLFilter.checkInput(valittu))
+                string Yksikko = Request.Form["yksikko"].ToString();
+                if (!SQLFilter.checkInput(Yksikko))
                 {
                     ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
@@ -234,19 +206,50 @@ namespace VarastoApi.Controllers
                     return RedirectToAction("Index");
                 }
 
-            obj.Koko = Koko;
-            
-        
-
-        
-            
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();    //Avataan yhteys
 
+            switch (tyyppi) //Luodaan asianmukainen olio
+            {
+                case "1":
+                    
+                    Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
+                    dmVan.InsertInto(van);
+                    break;
+                    
+
+
+                case "2":
+                    
+                    Maali maa = Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    DatabaseMaali dmMaa = new DatabaseMaali(cnn);
+                    dmMaa.InsertInto(maa);
+                    break;
+
+
+
+                case "3":
+
+                    Lauta lau = Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    DatabaseLauta dmLau = new DatabaseLauta(cnn);
+                    dmLau.InsertInto(lau);
+                    break;
+
+
+            };
+            
+
+
+
+
+
+
+           
+
           
-            Vaneri van = new Vaneri();
-            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-            dmVan.InsertInto(van);
+           
+           
             mm.CloseConnection(); //SUljetaan yhteys
 
          
