@@ -46,6 +46,19 @@
             });
             return false;
         });
+        $('a.edit3').on('click', function () { //Kun painetaan edit maali nappia
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: true,
+                success: function (result) {
+                    $('#myModal3').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                        show: true
+                    });
+                }
+            });
+            return false;
+        });
 
 
     </script>
@@ -162,7 +175,7 @@
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
                             @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
                     </tr>
                 }
@@ -171,6 +184,7 @@
         <hr />
     </div>
 </div>
+<div id="myModal2"></div>
 <div class="row">
     <div class="col-75">
         <table id="" class="display">
@@ -195,9 +209,9 @@
                         <td>@item.Maara</td>
                         <td>@item.Lisatiedot</td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
                             @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
                     </tr>
                 }
@@ -206,7 +220,7 @@
         <hr />
     </div>
 </div>
-<div id="myModal2"></div>
+<div id="myModal3"></div>
 <!--Uuden tavaran/materiaalin lisäys varastoon-->
 <button id="show">Lisää uusi materiaali</button>
 

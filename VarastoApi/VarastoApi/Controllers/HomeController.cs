@@ -42,7 +42,7 @@ namespace VarastoApi.Controllers
 
        
         [HttpGet]
-        public ActionResult Edit(int id)  //Edit napilla palauttaa vanerin
+        public ActionResult Edit(int id)  //Edit napilla palauttaa materiaalin
         {
             dbMan = new DatabaseManager(); 
             cnn = dbMan.OpenConnection(); //avataan yhteys
@@ -86,17 +86,17 @@ namespace VarastoApi.Controllers
         public ActionResult EditInfo(FormCollection form)
         {
             //luodaan uusi vaneri olio
-            Vaneri van = new Vaneri();
+           
             string sid = form[String.Format("Tid")];
             if (form["Tid"] != null) {
 
 
-                if (!int.TryParse(form[String.Format("Tid")], out int Id)) {
+                if (!int.TryParse(form[String.Format("Tid")], out int id)) {
                     ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
                 string Koko = form[String.Format("TKoko")];
-                if (!SQLFilter.checkInput(van.Koko)) {
+                if (!SQLFilter.checkInput(Koko)) {
                     ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
@@ -104,17 +104,17 @@ namespace VarastoApi.Controllers
                     ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
                     return RedirectToAction("Index");
                 }
-                string Kauppa = form[String.Format("TYksikko")];
-                if (!SQLFilter.checkInput(van.Kauppa)) {
+                string Kauppa = form[String.Format("TKauppa")];
+                if (!SQLFilter.checkInput(Kauppa)) {
                     ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
                 string Lisatiedot = form[String.Format("TLisatiedot")];
-                if (!SQLFilter.checkInput(van.Lisatiedot)) {
+                if (!SQLFilter.checkInput(Lisatiedot)) {
                     ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
-                if (!int.TryParse(form[String.Format("TSijainti")], out int Sijainti)) {
+                if (!int.TryParse(form[String.Format("TSijainti")], out int sijainti)) {
                     ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
@@ -131,7 +131,7 @@ namespace VarastoApi.Controllers
                 }
 
 
-            };
+            
             //int to string
             string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
             DatabaseManager mm = new DatabaseManager();
@@ -140,7 +140,7 @@ namespace VarastoApi.Controllers
             {
                 case "1":
                     //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
-                    Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
                     DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
                     dmVan.Update(van);
                     break;
@@ -148,14 +148,14 @@ namespace VarastoApi.Controllers
 
                 case "4":
 
-                    Maali maa = Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    Maali maa = Maali.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
                     DatabaseMaali dmMaa = new DatabaseMaali(cnn);
                     dmMaa.Update(maa);
                     break;
 
                 case "2":
 
-                    Lauta lau = Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    Lauta lau = Lauta.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
                     DatabaseLauta dmLau = new DatabaseLauta(cnn);
                     dmLau.Update(lau);
                     break;
@@ -164,7 +164,7 @@ namespace VarastoApi.Controllers
             };
             mm.CloseConnection();
 
-
+            };
 
 
 
@@ -178,14 +178,40 @@ namespace VarastoApi.Controllers
             // Otetaan yhteys tietokantaan
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();
-            DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-            //Poistetaan tietue
-            dmVan.Delete(id);
-            mm.CloseConnection();
+            
+            
 
 
             //Palataan indexiin
+           
+            string sid = id.ToString(); //int to string
+            string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
+
+            //SWITCHILLE VOISI LUODA OMAN FUNKTION ETTEI AINA TARVITSE KIRJOITTAA TÄTÄ
+            switch (eka) //Tarkistetaan mikä se on.
+            {
+                case "1":
+
+                    dbVan = new DatabaseVaneri(cnn); //Poistetaan tietue
+                    dbVan.Delete(id);
+                    break;
+                    
+
+                case "4":
+                    dbMaa = new DatabaseMaali(cnn);
+                    dbMaa.Delete(id);
+                    break;
+
+                case "2":
+                    dbLau = new DatabaseLauta(cnn);
+                    dbLau.Delete(id); //Select id puuttuu lautadatabasesta
+                    break;
+
+
+            };
+            mm.CloseConnection();
             return RedirectToAction("Index");
+
         }
 
 

@@ -33,9 +33,10 @@ namespace VarastoApi.Backend {
                 koko = dataReader.GetValue(1).ToString();
                 float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
                 int.TryParse(dataReader.GetValue(3).ToString(), out maara);
-                lisatiedot = dataReader.GetValue(4).ToString();
-                int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
-                kauppa = dataReader.GetValue(6).ToString();
+               
+                int.TryParse(dataReader.GetValue(4).ToString(), out sijainti);
+                kauppa = dataReader.GetValue(5).ToString();
+                lisatiedot = dataReader.GetValue(6).ToString();
                 yksikko = dataReader.GetValue(7).ToString();
                 Lauta m= Lauta.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
                 laudat.Add(m);
@@ -84,13 +85,31 @@ namespace VarastoApi.Backend {
             koko = dataReader.GetValue(1).ToString();
             float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
             int.TryParse(dataReader.GetValue(3).ToString(), out maara);
-            yksikko = dataReader.GetValue(4).ToString();
-            int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
-            kauppa = dataReader.GetValue(6).ToString();
-            lisatiedot = dataReader.GetValue(7).ToString();
-            dataReader.Close();
+
+            int.TryParse(dataReader.GetValue(4).ToString(), out sijainti);
+            kauppa = dataReader.GetValue(5).ToString();
+            lisatiedot = dataReader.GetValue(6).ToString();
+            yksikko = dataReader.GetValue(7).ToString();
             Lauta m = Lauta.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
             return m;
+        }
+        public bool Delete(int id)
+        {
+            try
+            {
+                sql = "Delete FROM mydb.Lauta WHERE LautaID='" + id + "';";
+                command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein d:D
+                adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
+                adapter.UpdateCommand.ExecuteNonQuery();
+                command.Dispose(); //poistetaan olio
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ExceptionController.WriteException(this, ex.Message);
+                return false;
+            }
+
         }
 
     }
