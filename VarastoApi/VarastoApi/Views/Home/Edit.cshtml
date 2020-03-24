@@ -1,51 +1,92 @@
-﻿@model VarastoApi.Backend.Vaneri
-
-<!-- Muokkaus formi -->
-@using (Html.BeginForm("EditInfo", "Home", FormMethod.Post)) {
+﻿<!-- Muokkaus formi -->
+@using (Html.BeginForm("EditInfo", "Home", FormMethod.Post))
+{
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
-
-
-
-        <!-- Haetaan tiedot formiin -->
-        <label for="Tid">Tuote Id: @Model.Id </label> <br />
+<div class="form-horizontal">
+    <hr />
+    <fieldset>
+        <h3><label for="Tid">Tuote Id: @Model.Id </label></h3> <br />
         <input type="hidden" id="Tid" name="Tid" value="@Model.Id" />
-        <hr />
-        <label for="TKoko">Koko:</label>
-        <input type="text" id="TKoko" name="TKoko" value="@Model.Koko">
-
-        <select id="TYksikko" name="TYksikko">
-            <option value="">@Model.Yksikko</option>
-            <option value="">m</option>
-            <option value="">mm</option>
-        </select>
-        <input type="text" id="THinta" name="THinta" value="@Model.Hinta" />
-        <input type="text" id="TKauppa" name="TKauppa" value="@Model.Kauppa" />
-        <input type="text" id="TLisatiedot" name="TLisatiedot" value="@Model.Lisatiedot" />
-        <input type="text" id="TSijainti" name="TSijainti" value="@Model.Sijainti" />
-        <input type="text" id="TMaara" name="TMaara" value="@Model.Maara" />
-
-
-
-
-
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
-                <input type="submit" value="Save" class="btn btn-default" />
+        <div class="row">
+            <div class="col-25">
+                <label for="TKoko">Koko:</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="TKoko" name="TKoko" value="@Model.Koko"><br>
             </div>
         </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="TMaara">Määrä :</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="TMaara" name="TMaara" value="@Model.Maara" /><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="TKoko">Koko:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="TKoko" name="TKoko" value="@Model.Koko">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="TYksikko">Yksikkö :</label>
+            </div>
+            <div class="col-75">
+                <select id="TYksikko" name="TYksikko">
+                    <option value="">@Model.Yksikko</option>
+                    <option value="">m</option>
+                    <option value="">mm</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="Tsijainti">Sijainti :</label>
+            </div>
+            <div class="col-75">
+                <select id="Tsijainti" name="Tsijainti" style="width:240px;">
+                    <option value="@Model.Sijainti">Varasto 1</option>
+                    <option value="2">Varasto 2</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="Tkauppa">Kauppa :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="TKauppa" name="TKauppa" value="@Model.Kauppa" /><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="komm">Lisätiedot :</label><br>
+            </div>
+            <div class="col-75">
+                <textarea name="TLisatiedot" id="TLisatiedot" style="width:240px; height:120px">@Model.Lisatiedot</textarea><br><br>
+            </div>
+        </div>
+
+    </fieldset>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
+            <input type="submit" value="Tallenna" class="btn btn-default" />
+            <input type="" value="Sulje" class="btn btn-default" />
+        </div>
     </div>
+</div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+    }

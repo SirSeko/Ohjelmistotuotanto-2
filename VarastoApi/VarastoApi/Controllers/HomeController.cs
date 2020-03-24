@@ -25,6 +25,7 @@ namespace VarastoApi.Controllers
     {
         DatabaseManager dbMan;
         DatabaseVaneri dbVan;
+        DatabaseMaali dbMaa;
         List<Vaneri> vanerit = new List<Vaneri>();
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
@@ -35,25 +36,49 @@ namespace VarastoApi.Controllers
             return View(matko);
 
         }
-        //TÄMÄ ON TESTAILUA
+       
 
 
-
+       
         [HttpGet]
         public ActionResult Edit(int id)  //Edit napilla palauttaa vanerin
         {
-            dbMan = new DatabaseManager();
-            cnn = dbMan.OpenConnection();
-            dbVan = new DatabaseVaneri(cnn);
-            Vaneri v = dbVan.SelectId(id);
-            dbMan.CloseConnection();
-            return PartialView(v);
+            dbMan = new DatabaseManager(); 
+            cnn = dbMan.OpenConnection(); //avataan yhteys
+            
+            string sid = id.ToString(); //int to string
+            string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
+
+            switch (eka) //Tarkistetaan mikä se on.
+            {
+                case "1":
+                   //Haetaan tiedot tietokannasta
+                    dbVan = new DatabaseVaneri(cnn);
+                    Vaneri v = dbVan.SelectId(id);
+                    dbMan.CloseConnection();
+                    return PartialView(v);
+  
+                case "4":
+                    dbMaa = new DatabaseMaali(cnn);
+                    Maali maa = dbMaa.SelectId(id);
+                    dbMan.CloseConnection();
+                    return PartialView(maa);
+
+
+
+                case "2":
+
+                   
+                    break;
+
+
+            };
+            
+            return RedirectToAction("Index");
+
         }
 
-
-
-
-
+        
         [System.Web.Mvc.HttpPost] // Muokataan tietuetta
         public ActionResult EditInfo(FormCollection form)
         {
@@ -62,7 +87,7 @@ namespace VarastoApi.Controllers
             int i = 0;
             if (form["Tid"] != null) {
 
-                //Haetaan formista tiedot olioon jos id ei ole null 
+                
 
                 if (!int.TryParse(form[String.Format("Tid")], out van.Id)) {
                     ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
@@ -141,29 +166,16 @@ namespace VarastoApi.Controllers
             return View(v);
         }
 
-
-        [HttpGet]
-        public ActionResult AddNew()
-        {
-            return PartialView();
-
-
-        }
-
       
         [System.Web.Mvc.HttpPost] // Muokataan tietuetta
         public ActionResult AddNew(FormCollection form)
         {
 
-
-
-            //Tarkistetaan mikä materiaali on kyseesssä
+          //Haetaan valittu tyyppi dropdownlistasta
             string tyyppi = form[String.Format("tyyppi")];
-
-
-            //Haetaan formista tiedot olioon jos id ei ole null 
+            //Olio vaatii jonkun id:n, tällä ei merkitystä kunhan ei null.
             int id = 1;
-            
+            //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
                 string Koko = form[String.Format("koko")];
                 if (!SQLFilter.checkInput(Koko))
                 {
@@ -208,11 +220,11 @@ namespace VarastoApi.Controllers
 
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();    //Avataan yhteys
-
-            switch (tyyppi) //Luodaan asianmukainen olio
+            //Tarkistetaan mikä materiaali on kyseesssä
+            switch (tyyppi)
             {
                 case "1":
-                    
+                    //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
                     Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
                     DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
                     dmVan.InsertInto(van);
@@ -239,25 +251,8 @@ namespace VarastoApi.Controllers
 
             };
             
-
-
-
-
-
-
-           
-
-          
-           
-           
             mm.CloseConnection(); //SUljetaan yhteys
-
-         
-
-
-
-            //Palataan Indexiin
-            return RedirectToAction("Index");
+            return RedirectToAction("Index"); //Palataan indexiin
             
         }
 
