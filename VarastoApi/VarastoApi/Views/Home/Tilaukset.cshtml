@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Tilaukset";
+}
+
+<style>
+    input {
+        width: 240px;
+    }
+
+    .col-25 {
+        float: left;
+        width: 20%;
+        margin-top: 5px;
+    }
+
+    .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 5px;
+    }
+    /*Clear floats after the columns*/
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+<h2>Tilaukset</h2>
+<br />
+<br />
+
+<fieldset> <!--Tilausten tarkastelu (Ei toiminnallisuutta vielä)-->
+   
+    <div class="row">
+        <div class="col-25">
+            <label for="tilaukset">Tilaukset :</label>
+        </div>
+        <div class="col-75">
+            <select id="tilaukset" style="width:240px;">
+                <option>tilaus 1</option>
+                <option>tilaus 2</option>
+                <option>tilaus 3</option>
+                <option>tilaus 4</option>
+                <option>tilaus 5</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="tt">Tilauksen tiedot :</label>
+        </div>
+        <div class="col-75">
+            <textarea id="tilausinfo" style="width:240px; height:120px"></textarea>
+        </div>
+    </div>
+    <br />
+</fieldset>
+
+<fieldset> <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
+    <legend>Uuden tilauksen luonti</legend>
+    <form action="/action_page.php">
+        <div class="row">
+            <div class="col-25">
+                <label for="materiaalitavara">Materiaali/tavara :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="maara">Määrä :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="maara" name="maara"><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="button" value="Lisaa materiaali/tavara"><br>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-25">
+        </div>
+        <div class="col-75">
+            <textarea disabled style="width:240px; height:120px"></textarea><br><br>
+        </div>
+    </div>
+    <form>
+        <div class="row">
+            <div class="col-25">
+                <label for="Tilaaja">Tilaaja :</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="tilaaja" name="tilaaja">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+            </div>
+            <div class="col-75">
+                <input type="button" value="Lisää tilaus">
+            </div>
+        </div>
+    </form>
+</fieldset>
+<hr />
+<!--Tilausten tarkastelu-->

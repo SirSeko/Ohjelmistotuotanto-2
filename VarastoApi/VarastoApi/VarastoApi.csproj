@@ -186,6 +186,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Vanerit.cshtml" />
+    <Content Include="Views\Home\Tilaukset.cshtml" />
+    <Content Include="Views\Home\Ohjeet.cshtml" />
+    <Content Include="Views\Home\Kayttajat.cshtml" />
+    <Content Include="Views\Home\Asetukset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

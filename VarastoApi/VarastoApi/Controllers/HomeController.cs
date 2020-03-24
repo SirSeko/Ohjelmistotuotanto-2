@@ -37,10 +37,26 @@ namespace VarastoApi.Controllers
             return View(matko);
 
         }
-       
+        public ActionResult Tilaukset()
+        {
+            return View();
+        }
+        public ActionResult Kayttajat()
+        {
+            return View();
+        }
+        public ActionResult Asetukset()
+        {
+            return View();
+        }
+        public ActionResult Ohjeet()
+        {
+            return View();
+        }
 
 
-       
+
+
         [HttpGet]
         public ActionResult Edit(int id)  //Edit napilla palauttaa vanerin
         {
@@ -136,7 +152,7 @@ namespace VarastoApi.Controllers
             string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();
-            switch (eka)
+         /*   switch (eka)
             {
                 case "1":
                     //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
@@ -161,7 +177,7 @@ namespace VarastoApi.Controllers
                     break;
 
 
-            };
+            };*/
             mm.CloseConnection();
 
 
