@@ -26,6 +26,7 @@ namespace VarastoApi.Controllers
         DatabaseManager dbMan;
         DatabaseVaneri dbVan;
         DatabaseMaali dbMaa;
+        DatabaseLauta dbLau;
         List<Vaneri> vanerit = new List<Vaneri>();
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
@@ -68,8 +69,10 @@ namespace VarastoApi.Controllers
 
                 case "2":
 
-                   
-                    break;
+                    dbLau = new DatabaseLauta(cnn);
+                    Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
+                    dbMan.CloseConnection();
+                    return PartialView(lau);
 
 
             };
