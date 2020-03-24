@@ -171,6 +171,41 @@
         <hr />
     </div>
 </div>
+<div class="row">
+    <div class="col-75">
+        <table id="" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Koko</th>
+                    <th>Hinta</th>
+                    <th>Määrä</th>
+                    <th>Lisätiedot</th>
+                    <th>Muokkaa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Täytetään taulu-->
+                @foreach (var item in @Model.Laudat)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Koko</td>
+                        <td>@item.Hinta</td>
+                        <td>@item.Maara</td>
+                        <td>@item.Lisatiedot</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
+                            @Html.ActionLink("Tiedot", "Vaneri", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+    </div>
+</div>
 <div id="myModal2"></div>
 <!--Uuden tavaran/materiaalin lisäys varastoon-->
 <button id="show">Lisää uusi materiaali</button>

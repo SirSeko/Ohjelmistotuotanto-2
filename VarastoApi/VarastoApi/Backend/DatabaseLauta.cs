@@ -74,6 +74,24 @@ namespace VarastoApi.Backend {
             }
 
         }
+        public Lauta SelectId(int id)
+        {
+            sql = "Select * from mydb.Lauta Where LautaId='" + id + "';";
+            command = new SqlCommand(sql, cnn);
+            dataReader = command.ExecuteReader();
+            dataReader.Read();
+            int.TryParse(dataReader.GetValue(0).ToString(), out id);
+            koko = dataReader.GetValue(1).ToString();
+            float.TryParse(dataReader.GetValue(2).ToString(), out hinta);
+            int.TryParse(dataReader.GetValue(3).ToString(), out maara);
+            yksikko = dataReader.GetValue(4).ToString();
+            int.TryParse(dataReader.GetValue(5).ToString(), out sijainti);
+            kauppa = dataReader.GetValue(6).ToString();
+            lisatiedot = dataReader.GetValue(7).ToString();
+            dataReader.Close();
+            Lauta m = Lauta.Create(id, koko, hinta, maara, yksikko, sijainti, kauppa, lisatiedot);
+            return m;
+        }
 
     }
 }
