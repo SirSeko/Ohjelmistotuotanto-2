@@ -1,19 +1,10 @@
 ﻿
-using System.Net;
 using System.Web.Mvc;
-using System.IO;
-using Newtonsoft.Json.Linq;
-
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using VarastoApi.Backend;
 using System;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Linq;
-using System.Collections;
-using System.Web.Http;
+
 using HttpGetAttribute = System.Web.Mvc.HttpGetAttribute;
 
 namespace VarastoApi.Controllers
@@ -98,7 +89,7 @@ namespace VarastoApi.Controllers
         }
 
         
-        [System.Web.Mvc.HttpPost] // Muokataan tietuetta
+        [HttpPost] // Muokataan tietuetta
         public ActionResult EditInfo(FormCollection form)
         {
             //luodaan uusi vaneri olio
@@ -152,7 +143,7 @@ namespace VarastoApi.Controllers
             string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
             DatabaseManager mm = new DatabaseManager();
             cnn = mm.OpenConnection();
-         /*   switch (eka)
+            switch (eka)
             {
                 case "1":
                     //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
@@ -177,16 +168,15 @@ namespace VarastoApi.Controllers
                     break;
 
 
-            };*/
+            };
             mm.CloseConnection();
 
             };
 
-
-
             //Palataan Indexiin
             return RedirectToAction("Index");
         }
+        
 
         [HttpGet] // Poistetaan tietueet tällä Getillä  
         public ActionResult Delete(int id) {
@@ -212,7 +202,6 @@ namespace VarastoApi.Controllers
                     dbVan.Delete(id);
                     break;
                     
-
                 case "4":
                     dbMaa = new DatabaseMaali(cnn);
                     dbMaa.Delete(id);
@@ -220,7 +209,7 @@ namespace VarastoApi.Controllers
 
                 case "2":
                     dbLau = new DatabaseLauta(cnn);
-                    dbLau.Delete(id); //Select id puuttuu lautadatabasesta
+                    dbLau.Delete(id); 
                     break;
 
 
@@ -238,7 +227,7 @@ namespace VarastoApi.Controllers
         }
 
       
-        [System.Web.Mvc.HttpPost] // Muokataan tietuetta
+        [HttpPost] // Muokataan tietuetta
         public ActionResult AddNew(FormCollection form)
         {
 
@@ -315,7 +304,6 @@ namespace VarastoApi.Controllers
                     DatabaseLauta dmLau = new DatabaseLauta(cnn);
                     dmLau.InsertInto(lau);
                     break;
-
 
             };
             
