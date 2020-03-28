@@ -2,7 +2,61 @@
 @{
     ViewBag.Title = "Kayttajat";
 }
+<style>
+    .col-25 {
+        float: left;
+        width: 20%;
+        margin-top: 5px;
+    }
 
-<h2>Kayttajat</h2>
-<h1>Kayttaja hommat tulee tänne</h1>
+    .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 5px;
+    }
+    /*Clear floats after the columns*/
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
 
+<h2>Käyttäjät</h2>
+<hr />
+<div class="row">
+    <div class="col-25">
+        <label>Et ole kirjautunut sisään</label>
+    </div>
+</div>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-25">
+            <label>Kirjaudu sisään</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="user">Käyttäjänimi :</label>
+        </div>
+        <div class="col-75">
+            <input type="text" id="user" name="user"><br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="pass">Salasana :</label>
+        </div>
+        <div class="col-75">
+            <input type="password" id="pass" name="pass"><br>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+        </div>
+        <div class="col-75">
+            <input type="submit" value="Kirjaudu">
+        </div>
+    </div>
+</form>
