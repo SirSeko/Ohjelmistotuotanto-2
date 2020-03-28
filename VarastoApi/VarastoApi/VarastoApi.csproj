@@ -142,7 +142,6 @@
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\Sijainti.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
-    <Compile Include="Backend\Test.cs" />
     <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MateriaaliController.cs" />

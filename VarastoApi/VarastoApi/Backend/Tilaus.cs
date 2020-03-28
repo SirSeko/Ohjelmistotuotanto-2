@@ -2,17 +2,15 @@ namespace VarastoApi.Backend {
     public class Tilaus {
         public int Id;
         public string TilaajanNimi;
-        public int Maara;
-        public int MateriaaliId;
+        public string TilaajanOsoite;
 
 
 
         //Uudet tilaukset luodaan vain konstruktorilla!! Näin toimii hyvä tarkistus
-        private Tilaus(int Id, string TilaajanNimi, int Maara, int MateriaaliId) {
+        private Tilaus(int Id, string TilaajanNimi, string TilaajanOsoite) {
             this.Id = Id;
             this.TilaajanNimi = TilaajanNimi;
-            this.Maara = Maara;
-            this.MateriaaliId = MateriaaliId;
+            this.TilaajanOsoite = TilaajanOsoite;
             }
 
         /// <summary>
@@ -23,8 +21,8 @@ namespace VarastoApi.Backend {
         /// <param name="Maara"></param>
         /// <param name="MateriaaliId"></param>
         /// <returns>Tilaus || null</returns>
-        public static Tilaus Create(int Id, string TilaajanNimi, int Maara, int MateriaaliId) {
-            Tilaus t = new Tilaus(-1, "", -1, -1);
+        public static Tilaus Create(int Id, string TilaajanNimi, string TilaajanOsoite) {
+            Tilaus t = new Tilaus(-1, "", "");
             if (!checkId(Id)) {
                 ExceptionController.WriteException(t, "Tilasta luodessa huono ID.");
                 return null;
@@ -33,15 +31,11 @@ namespace VarastoApi.Backend {
                 ExceptionController.WriteException(t, "Tilausta luodessa huono tilaajan nimi.");
                 return null;
             }
-            if (!checkMaara(Maara)) {
-                ExceptionController.WriteException(t, "Tilausta luodessa huono tilaajan nimi.");
+            if (!checkTilaajanOsoite(TilaajanOsoite)) {
+                ExceptionController.WriteException(t, "Tilausta luodessa huono tilaajan osoite.");
                 return null;
             }
-            if (!checkMateriaaliId(MateriaaliId)) {
-                ExceptionController.WriteException(t, "Tilausta luodessa huono materiaalin id.");
-                return null;
-            }
-            return new Tilaus(Id, TilaajanNimi, Maara, MateriaaliId);
+            return new Tilaus(Id, TilaajanNimi, TilaajanOsoite);
         }
 
 
@@ -63,18 +57,9 @@ namespace VarastoApi.Backend {
             }
         }
 
-        //tarkistus määrälle
-        static bool checkMaara(int Maara) {
-            if (Maara < 0) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        //tarkistus Materiaalin ID:lle TODO
-        static bool checkMateriaaliId(int Id) {
-            if (Id < 0) {
+        //tarkistus tilaajan osoitteelle
+        static bool checkTilaajanOsoite(string TilaajanOsoite) {
+            if (TilaajanOsoite == null || TilaajanOsoite == "" || TilaajanOsoite.Length < 2) {
                 return false;
             } else {
                 return true;
