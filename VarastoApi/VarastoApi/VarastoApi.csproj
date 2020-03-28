@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Backend\DatabaseKayttaja.cs" />
     <Compile Include="Backend\DatabaseLauta.cs" />
     <Compile Include="Backend\DatabaseMaali.cs" />
     <Compile Include="Backend\DatabaseTilattava.cs" />
