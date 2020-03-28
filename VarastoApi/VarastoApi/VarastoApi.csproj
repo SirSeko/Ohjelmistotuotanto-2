@@ -130,6 +130,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Backend\DatabaseLauta.cs" />
     <Compile Include="Backend\DatabaseMaali.cs" />
+    <Compile Include="Backend\DatabaseTilattava.cs" />
     <Compile Include="Backend\DatabaseVaneri.cs" />
     <Compile Include="Backend\DatabaseVaraus.cs" />
     <Compile Include="Backend\DatabaseSijainti.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\Sijainti.cs" />
     <Compile Include="Backend\SQLFilter.cs" />
+    <Compile Include="Backend\Tilattava.cs" />
     <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MateriaaliController.cs" />
