@@ -6,6 +6,7 @@ using VarastoApi.Backend;
 using System;
 
 using HttpGetAttribute = System.Web.Mvc.HttpGetAttribute;
+using System.Text;
 
 namespace VarastoApi.Controllers
 
@@ -14,11 +15,11 @@ namespace VarastoApi.Controllers
 
     public class HomeController : Controller
     {
-        DatabaseManager dbMan;
+        DatabaseManager dbMan = new DatabaseManager();
         DatabaseVaneri dbVan;
         DatabaseMaali dbMaa;
         DatabaseLauta dbLau;
-        List<Vaneri> vanerit = new List<Vaneri>();
+       
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
 
@@ -51,266 +52,236 @@ namespace VarastoApi.Controllers
         [HttpGet]
         public ActionResult Edit(int id)  //Edit napilla palauttaa materiaalin
         {
-            dbMan = new DatabaseManager(); 
             cnn = dbMan.OpenConnection(); //avataan yhteys
-            
             string sid = id.ToString(); //int to string
             string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
 
             switch (eka) //Tarkistetaan mikä se on.
             {
                 case "1":
-                   //Haetaan tiedot tietokannasta
+                    //Haetaan tiedot tietokannasta
                     dbVan = new DatabaseVaneri(cnn);
                     Vaneri v = dbVan.SelectId(id);
                     dbMan.CloseConnection();
                     return PartialView(v);
-  
+
                 case "4":
                     dbMaa = new DatabaseMaali(cnn);
                     Maali maa = dbMaa.SelectId(id);
                     dbMan.CloseConnection();
                     return PartialView(maa);
 
-
-
                 case "2":
-
                     dbLau = new DatabaseLauta(cnn);
                     Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
                     dbMan.CloseConnection();
                     return PartialView(lau);
 
-
             };
-            
             return RedirectToAction("Index");
 
         }
 
-        
+
         [HttpPost] // Muokataan tietuetta
-        public ActionResult EditInfo(FormCollection form)
+        public ActionResult EditInfo(FormCollection form) //Tuodaan formin tiedot
         {
-            //luodaan uusi vaneri olio
-           
+
+            //Haetaan id formista
             string sid = form[String.Format("Tid")];
-            if (form["Tid"] != null) {
+            if (form["Tid"] != null)
+            { //Mikäli ei null niin jatketaan
 
-
-                if (!int.TryParse(form[String.Format("Tid")], out int id)) {
+                if (!int.TryParse(form[String.Format("Tid")], out int id))
+                {
                     ExceptionController.WriteException(this, "VaneriID muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
                 string Koko = form[String.Format("TKoko")];
-                if (!SQLFilter.checkInput(Koko)) {
+                if (!SQLFilter.checkInput(Koko))
+                {
                     ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
-                if (!float.TryParse(form[String.Format("THinta")], out float Hinta)) {
+                if (!float.TryParse(form[String.Format("THinta")], out float Hinta))
+                {
                     ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
                     return RedirectToAction("Index");
                 }
                 string Kauppa = form[String.Format("TKauppa")];
-                if (!SQLFilter.checkInput(Kauppa)) {
+                if (!SQLFilter.checkInput(Kauppa))
+                {
                     ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
                 string Lisatiedot = form[String.Format("TLisatiedot")];
-                if (!SQLFilter.checkInput(Lisatiedot)) {
+                if (!SQLFilter.checkInput(Lisatiedot))
+                {
                     ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
-                if (!int.TryParse(form[String.Format("TSijainti")], out int sijainti)) {
+                if (!int.TryParse(form[String.Format("TSijainti")], out int sijainti))
+                {
                     ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
                 string valittu = Request.Form["TYksikko"].ToString();
-                if (!SQLFilter.checkInput(valittu)) {
+                if (!SQLFilter.checkInput(valittu))
+                {
                     ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
-                 //onko jokin syy, että on aiemmin string valittu ja nyt laitetaan vanerin attribuutiksi?
-
-                if (!int.TryParse(form[String.Format("TMaara")], out int Maara)) {
+                if (!int.TryParse(form[String.Format("TMaara")], out int Maara))
+                {
                     ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
                     return RedirectToAction("Index");
                 }
 
-
-            
-            //int to string
-            string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
-            DatabaseManager mm = new DatabaseManager();
-            cnn = mm.OpenConnection();
-            switch (eka)
-            {
-                case "1":
-                    //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
-                    Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
-                    DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-                    dmVan.Update(van);
-                    break;
-
-
-                case "4":
-
-                    Maali maa = Maali.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
-                    DatabaseMaali dmMaa = new DatabaseMaali(cnn);
-                    dmMaa.Update(maa);
-                    break;
-
-                case "2":
-
-                    Lauta lau = Lauta.Create(id, Koko, Hinta, Maara, Kauppa, sijainti, valittu, Lisatiedot);
-                    DatabaseLauta dmLau = new DatabaseLauta(cnn);
-                    dmLau.Update(lau);
-                    break;
-
-
-            };
-            mm.CloseConnection();
+                string kutsu = "muokkaus"; //Muokkaus kutsu switchille
+                switchi(kutsu, id, Koko, Hinta, Maara, valittu, sijainti, Kauppa, Lisatiedot); //Kutsutaan switchia ja viedään tiedot sinne.
+                dbMan.CloseConnection();
 
             };
 
             //Palataan Indexiin
             return RedirectToAction("Index");
         }
-        
+
 
         [HttpGet] // Poistetaan tietueet tällä Getillä  
-        public ActionResult Delete(int id) {
-
-            // Otetaan yhteys tietokantaan
-            DatabaseManager mm = new DatabaseManager();
-            cnn = mm.OpenConnection();
-            
-            
-
-
-            //Palataan indexiin
-           
-            string sid = id.ToString(); //int to string
-            string eka = sid.Substring(0, 1); //id:n eka numero määrittää mikä tuote on kyseessä
-
-            //SWITCHILLE VOISI LUODA OMAN FUNKTION ETTEI AINA TARVITSE KIRJOITTAA TÄTÄ
-            switch (eka) //Tarkistetaan mikä se on.
-            {
-                case "1":
-
-                    dbVan = new DatabaseVaneri(cnn); //Poistetaan tietue
-                    dbVan.Delete(id);
-                    break;
-                    
-                case "4":
-                    dbMaa = new DatabaseMaali(cnn);
-                    dbMaa.Delete(id);
-                    break;
-
-                case "2":
-                    dbLau = new DatabaseLauta(cnn);
-                    dbLau.Delete(id); 
-                    break;
-
-
-            };
-            mm.CloseConnection();
+        public ActionResult Delete(int id)
+        { //Tuodaan tietueen id 
+            string kutsu = "poisto";
+            // Annetaan switchille tietoja koska se haluaa. Ainoa tärkeä tieto on kutsu ja id.
+            switchi(kutsu, id, "a", 1, 1, "a", 1, "a", "a");
+            dbMan.CloseConnection();
             return RedirectToAction("Index");
 
         }
 
 
         [HttpGet] //Esimerkki modulaarisesta sivun rakennuksesta
-        public ActionResult Vanerit() {
+        public ActionResult Vanerit()
+        {
             Models.Vanerit v = new Models.Vanerit();
             return View(v);
         }
 
-      
+
         [HttpPost] // Muokataan tietuetta
         public ActionResult AddNew(FormCollection form)
         {
 
-          //Haetaan valittu tyyppi dropdownlistasta
-            string tyyppi = form[String.Format("tyyppi")];
-            //Olio vaatii jonkun id:n, tällä ei merkitystä kunhan ei null.
-            int id = 1;
+            //Haetaan tyyppi id. eli ensimmäinen numero joka määrittää mikä materiaali kyseessä
+            int.TryParse(form[String.Format("tyyppi")], out int id); 
             //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
-                string Koko = form[String.Format("koko")];
-                if (!SQLFilter.checkInput(Koko))
-                {
-                    ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
-                    return RedirectToAction("Index");
-                }
-                if (!float.TryParse(form[String.Format("hinta")], out float Hinta))
-                {
-                    ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
-                    return RedirectToAction("Index");
-                }
-                string Kauppa = form[String.Format("kauppa")];
-                if (!SQLFilter.checkInput(Kauppa))
-                {
-                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
-                    return RedirectToAction("Index");
-                }
-                string Lisatiedot = form[String.Format("komm")];
-                if (!SQLFilter.checkInput(Lisatiedot))
-                {
-                    ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
-                    return RedirectToAction("Index");
-                }
-                if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti))
-                {
-                    ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
-                    return RedirectToAction("Index");
-                }
-                string Yksikko = Request.Form["yksikko"].ToString();
-                if (!SQLFilter.checkInput(Yksikko))
-                {
-                    ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
-                    return RedirectToAction("Index");
-                }
-                //van.Yksikko = valittu; //onko jokin syy, että on aiemmin string valittu ja nyt laitetaan vanerin attribuutiksi?
-
-                if (!int.TryParse(form[String.Format("maara")], out int Maara))
-                {
-                    ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
-                    return RedirectToAction("Index");
-                }
-
-            DatabaseManager mm = new DatabaseManager();
-            cnn = mm.OpenConnection();    //Avataan yhteys
-            //Tarkistetaan mikä materiaali on kyseesssä
-            switch (tyyppi)
+            string Koko = form[String.Format("koko")];
+            if (!SQLFilter.checkInput(Koko))
             {
-                case "1":
-                    //Luodaan tarvittava olio ja viedään tiedot tietokantaan.
-                    Vaneri van = Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
+                return RedirectToAction("Index");
+            }
+            if (!float.TryParse(form[String.Format("hinta")], out float Hinta))
+            {
+                ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
+                return RedirectToAction("Index");
+            }
+            string Kauppa = form[String.Format("kauppa")];
+            if (!SQLFilter.checkInput(Kauppa))
+            {
+                ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                return RedirectToAction("Index");
+            }
+            string Lisatiedot = form[String.Format("komm")];
+            if (!SQLFilter.checkInput(Lisatiedot))
+            {
+                ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
+                return RedirectToAction("Index");
+            }
+            if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti))
+            {
+                ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
+                return RedirectToAction("Index");
+            }
+            string Yksikko = Request.Form["yksikko"].ToString();
+            if (!SQLFilter.checkInput(Yksikko))
+            {
+                ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
+                return RedirectToAction("Index");
+            }
+
+            if (!int.TryParse(form[String.Format("maara")], out int Maara))
+            {
+                ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                return RedirectToAction("Index");
+            }
+            //Kertoo switchille mikä kutsu on kyseessä
+            string kutsu = "uusi";
+            switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
+            dbMan.CloseConnection(); //suljetaan yhteys
+            return RedirectToAction("Index"); // palataan
+           
+
+        }
+
+        // Tämä tutkii tiedot ja päättää onko kyseessä lisäys, muokkaus vai poisto // Private huvin vuoksi..
+        private bool switchi (string kutsu, int id, string Koko, float Hinta, int Maara, string Yksikko, int Sijainti, string Kauppa, string Lisatiedot)
+        {
+            string sid = id.ToString(); // Muutetaan id stringiksi koska haluamme vain ensimmäisen numeron joka kertoo materiaalin tyypin
+            string tyyppi = sid.Substring(0, 1); 
+
+            cnn = dbMan.OpenConnection(); //Avataan yhteys
+            //Tarkistetaan mikä materiaali on kyseesssä
+            switch (tyyppi) //Tässä tarkastellaan mikä materiaali
+            {
+                case "1": 
                     DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
-                    dmVan.InsertInto(van);
-                    break;
                     
+                    if (kutsu == "uusi") {  //Jos uusi niin luodaan uusi
+                        dmVan.InsertInto(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "muokkaus") //Jos muokkaus niin muokataan
+                    {
+                        dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "poista") //Jos poisto niin poistetaan
+                    {
+                        dmVan.Delete(id); 
+                    }
+                    return true; //Palauteaan true jos homma ok.
 
-                case "2":
-                    
-                    Maali maa = Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                case "4":
                     DatabaseMaali dmMaa = new DatabaseMaali(cnn);
-                    dmMaa.InsertInto(maa);
-                    break;
-
-                case "3":
-
-                    Lauta lau = Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot);
+                    if (kutsu == "uusi") { 
+                        dmMaa.InsertInto(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "muokkaus")
+                    {
+                        dmMaa.Update(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "poisto")
+                    {
+                        dmMaa.Delete(id);
+                    }
+                    return true;
+                case "2":
                     DatabaseLauta dmLau = new DatabaseLauta(cnn);
-                    dmLau.InsertInto(lau);
-                    break;
+                    if (kutsu == "uusi") { 
+                        dmLau.InsertInto(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if(kutsu == "muokkaus")
+                    {
+                        dmLau.Update(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "poisto")
+                    {
+                        dmLau.Delete(id);
+                    }
+                    return true;
 
             };
-            
-            mm.CloseConnection(); //SUljetaan yhteys
-            return RedirectToAction("Index"); //Palataan indexiin
-            
+            return false; //Jos tyyppi ei täsmää palautetaan false
         }
 
-        }
+    }   
 }
