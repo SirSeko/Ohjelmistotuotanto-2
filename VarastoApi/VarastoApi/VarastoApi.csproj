@@ -147,7 +147,6 @@
     <Compile Include="Backend\Tilattava.cs" />
     <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MateriaaliController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

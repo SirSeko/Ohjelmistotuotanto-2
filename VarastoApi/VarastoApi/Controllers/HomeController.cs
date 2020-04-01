@@ -25,6 +25,7 @@ namespace VarastoApi.Controllers
 
         public ActionResult Index()
         {
+
             matko.Initiate();
             return View(matko);
 
@@ -45,7 +46,6 @@ namespace VarastoApi.Controllers
         {
             return View();
         }
-
 
 
 
@@ -282,6 +282,7 @@ namespace VarastoApi.Controllers
             };
             return false; //Jos tyyppi ei täsmää palautetaan false
         }
+       
 
     }   
 }
