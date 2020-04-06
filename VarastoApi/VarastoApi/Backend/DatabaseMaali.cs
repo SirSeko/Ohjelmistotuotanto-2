@@ -62,7 +62,7 @@ namespace VarastoApi.Backend {
         //Muokkaa ID:n mukaista Columnia. Tarkennus: Vastaanottaa olion Tilaus ja korvaa tietokannasta MateriaaliID:n mukaisen columnin tiedot.
         public bool Update(Maali m) {
             try {
-                sql = "UPDATE mydb.Maali SET Koko='" + m.Koko + "', Hinta='" + m.Hinta + "', Määrä='" + m.Maara + "', Yksikkö='=" + m.Yksikko + "', Sijainti='" + m.Sijainti + "', Kauppa='" + m.Kauppa + "', Lisätiedot='" + m.Lisatiedot + "' WHERE MaaliID='" + m.Id + "';";
+                sql = "UPDATE mydb.Maali SET Koko='" + m.Koko + "', Hinta='" + m.Hinta + "', Määrä='" + m.Maara + "', Yksikkö='" + m.Yksikko + "', Sijainti='" + m.Sijainti + "', Kauppa='" + m.Kauppa + "', Lisätiedot='" + m.Lisatiedot + "' WHERE MaaliID='" + m.Id + "';";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein d:D
                 adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.UpdateCommand.ExecuteNonQuery();
