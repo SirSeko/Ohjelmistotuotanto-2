@@ -277,6 +277,14 @@ namespace VarastoApi.Controllers {
                 return RedirectToAction("Login", "Login");
             }
         }
+
+        public ActionResult DeleteKayttaja(string Kayttajanimi) {
+            dbMan = new DatabaseManager();
+            cnn = dbMan.OpenConnection();
+            dbKay = new DatabaseKayttaja(cnn);
+            dbKay.Delete(Kayttajanimi);
+            return RedirectToAction("Kayttajat");
+        }
     }
 
 }  

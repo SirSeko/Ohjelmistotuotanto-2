@@ -67,8 +67,10 @@
 }
 
 @foreach(var item in Model.Lista) {
-    <tr>
-        <td>@item.Kayttajanimi</td>
-        <td>@item.Valtuus</td>
-    </tr>
+        <tr>
+            <td>@item.Kayttajanimi</td>
+            <td>@item.Valtuus</td>
+            @Html.ActionLink("Delete", "DeleteKayttaja", new { Kayttajanimi = item.Kayttajanimi }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+        </tr>
+    <br />
 }

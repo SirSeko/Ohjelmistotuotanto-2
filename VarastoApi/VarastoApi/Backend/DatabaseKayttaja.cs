@@ -89,9 +89,9 @@ namespace VarastoApi.Backend {
         }
 
         //Poistaa taulusta kohdan, missä tilaus id on x ja materiaali id on y
-        public bool Delete(Kayttaja k) {
+        public bool Delete(string Kayttajanimi) {
             try {
-                sql = "Delete FROM mydb.Kayttajat WHERE Kayttajanimi='" + k.Kayttajanimi + "';";
+                sql = "Delete FROM mydb.Kayttajat WHERE Kayttajanimi='" + Kayttajanimi + "';";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein Owo
                 adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.UpdateCommand.ExecuteNonQuery();
