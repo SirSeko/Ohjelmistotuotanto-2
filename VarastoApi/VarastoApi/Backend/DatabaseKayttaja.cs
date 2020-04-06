@@ -43,9 +43,10 @@ namespace VarastoApi.Backend {
             try {
                 this.kayttajanimi = "";
                 this.valtuus = -1;
-                sql = "Select Kayttajanimi, Valtuudet from mydb.Kayttajat where Kayttajanimi = '" + kayttajanimi + "' and Salasana ='" + hash + "';";
+                sql = "Select Kayttajanimi, Valtuudet FROM mydb.Kayttajat WHERE Kayttajanimi = '" + kayttajanimi + "' AND Salasana ='" + hash + "';";
                 command = new SqlCommand(sql, cnn);
                 dataReader = command.ExecuteReader();
+                dataReader.Read();
                 this.kayttajanimi = dataReader.GetValue(0).ToString();
                 int.TryParse(dataReader.GetValue(1).ToString(), out this.valtuus);
                 dataReader.Close();
@@ -101,5 +102,7 @@ namespace VarastoApi.Backend {
                 return false;
             }
         }
+
+     
     }
 }

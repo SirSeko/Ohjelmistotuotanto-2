@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<style>
+    .col-25 {
+        float: left;
+        width: 20%;
+        margin-top: 5px;
+    }
+
+    .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 5px;
+    }
+    /*Clear floats after the columns*/
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post)) {
+    {
+        @Html.AntiForgeryToken()
+    <fieldset>
+        <legend> Käyttäjänimi</legend>
+        <div class="row">
+            <div class="col-25">
+                <label for="kayttajanimi">Käyttäjänimi : </label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="kayttajanimi" name="kayttajanimi"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="salasana">Salasana : </label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="salasana" name="salasana"><br>
+            </div>
+        </div>
+    </fieldset>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+    }
+}

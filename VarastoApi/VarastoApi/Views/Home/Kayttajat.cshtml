@@ -1,4 +1,5 @@
-﻿
+﻿@model VarastoApi.Models.Kayttajat
+
 @{
     ViewBag.Title = "Kayttajat";
 }
@@ -23,40 +24,51 @@
 </style>
 
 <h2>Käyttäjät</h2>
-<hr />
-<div class="row">
-    <div class="col-25">
-        <label>Et ole kirjautunut sisään</label>
-    </div>
-</div>
-<hr />
-<form>
-    <div class="row">
-        <div class="col-25">
-            <label>Kirjaudu sisään</label>
+@using (Html.BeginForm("Register", "Home", FormMethod.Post)) {
+    {
+        @Html.AntiForgeryToken()
+        <fieldset>
+            <legend>Rekisteröi käyttäjä</legend>
+            <div class="row">
+                <div class="col-25">
+                    <label for="kayttajanimi">Käyttäjänimi : </label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="kayttajanimi" name="kayttajanimi"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Valtuus">Valtuustaso :</label>
+                </div>
+                <div class="col-75">
+                    <select id="valtuus" name="valtuus" style="width:240px;">
+                        <option value="1">Oppilas</option>
+                        <option value="2">Opettaja</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="salasana">Salasana : </label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="salasana" name="salasana"><br>
+                </div>
+            </div>
+        </fieldset>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-25">
-            <label for="user">Käyttäjänimi :</label>
-        </div>
-        <div class="col-75">
-            <input type="text" id="user" name="user"><br>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-25">
-            <label for="pass">Salasana :</label>
-        </div>
-        <div class="col-75">
-            <input type="password" id="pass" name="pass"><br>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-25">
-        </div>
-        <div class="col-75">
-            <input type="submit" value="Kirjaudu">
-        </div>
-    </div>
-</form>
+    }
+}
+
+@foreach(var item in Model.Lista) {
+    <tr>
+        <td>@item.Kayttajanimi</td>
+        <td>@item.Valtuus</td>
+    </tr>
+}

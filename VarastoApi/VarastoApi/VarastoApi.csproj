@@ -147,6 +147,7 @@
     <Compile Include="Backend\Tilattava.cs" />
     <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -155,6 +156,7 @@
     <Compile Include="Backend\DatabaseTilaus.cs" />
     <Compile Include="Backend\Tilaus.cs" />
     <Compile Include="Backend\Varaus.cs" />
+    <Compile Include="Models\Kayttajat.cs" />
     <Compile Include="Models\Vanerit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -191,6 +193,7 @@
     <Content Include="Views\Home\Ohjeet.cshtml" />
     <Content Include="Views\Home\Kayttajat.cshtml" />
     <Content Include="Views\Home\Asetukset.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
