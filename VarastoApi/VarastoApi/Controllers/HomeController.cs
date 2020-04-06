@@ -268,8 +268,14 @@ namespace VarastoApi.Controllers {
         }
 
         public ActionResult Kayttajat() {
-            Models.Kayttajat k = new Models.Kayttajat();
-            return View(k);
+            if ((string)Session["Valtuus"] == "2") {
+                Models.Kayttajat k = new Models.Kayttajat();
+                return View(k);
+            } else if ((string)Session["Valtuus"] == "1"){
+                return RedirectToAction("Index");
+            } else {
+                return RedirectToAction("Login", "Login");
+            }
         }
     }
 
