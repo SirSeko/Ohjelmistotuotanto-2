@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Tilaukset";
 }
-
+@model VarastoApi.Backend.TilausKoonti
 <style>
     input {
         width: 240px;
@@ -30,19 +30,20 @@
 <br />
 <br />
 
-<fieldset> <!--Tilausten tarkastelu (Ei toiminnallisuutta vielä)-->
-   
+<fieldset>
+    <!--Tilausten tarkastelu (Ei toiminnallisuutta vielä)-->
+
     <div class="row">
         <div class="col-25">
             <label for="tilaukset">Tilaukset :</label>
         </div>
         <div class="col-75">
             <select id="tilaukset" style="width:240px;">
-                <option>tilaus 1</option>
-                <option>tilaus 2</option>
-                <option>tilaus 3</option>
-                <option>tilaus 4</option>
-                <option>tilaus 5</option>
+                @foreach (var item in Model.Tilaukset)
+                {
+                    <option value="@item.Id">tilaus @item.Id</option>
+
+                };
             </select>
         </div>
     </div>
@@ -57,57 +58,83 @@
     <br />
 </fieldset>
 
-<fieldset> <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
+<fieldset>
+    <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
     <legend>Uuden tilauksen luonti</legend>
-    <form action="/action_page.php">
-        <div class="row">
-            <div class="col-25">
-                <label for="materiaalitavara">Materiaali/tavara :</label>
+    <!-- <form action="/action_page.php">
+         <div class="row">
+             <div class="col-25">
+                 <label for="materiaalitavara">Materiaali/tavara :</label>
+             </div>
+             <div class="col-75">
+                 <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-25">
+                 <label for="maara">Määrä :</label>
+             </div>
+             <div class="col-75">
+                 <input type="text" id="maara" name="maara"><br><br>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-25">
+             </div>
+             <div class="col-75">
+                 <input type="button" value="Lisaa materiaali/tavara"><br>
+             </div>
+         </div>
+     </form>
+     <div class="row">
+         <div class="col-25">
+         </div>
+         <div class="col-75">
+             <textarea disabled style="width:240px; height:120px"></textarea><br><br>
+         </div>
+     </div>
+     <form>
+         <div class="row">
+             <div class="col-25">
+                 <label for="Tilaaja">Tilaaja :</label>
+             </div>
+             <div class="col-75">
+                 <input type="text" id="tilaaja" name="tilaaja">
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-25">
+             </div>
+             <div class="col-75">
+                 <input type="button" value="Lisää tilaus">
+             </div>
+         </div>
+     </form>-->
+    @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <fieltset>
+            <legend>Uusi tilaus</legend>
+            <div class="row">
+               
+                <label for="tilaajanNimi">Nimi:</label>
+
+                <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
+                <label for="tilaajanOsoite">Osoite:</label>
+                <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
             </div>
-            <div class="col-75">
-                <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
-            </div>
+
+        </fieltset>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <input type="submit" value="Lisää tilaus" class="btn btn-default" />
         </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="maara">Määrä :</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="maara" name="maara"><br><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-            </div>
-            <div class="col-75">
-                <input type="button" value="Lisaa materiaali/tavara"><br>
-            </div>
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-25">
-        </div>
-        <div class="col-75">
-            <textarea disabled style="width:240px; height:120px"></textarea><br><br>
-        </div>
-    </div>
-    <form>
-        <div class="row">
-            <div class="col-25">
-                <label for="Tilaaja">Tilaaja :</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="tilaaja" name="tilaaja">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-            </div>
-            <div class="col-75">
-                <input type="button" value="Lisää tilaus">
-            </div>
-        </div>
-    </form>
+    }
+
+
+
 </fieldset>
-<hr />
-<!--Tilausten tarkastelu-->
+<thead>
+    
+
+    <!--Tilausten tarkastelu-->

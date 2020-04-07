@@ -18,9 +18,11 @@ namespace VarastoApi.Controllers {
         DatabaseVaneri dbVan;
         DatabaseMaali dbMaa;
         DatabaseLauta dbLau;
+        DatabaseTilaus dbTil;
 
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
+        TilausKoonti tilko = new TilausKoonti();
 
         public ActionResult Index() {
             if (Session["Kayttajanimi"] != null) {
@@ -32,7 +34,8 @@ namespace VarastoApi.Controllers {
 
         }
         public ActionResult Tilaukset() {
-            return View();
+            tilko.Initiate();
+            return View(tilko);
         }
         public ActionResult Asetukset() {
             return View();
@@ -287,7 +290,21 @@ namespace VarastoApi.Controllers {
             dbKay.Delete(Kayttajanimi);
             return RedirectToAction("Kayttajat");
         }
-
+        [HttpPost]
+        public ActionResult LisaaTilaus(FormCollection form)
+        {
+            int.TryParse(form[string.Format("id")], out int id);
+            string tilaajanNimi = form[string.Format("tilaajanNimi")];
+            string tilaajanOsoite = form[string.Format("tilaajanOsoite")];
+            dbMan = new DatabaseManager();
+            cnn = dbMan.OpenConnection();
+            dbTil = new DatabaseTilaus(cnn);
+            Tilaus t = Tilaus.Create(id, tilaajanNimi, tilaajanOsoite);
+            dbTil.InsertInto(t);
+            return RedirectToAction("Tilaukset");
+        }
     }
+    
+
 
 }  

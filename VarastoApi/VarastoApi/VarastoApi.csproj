@@ -140,6 +140,7 @@
     <Compile Include="Backend\Lauta.cs" />
     <Compile Include="Backend\Maali.cs" />
     <Compile Include="Backend\Materiaali.cs" />
+    <Compile Include="Backend\TilausKoonti.cs" />
     <Compile Include="Backend\MateriaaliKoonti.cs" />
     <Compile Include="Backend\PBKDF2Hash.cs" />
     <Compile Include="Backend\Sijainti.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Backend\Tilaus.cs" />
     <Compile Include="Backend\Varaus.cs" />
     <Compile Include="Models\Kayttajat.cs" />
+    <Compile Include="Models\Tilaukset.cs" />
     <Compile Include="Models\Vanerit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -197,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Tilaukset\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.min.css.map" />
