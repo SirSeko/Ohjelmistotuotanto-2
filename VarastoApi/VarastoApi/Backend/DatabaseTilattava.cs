@@ -18,9 +18,31 @@ namespace VarastoApi.Backend {
         }
 
         //Lukee kaiken datan taulusta
-        public List<Tilattava> SelectAll(List<Tilattava> tilattavat) {
+        public List<Tilattava> SelectAll() {
             try {
+                List<Tilattava> tilattavat = new List<Tilattava>();
                 sql = "Select * from mydb.Tilattava;";
+                command = new SqlCommand(sql, cnn);
+                dataReader = command.ExecuteReader();
+                while (dataReader.Read()) {
+                    int.TryParse(dataReader.GetValue(0).ToString(), out tilausId);
+                    int.TryParse(dataReader.GetValue(1).ToString(), out materiaaliId);
+                    Tilattava t = new Tilattava(tilausId, materiaaliId);
+                    tilattavat.Add(t);
+                }
+                dataReader.Close();
+                return tilattavat;
+            } catch (Exception ex) {
+                ExceptionController.WriteException(this, ex.Message);
+                return null;
+            }
+        }
+
+        //Hakee kaikki tilattavat annetulla TilausID:llä
+        public List<Tilattava> SelectTilaus(int TilausID) {
+            try {
+                List<Tilattava> tilattavat = new List<Tilattava>();
+                sql = "Select * from mydb.Tilattava where TilausID = '" + TilausID + "';";
                 command = new SqlCommand(sql, cnn);
                 dataReader = command.ExecuteReader();
                 while (dataReader.Read()) {
