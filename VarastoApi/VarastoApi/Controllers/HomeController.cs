@@ -34,14 +34,26 @@ namespace VarastoApi.Controllers {
 
         }
         public ActionResult Tilaukset() {
-            tilko.Initiate();
-            return View(tilko);
+            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1") {
+                tilko.Initiate();
+                return View(tilko);
+            } else { 
+                return RedirectToAction("Login", "Login");
+            }
         }
         public ActionResult Asetukset() {
-            return View();
+            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1") {
+                return View();
+            } else {
+                return RedirectToAction("Login", "Login");
+            }
         }
         public ActionResult Ohjeet() {
-            return View();
+            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1") {
+                return View();
+            } else {
+                return RedirectToAction("Login", "Login");
+            }
         }
 
 
