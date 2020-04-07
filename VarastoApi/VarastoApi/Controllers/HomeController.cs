@@ -7,6 +7,8 @@ using System;
 
 using HttpGetAttribute = System.Web.Mvc.HttpGetAttribute;
 using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace VarastoApi.Controllers {
 
@@ -285,6 +287,7 @@ namespace VarastoApi.Controllers {
             dbKay.Delete(Kayttajanimi);
             return RedirectToAction("Kayttajat");
         }
+
     }
 
 }  
