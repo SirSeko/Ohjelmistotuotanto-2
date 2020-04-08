@@ -24,7 +24,7 @@ namespace VarastoApi.Backend {
         public static Tilaus Create(int Id, string TilaajanNimi, string TilaajanOsoite) {
             Tilaus t = new Tilaus(-1, "", "");
             if (!checkId(Id)) {
-                ExceptionController.WriteException(t, "Tilasta luodessa huono ID.");
+                ExceptionController.WriteException(t, "Tilausta luodessa huono ID.");
                 return null;
             }
             if (!checkTilaajanNimi(TilaajanNimi)) {
