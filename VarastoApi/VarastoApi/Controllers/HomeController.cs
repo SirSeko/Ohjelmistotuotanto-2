@@ -232,7 +232,7 @@ namespace VarastoApi.Controllers {
                     } else if (kutsu == "muokkaus") //Jos muokkaus niin muokataan
                       {
                         dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    } else if (kutsu == "poista") //Jos poisto niin poistetaan
+                    } else if (kutsu == "poisto") //Jos poisto niin poistetaan
                       {
                         dmVan.Delete(id);
                     }
