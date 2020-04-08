@@ -1,9 +1,134 @@
 ﻿
+
+@model VarastoApi.Backend.TilausKoonti
 @{
     ViewBag.Title = "Tilaukset";
 }
-@model VarastoApi.Backend.TilausKoonti
+@section scripts{
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script>
+        //Javascript funktioita
+
+        $(document).ready(function () { //Kun sivun lataus valmis suoritetaan seuraaavat
+
+            //Datatables funktiot lähde: https://datatables.net/ //
+            $('table.display').DataTable({ //Käytetään datatablesia jossa seuraavat toiminnot select, ordering
+                select: true,
+                ordering: true,
+                paging: false,
+                responsive: true,
+                dom: 'Bfrtip', //Datatables napit
+                language: {
+                    buttons: {
+                        colvisRestore: "Palauta", //Muutetaan napin nimi koska muuten se olisi englanniksi
+                        colvis: "Rivit"
+
+                    }
+                },
+                buttons: [ //Määritellään mitän nappeja halutaan käyttää
+                    {
+                        extend: 'colvis', //Datatablesin omia nimityksiä napeille.
+                        postfixButtons: ['colvisRestore']
+                    }
+                ],
+                columnDefs: [ //Määritellään mitä rivejä piilotetaan
+                    {
+                        targets: 5, //Rivi numero
+                        visible: false //Näkyvyys
+                    },
+                    {
+                        targets: 6,
+                        visible: false
+                    }
+                ]
+            });
+
+
+        });
+
+        //Nappien ja modaalien funktiot //
+
+        $('#uusi').hide(); //Piilotetaan div jolla lisätään uusi materiaali heti kun sivu ladataan
+        $("#show").click(function () { //Nabbia painamalla näytetään tai piilotetaan se
+            $("#uusi").toggle();
+        });
+
+        $('a.edit').on('click', function () { //Kun painetaan edit vaneri nappia
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: true,
+                success: function (result) {
+                    $('#myModal').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                        show: true
+                    });
+                }
+            });
+
+            return false;
+        });
+        $('a.edit2').on('click', function () { //Kun painetaan edit maali nappia
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: true,
+                success: function (result) {
+                    $('#myModal2').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                        show: true
+                    });
+                }
+            });
+            return false;
+        });
+        $('a.edit3').on('click', function () { //Kun painetaan edit lauta nappia
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: true,
+                success: function (result) {
+                    $('#myModal3').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                        show: true
+                    });
+                }
+            });
+            return false;
+        });
+
+        $("#sijainti").change(function () {
+            if ($(this).data('options') === undefined) {
+                /*Taking an array of all options-2 and kind of embedding it on the select1*/
+                $(this).data('options', $('#skaappi option').clone());
+            }
+            var id = $(this).val();
+            var options = $(this).data('options').filter('[value=' + id + ']');
+            $('#skaappi').html(options);
+
+        });
+
+    </script>
+}
+<!--Nämä sitten erilliseen tyylitiedostoon sitten-->
 <style>
+
+    /*Taulujen tyyli*/
+    table, th, td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    table {
+        border-spacing: 10px;
+    }
+    /*Lomakkeiden tyyli ja formatointi*/
     input {
         width: 240px;
     }
@@ -26,6 +151,8 @@
         clear: both;
     }
 </style>
+
+
 <h2>Tilaukset</h2>
 <br />
 <br />
@@ -34,7 +161,7 @@
     <!--Tilausten tarkastelu (Ei toiminnallisuutta vielä)-->
 
     <div class="row">
-        <div class="col-25">
+        <!--div class="col-25">
             <label for="tilaukset">Tilaukset :</label>
         </div>
         <div class="col-75">
@@ -45,83 +172,116 @@
 
                 };
             </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-25">
-            <label for="tt">Tilauksen tiedot :</label>
-        </div>
+
+        </div>-->
         <div class="col-75">
-            <textarea id="tilausinfo" style="width:240px; height:120px"></textarea>
+            <table id="tilausTaulu" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tilaaja</th>
+                        <th>Osoite</th>
+                        <th>Toiminnot</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var tilattava in Model.Tilaukset)
+                    {
+                        <tr>
+                            <td>@tilattava.Id</td>
+                            <td>@tilattava.TilaajanNimi</td>
+                            <td>@tilattava.TilaajanOsoite</td>
+                            <td>
+                                @Html.ActionLink("Tiedot", "lisatiedot", new { id = tilattava.Id }, new { @class = "btn tiedot" })
+                            @Html.ActionLink("Poista", "poistaTilaus", new { id = tilattava.Id }, new { @class = "btn poistatilaus" })
+                        </td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
         </div>
     </div>
+
     <br />
 </fieldset>
 
 <fieldset>
     <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
     <legend>Uuden tilauksen luonti</legend>
-    <!-- <form action="/action_page.php">
-         <div class="row">
-             <div class="col-25">
-                 <label for="materiaalitavara">Materiaali/tavara :</label>
-             </div>
-             <div class="col-75">
-                 <input type="text" id="materiaalitavara" name="materiaalitavara"><br><br>
-             </div>
-         </div>
-         <div class="row">
-             <div class="col-25">
-                 <label for="maara">Määrä :</label>
-             </div>
-             <div class="col-75">
-                 <input type="text" id="maara" name="maara"><br><br>
-             </div>
-         </div>
-         <div class="row">
-             <div class="col-25">
-             </div>
-             <div class="col-75">
-                 <input type="button" value="Lisaa materiaali/tavara"><br>
-             </div>
-         </div>
-     </form>
-     <div class="row">
-         <div class="col-25">
-         </div>
-         <div class="col-75">
-             <textarea disabled style="width:240px; height:120px"></textarea><br><br>
-         </div>
-     </div>
-     <form>
-         <div class="row">
-             <div class="col-25">
-                 <label for="Tilaaja">Tilaaja :</label>
-             </div>
-             <div class="col-75">
-                 <input type="text" id="tilaaja" name="tilaaja">
-             </div>
-         </div>
-         <div class="row">
-             <div class="col-25">
-             </div>
-             <div class="col-75">
-                 <input type="button" value="Lisää tilaus">
-             </div>
-         </div>
-     </form>-->
+
+
+    @using (Html.BeginForm("lisaaTilattava", "Home", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-25">
+                <label for="tilausId">tilausId:</label><br>
+            </div>
+            <div class="col-75">
+                <input type="text" id="tilausId" name="tilausId"><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="tyyppi">Tyyppi :</label>
+            </div>
+            <div class="col-75">
+                <select id="materiaaliID" name="materiaaliID" style="width:240px;">
+                    <option value="1">Vaneri</option>
+                    <option value="4">Maali</option>
+                    <option value="2">Lauta</option>
+
+
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-25">
+                <input type="submit" value="Lisää tilaukseen" class="btn btn-default" />
+            </div>
+
+        </div>
+    }
+
+
     @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <fieltset>
-            <legend>Uusi tilaus</legend>
-            <div class="row">
-               
-                <label for="tilaajanNimi">Nimi:</label>
 
-                <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
-                <label for="tilaajanOsoite">Osoite:</label>
-                <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
+
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="tilaajanNimi">Nimi:</label>
+
+                </div>
+                <div class="col-75">
+                    <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
+
+
+                </div>
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-25">
+
+                    <label for="tilaajanOsoite">Osoite:</label>
+                </div>
+                <div class="col-75">
+
+
+                    <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
+                </div>
+
+
+
             </div>
 
         </fieltset>
@@ -130,11 +290,9 @@
             <input type="submit" value="Lisää tilaus" class="btn btn-default" />
         </div>
     }
-
+   
+      
 
 
 </fieldset>
 <thead>
-    
-
-    <!--Tilausten tarkastelu-->

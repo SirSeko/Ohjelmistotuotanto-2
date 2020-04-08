@@ -19,6 +19,7 @@ namespace VarastoApi.Controllers {
         DatabaseMaali dbMaa;
         DatabaseLauta dbLau;
         DatabaseTilaus dbTil;
+        DatabaseTilattava dbTilattava;
 
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
@@ -313,6 +314,30 @@ namespace VarastoApi.Controllers {
             dbTil = new DatabaseTilaus(cnn);
             Tilaus t = Tilaus.Create(id, tilaajanNimi, tilaajanOsoite);
             dbTil.InsertInto(t);
+            return RedirectToAction("Tilaukset");
+        }
+       
+        public ActionResult lisaaTilattava(FormCollection form)
+        {
+            int.TryParse(form[string.Format("tilausId")], out int tilausId);
+            int.TryParse(form[string.Format("materiaaliID")], out int materiaaliID);
+            dbMan = new DatabaseManager();
+            cnn = dbMan.OpenConnection();
+            dbTilattava = new DatabaseTilattava(cnn);
+            //Tilattava t = Tilattava.Create(tilausId,materiaaliID);
+            
+           // dbTilattava.InsertInto(t);
+            return RedirectToAction("Tilaukset");
+            
+            
+            
+        }
+        [HttpGet]
+        public ActionResult poistaTilaus(int id)
+        {
+            cnn = dbMan.OpenConnection();
+            dbTil = new DatabaseTilaus(cnn);
+            dbTil.Delete(id);
             return RedirectToAction("Tilaukset");
         }
     }
