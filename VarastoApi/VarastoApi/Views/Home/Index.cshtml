@@ -7,11 +7,13 @@
     <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script>
         //Javascript funktioita
 
@@ -23,11 +25,11 @@
                 ordering: true,
                 paging: false,
                 responsive: true,
-                dom: 'Bfrtip', //Datatables napit 
+                dom: 'Bfrtip', //Datatables napit
                 language: {
                     buttons: {
                         colvisRestore: "Palauta", //Muutetaan napin nimi koska muuten se olisi englanniksi
-                        colvis: "Rivit" 
+                        colvis: "Rivit"
 
                     }
                 },
@@ -37,7 +39,7 @@
                         postfixButtons: ['colvisRestore']
                     }
                 ],
-                columnDefs: [ //Määritellään mitä rivejä piilotetaan 
+                columnDefs: [ //Määritellään mitä rivejä piilotetaan
                     {
                         targets: 5, //Rivi numero
                         visible: false //Näkyvyys
@@ -49,7 +51,7 @@
                 ]
             });
 
-           
+
         });
 
         //Nappien ja modaalien funktiot //
@@ -58,6 +60,9 @@
         $("#show").click(function () { //Nabbia painamalla näytetään tai piilotetaan se
             $("#uusi").toggle();
         });
+        /*$("#showSijainti").click(function () { //Nabbia painamalla näytetään tai piilotetaan se
+            $("#uusi").toggle();
+        });*/
 
         $('a.edit').on('click', function () { //Kun painetaan edit vaneri nappia
             $.ajax({
@@ -105,10 +110,11 @@
                 /*Taking an array of all options-2 and kind of embedding it on the select1*/
                 $(this).data('options', $('#skaappi option').clone());
             }
-            var id = $(this).val();
-            var options = $(this).data('options').filter('[value=' + id + ']');
+            //var id = $(this).id();
+            var id = $(this).children(":selected").attr("id");
+            var options = $(this).data('options').filter('[id=' + id + ']');
             $('#skaappi').html(options);
-            
+
         });
 
     </script>
@@ -184,7 +190,7 @@
                         <td>@item.Lisatiedot</td>
                         <td>
                             @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
-                            
+
                             @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
                     </tr>
@@ -231,7 +237,7 @@
                         <td>@item.Lisatiedot</td>
                         <td>
                             @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
-                           
+
                             @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
                     </tr>
@@ -261,20 +267,20 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Laudat)
                 {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Koko</td>
-                    <td>@item.Hinta</td>
-                    <td>@item.Maara</td>
-                    <td>@item.Yksikko</td>
-                    <td>@item.Kauppa</td>
-                    <td>@item.Lisatiedot</td>
-                    <td>
-                        @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
-                       
-                        @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-                    </td>
-                </tr>
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Koko</td>
+                        <td>@item.Hinta</td>
+                        <td>@item.Maara</td>
+                        <td>@item.Yksikko</td>
+                        <td>@item.Kauppa</td>
+                        <td>@item.Lisatiedot</td>
+                        <td>
+                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
+
+                            @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -284,118 +290,121 @@
 <div id="myModal3"></div>
 <!--Uuden tavaran/materiaalin lisäys varastoon-->
 <button id="show">Lisää uusi materiaali</button>
+<a href="#ex1" rel="modal:open" id="">Lisää uusi sijainti</a>
 
 <div id="uusi">
     @using (Html.BeginForm("AddNew", "Home", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
-    <fieldset>
-        <legend>Uusi tavara/materiaali</legend>
-        <div class="row">
-            <div class="col-25">
-                <label for="tyyppi">Tyyppi :</label>
-            </div>
-            <div class="col-75">
-                <select id="tyyppi" name="tyyppi" style="width:240px;">
-                    <option value="1">Vaneri</option>
-                    <option value="4">Maali</option>
-                    <option value="2">Lauta</option>
+        <fieldset>
+            <legend>Uusi tavara/materiaali</legend>
+            <div class="row">
+                <div class="col-25">
+                    <label for="tyyppi">Tyyppi :</label>
+                </div>
+                <div class="col-75">
+                    <select id="tyyppi" name="tyyppi" style="width:240px;">
+                        <option value="1">Vaneri</option>
+                        <option value="4">Maali</option>
+                        <option value="2">Lauta</option>
 
 
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="hinta">Hinta :</label><br>
-            </div>
-            <div class="col-75">
-                <input type="text" id="hinta" name="hinta"><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="maara">Määrä :</label><br>
-            </div>
-            <div class="col-75">
-                <input type="text" id="maara" name="maara"><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="koko">Koko :</label><br>
-            </div>
-            <div class="col-75">
-                <input type="text" id="koko" name="koko"><br>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-25">
-                <label for="yksikko">Yksikkö :</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="yksikko" name="yksikko"><br>
-            </div>
-        </div>
-      
-        <div class="row">
-            <div class="col-25">
-                <label for="sijainti">Sijainti :</label>
-            </div>
-            <div class="col-75">
-                <select id="sijainti" name="sijainti" style="width:240px;">
-
-                    @foreach (var item in @Model.Sijainnit)
-
-                    {
-                        <option value="@item.Id">@item.Nimi</option>
-                    }
-
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="sijainti">Huone :</label>
+                    </select>
+                </div>
             </div>
             <div class="row">
+                <div class="col-25">
+                    <label for="hinta">Hinta :</label><br>
+                </div>
                 <div class="col-75">
-                    <select id="skaappi" name="kaappi" value="1" style="width:160px;">
+                    <input type="text" id="hinta" name="hinta"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="maara">Määrä :</label><br>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="maara" name="maara"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="koko">Koko :</label><br>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="koko" name="koko"><br>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="yksikko">Yksikkö :</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="yksikko" name="yksikko"><br>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="sijainti">Sijainti :</label>
+                </div>
+                <div class="col-75">
+                    <select id="sijainti" name="sijainti" style="width:240px;">
                         @foreach (var item in @Model.Sijainnit)
 
                         {
-                            <option value="@item.Nimi">@item.Kaappi</option>
+                            <option id="@item.Nimi" value="@item.Id">@item.Nimi</option>
+                             
                         }
+                        
+
 
                     </select>
-                    
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="kauppa">Kauppa :</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="kauppa" name="kauppa"><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="komm">Lisätiedot :</label><br>
-            </div>
-            <div class="col-75">
-                <textarea name="komm" id="komm" style="width:240px; height:120px"></textarea><br><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
+            <div class="row">
+                <div class="col-25">
+                    <label for="sijainti">Kaappi :</label>
+                </div>
+                    <div class="col-75">
+                        <select id="skaappi" name="kaappi" value="1" style="width:160px;">
+                            @foreach (var item in @Model.Sijainnit)
+
+                            {
+                                <option id="@item.Nimi" value="@item.Kaappi">@item.Kaappi</option>
+                            }
+
+                        </select>
+
+                    </div>
+                
             </div>
 
-        </div>
-    </fieldset>
+            <div class="row">
+                <div class="col-25">
+                    <label for="kauppa">Kauppa :</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="kauppa" name="kauppa"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="komm">Lisätiedot :</label><br>
+                </div>
+                <div class="col-75">
+                    <textarea name="komm" id="komm" style="width:240px; height:120px"></textarea><br><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                </div>
+
+            </div>
+        </fieldset>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -404,8 +413,45 @@
                 <input type="button" value="Peruuta" class="btn btn-default" onclick="$('#uusi').hide();" />
             </div>
         </div>
-
     }
-
 </div>
+  
+<div id="ex1" class="modal">
+    @using (Html.BeginForm("AddSijainti", "Home", FormMethod.Post))
+    {
+        <fieldset>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Sijainti">Sijainti :</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="Sijainti" name="Sijainti"><br>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="Sijainti">Kaappi :</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="Kaappi" name="Kaappi"><br>
+
+                </div>
+            </div><br />
+        </fieldset>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                <input type="submit" value="Luo uusi" class="btn btn-default" />
+
+            </div>
+
+            <a href="#" rel="modal:close">Sulje</a>
+
+
+        </div>
+    }
+</div>
+        
 
