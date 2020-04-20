@@ -373,6 +373,7 @@ namespace VarastoApi.Controllers {
         [HttpPost]
         public ActionResult LisaaTilaus(FormCollection form)
         {
+            
             int.TryParse(form[string.Format("id")], out int id);
             string tilaajanNimi = form[string.Format("tilaajanNimi")];
             string tilaajanOsoite = form[string.Format("tilaajanOsoite")];
@@ -386,18 +387,25 @@ namespace VarastoApi.Controllers {
 
         public ActionResult lisaaTilattava(FormCollection form)
         {
-            int.TryParse(form[string.Format("tilausId")], out int tilausId);
+            int.TryParse(form[string.Format("tilausID")], out int tilausID);
             int.TryParse(form[string.Format("materiaaliID")], out int materiaaliID);
             dbMan = new DatabaseManager();
             cnn = dbMan.OpenConnection();
             dbTilattava = new DatabaseTilattava(cnn);
-            //Tilattava t = Tilattava.Create(tilausId,materiaaliID);
-
-            // dbTilattava.InsertInto(t);
+            Tilattava t = Tilattava.Create(tilausID, materiaaliID);
+            dbTilattava.InsertInto(t);
+         
             return RedirectToAction("Tilaukset");
 
 
 
+        }
+        [HttpGet]
+        public ActionResult tilauksenTiedot()
+        {
+            
+            
+            return PartialView();
         }
         [HttpGet]
         public ActionResult poistaTilaus(int id)

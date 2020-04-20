@@ -12,6 +12,7 @@ namespace VarastoApi.Backend {
 
         public int tilausId;
         public int materiaaliId;
+        public int maara;
 
         public DatabaseTilattava(SqlConnection cnn) {
             this.cnn = cnn;
@@ -27,7 +28,8 @@ namespace VarastoApi.Backend {
                 while (dataReader.Read()) {
                     int.TryParse(dataReader.GetValue(0).ToString(), out tilausId);
                     int.TryParse(dataReader.GetValue(1).ToString(), out materiaaliId);
-                    Tilattava t = new Tilattava(tilausId, materiaaliId);
+                    int.TryParse(dataReader.GetValue(2).ToString(), out maara);
+                    Tilattava t = new Tilattava(tilausId, materiaaliId, maara);
                     tilattavat.Add(t);
                 }
                 dataReader.Close();
@@ -48,7 +50,8 @@ namespace VarastoApi.Backend {
                 while (dataReader.Read()) {
                     int.TryParse(dataReader.GetValue(0).ToString(), out tilausId);
                     int.TryParse(dataReader.GetValue(1).ToString(), out materiaaliId);
-                    Tilattava t = new Tilattava(tilausId, materiaaliId);
+                    int.TryParse(dataReader.GetValue(2).ToString(), out maara);
+                    Tilattava t = new Tilattava(tilausId, materiaaliId, maara);
                     tilattavat.Add(t);
                 }
                 dataReader.Close();
@@ -62,7 +65,7 @@ namespace VarastoApi.Backend {
         //Lisää tauluun, palauttaa true jos ei tule poikkeusta, muuten false
         public bool InsertInto(Tilattava t) {
             try {
-                sql = "Insert into mydb.Tilattava (TilausID, MateriaaliID) values ('" + t.TilausId + "', '" + t.MateriaaliId+ "');";
+                sql = "Insert into mydb.Tilattava (TilausID, MateriaaliID, Määrä) values ('" + t.TilausId + "', '" + t.MateriaaliId+ "', '" + t.Maara+ "');";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein o.o
                 adapter.InsertCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.InsertCommand.ExecuteNonQuery();
@@ -77,7 +80,7 @@ namespace VarastoApi.Backend {
         //Muokkaa TilausID:n mukaista Columnia. Tarkennus: Vastaanottaa olion Tilattava ja korvaa tietokannasta TilausId:n mukaisen columnin tiedot.
         public bool Update(Tilattava t) {
             try {
-                sql = "UPDATE mydb.Tilattava SET MateriaaliID='" + t.MateriaaliId + "' WHERE TilausID ='" + t.TilausId + "' AND MateriaaliID = '" + t.MateriaaliId + ";";
+                sql = "UPDATE mydb.Tilattava SET MateriaaliID='" + t.MateriaaliId + "', Määrä='" + t.Maara +"' WHERE TilausID ='" + t.TilausId + "' AND MateriaaliID = '" + t.MateriaaliId + ";";
                 command = new SqlCommand(sql, cnn); //en tiedä miksi on kaksi eri sql-komentoa, ohjeiden mukaan tein d:D
                 adapter.UpdateCommand = new SqlCommand(sql, cnn); //tämä on se toinen, mutta tämä ilmeisesti on käytössä?
                 adapter.UpdateCommand.ExecuteNonQuery();

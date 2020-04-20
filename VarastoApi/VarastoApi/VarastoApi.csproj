@@ -197,6 +197,7 @@
     <Content Include="Views\Home\Kayttajat.cshtml" />
     <Content Include="Views\Home\Asetukset.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Home\tilauksenTiedot.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
