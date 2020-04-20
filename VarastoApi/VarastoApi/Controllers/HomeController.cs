@@ -389,10 +389,12 @@ namespace VarastoApi.Controllers {
         {
             int.TryParse(form[string.Format("tilausID")], out int tilausID);
             int.TryParse(form[string.Format("materiaaliID")], out int materiaaliID);
+            //TÄHÄN MÄÄRÄ
+            int Maara = -1; //POISTA TÄMÄ
             dbMan = new DatabaseManager();
             cnn = dbMan.OpenConnection();
             dbTilattava = new DatabaseTilattava(cnn);
-            Tilattava t = Tilattava.Create(tilausID, materiaaliID);
+            Tilattava t = Tilattava.Create(tilausID, materiaaliID, Maara);
             dbTilattava.InsertInto(t);
          
             return RedirectToAction("Tilaukset");
