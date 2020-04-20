@@ -135,6 +135,7 @@
     <Compile Include="Backend\DatabaseVaneri.cs" />
     <Compile Include="Backend\DatabaseVaraus.cs" />
     <Compile Include="Backend\DatabaseSijainti.cs" />
+    <Compile Include="Backend\DatabaseYmat.cs" />
     <Compile Include="Backend\ExceptionController.cs" />
     <Compile Include="Backend\Kayttaja.cs" />
     <Compile Include="Backend\Lauta.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Backend\Tilattava.cs" />
     <Compile Include="Backend\Vaneri.cs" />
     <Compile Include="Backend\YleisMat.cs" />
+    <Compile Include="Backend\Ymat.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
