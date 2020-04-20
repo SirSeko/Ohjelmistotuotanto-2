@@ -43,7 +43,7 @@ namespace VarastoApi.Backend {
             try {
                 this.kayttajanimi = "";
                 this.valtuus = -1;
-                sql = "Select Kayttajanimi, Valtuudet FROM mydb.Kayttajat WHERE Kayttajanimi = '" + kayttajanimi + "' AND Salasana ='" + hash + "';";
+                sql = "Select Kayttajanimi, Valtuudet FROM mydb.Kayttajat WHERE Kayttajanimi = '" + kayttajanimi + "' COLLATE SQL_Latin1_General_CP1_CS_AS AND Salasana ='" + hash + "' COLLATE SQL_Latin1_General_CP1_CS_AS;";
                 command = new SqlCommand(sql, cnn);
                 dataReader = command.ExecuteReader();
                 dataReader.Read();
