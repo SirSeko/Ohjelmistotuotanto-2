@@ -164,102 +164,117 @@
 </fieldset>
 
 
-    <fieldset>
-        <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
-        <legend>Uuden tilauksen luonti</legend>
+<fieldset>
+    <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
+    <legend>Uuden tilauksen luonti</legend>
 
 
-        @using (Html.BeginForm("lisaaTilattava", "Home", FormMethod.Post))
-        {
-            
+
+
+
+    @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <fieltset>
+
+
+
             <div class="row">
                 <div class="col-25">
-                    <label for="tilausID">Tilaus id:</label>
+                    <label for="tilaajanNimi">Nimi:</label>
+
                 </div>
                 <div class="col-75">
-                    <select id="tilausID" name="tilausID" style="width:240px">
-                        @foreach (var id in Model.Tilaukset)
-                        {
-                            <option value="@id.Id">@id.Id</option>
+                    <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
 
-                        }
-                    </select>
+
                 </div>
+
+
+
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="tyyppi">Tyyppi :</label>
+
+                    <label for="tilaajanOsoite">Osoite:</label>
                 </div>
                 <div class="col-75">
-                    <select id="materiaaliID" name="materiaaliID" style="width:240px;">
-                        <option value="1">Vaneri</option>
-                        <option value="4">Maali</option>
-                        <option value="2">Lauta</option>
 
 
-                    </select>
+                    <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
                 </div>
+
+
+
+            </div>
+
+        </fieltset>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <input type="submit" value="Lisää tilaus" class="btn btn-default" />
+        </div>
+    }
+    @using (Html.BeginForm("lisaaTilattava", "Home", FormMethod.Post))
+    {
+
+        <div class="row">
+            <div class="col-25">
+                <label for="tilausID">Tilaus id:</label>
+            </div>
+            <div class="col-75">
+                <select id="tilausID" name="tilausID" style="width:240px">
+                    @foreach (var id in Model.Tilaukset)
+                    {
+                        <option value="@id.Id">@id.Id</option>
+
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="tyyppi">Tyyppi :</label>
+            </div>
+            <div class="col-75">
+                <select id="materiaaliID" name="materiaaliID" style="width:240px;">
+                    <option value="1">Vaneri</option>
+                    <option value="4">Maali</option>
+                    <option value="2">Lauta</option>
+
+
+                </select>
             </div>
 
 
-
-            <div class="row">
-                <div class="col-25">
-                    <input type="submit" value="Lisää tilaukseen" class="btn btn-default" />
-                </div>
-
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="maara">Määrä:</label>
             </div>
-        }
-
-
-        @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <fieltset>
-
-
-
-                <div class="row">
-                    <div class="col-25">
-                        <label for="tilaajanNimi">Nimi:</label>
-
-                    </div>
-                    <div class="col-75">
-                        <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
-
-
-                    </div>
-
-
-
-                </div>
-                <div class="row">
-                    <div class="col-25">
-
-                        <label for="tilaajanOsoite">Osoite:</label>
-                    </div>
-                    <div class="col-75">
-
-
-                        <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
-                    </div>
-
-
-
-                </div>
-
-            </fieltset>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <input type="submit" value="Lisää tilaus" class="btn btn-default" />
+            <div class="col-75">
+                <input type="text" id="maara" name="maara" />
             </div>
-        }
+
+
+        </div>
+
+
+
+
+
+        <div class="row">
+            <div class="col-25">
+                <input type="submit" value="Lisää tilaukseen" class="btn btn-default" />
+            </div>
+
+        </div>
+    }
 
 
 
 
 
 
-    </fieldset>
+</fieldset>
 
     <thead>
