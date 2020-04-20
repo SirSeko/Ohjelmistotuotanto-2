@@ -147,6 +147,7 @@
     <Compile Include="Backend\SQLFilter.cs" />
     <Compile Include="Backend\Tilattava.cs" />
     <Compile Include="Backend\Vaneri.cs" />
+    <Compile Include="Backend\YleisMat.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
