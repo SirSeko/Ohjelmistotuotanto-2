@@ -370,7 +370,7 @@ namespace VarastoApi.Controllers {
             dbKay.Delete(Kayttajanimi);
             return RedirectToAction("Kayttajat");
         }
-        [HttpPost]
+        /*[HttpPost]
         public ActionResult LisaaTilaus(FormCollection form)
         {
             
@@ -383,9 +383,28 @@ namespace VarastoApi.Controllers {
             Tilaus t = Tilaus.Create(id, tilaajanNimi, tilaajanOsoite);
             dbTil.InsertInto(t);
             return RedirectToAction("Tilaukset");
+        }*/
+        [HttpPost]
+        public ActionResult LisaaTilaus(FormCollection form)
+        {
+
+            int.TryParse(form[string.Format("id")], out int id);
+            string tilaajanNimi = form[string.Format("tilaajanNimi")];
+            string tilaajanOsoite = form[string.Format("tilaajanOsoite")];
+            dbMan = new DatabaseManager();
+            cnn = dbMan.OpenConnection();
+            dbTil = new DatabaseTilaus(cnn);
+            Tilaus t = Tilaus.Create(id, tilaajanNimi, tilaajanOsoite);
+            dbTil.InsertInto(t);
+            id = 5555555;
+            ViewBag.id = id;
+            matko.Initiate();
+           
+            return PartialView(matko);
         }
 
-        public ActionResult lisaaTilattava(FormCollection form)
+        [HttpPost]
+        public ActionResult LisaaTilattava(FormCollection form)
         {
             int.TryParse(form[string.Format("tilausID")], out int tilausID);
             int.TryParse(form[string.Format("materiaaliID")], out int materiaaliID);
@@ -394,7 +413,7 @@ namespace VarastoApi.Controllers {
             dbMan = new DatabaseManager();
             cnn = dbMan.OpenConnection();
             dbTilattava = new DatabaseTilattava(cnn);
-            Tilattava t = Tilattava.Create(tilausID, materiaaliID,maara);
+            Tilattava t = Tilattava.Create(tilausID, materiaaliID, maara);
             dbTilattava.InsertInto(t);
          
             return RedirectToAction("Tilaukset");

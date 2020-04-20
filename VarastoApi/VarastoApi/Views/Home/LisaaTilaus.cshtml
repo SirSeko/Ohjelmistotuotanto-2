@@ -1,0 +1,73 @@
+﻿@using (Html.BeginForm("LisaaTilattava", "Home", FormMethod.Post))
+{
+    int i = ViewBag.id; // Tuodaan id 
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        <fieldset>
+            <h3><label for="Tid">Tilaus Id: @i </label></h3> <br />
+            <input type="hidden" id="Tid" name="Tid" value="@i" />
+            <div class="row">
+                <div class="col-25">
+                    <label for="vaneri">Vanerit :</label>
+                </div>
+                <div class="col-75">
+                    <select id="vaneriId" name="vaneriId" value="1" style="width:160px;">
+                        @foreach (var item in @Model.Vanerit)
+                        {
+                            <option id="@item.Id" value="@item.Id">@item.Koko | @item.Yksikko</option>
+
+                        }
+                    </select>
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="vaneri">Maalit :</label>
+                </div>
+                <div class="col-75">
+                    <select id="maalitId" name="maalitId" value="1" style="width:160px;">
+                        @foreach (var item in @Model.Maalit)
+                        {
+                        <option id="@item.Id" value="@item.Id">@item.Koko | @item.Yksikko</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="vaneri">Laudat :</label>
+                </div>
+                <div class="col-75">
+                    <select id="laudatId" name="laudatId" value="1" style="width:160px;">
+                        @foreach (var item in @Model.Laudat)
+                        {
+                            <option id="@item.Id" value="@item.Id">@item.Koko | @item.Yksikko</option>
+
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+
+        </fieldset>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <!-- Submitattaan tiedot eteenpäin Edit info action resultiin HomeControlleriin -->
+                <input type="submit" value="Tallenna" class="btn btn-default" />
+                <input type="button" value="Peruuta" class="btn btn-default" onclick="location.href='@Url.Action("Index","Home")';" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
