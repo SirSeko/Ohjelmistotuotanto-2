@@ -12,5 +12,10 @@ namespace VarastoApi.Backend {
             this.TilausId = TilausId;
             this.MateriaaliId = MateriaaliId;
         }
+        public static Tilattava Create(int TilausId, int MateriaaliId)
+        {
+            Tilattava t = new Tilattava(-1,-1);
+            return new Tilattava(TilausId, MateriaaliId);
+        }
     }
 }

@@ -10,11 +10,13 @@
     <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script>
         //Javascript funktioita
 
@@ -57,18 +59,18 @@
 
         //Nappien ja modaalien funktiot //
 
-        $('#uusi').hide(); //Piilotetaan div jolla lisätään uusi materiaali heti kun sivu ladataan
+        $('#tiedot').hide(); //Piilotetaan div jolla näkee tilauksen tiedot
         $("#show").click(function () { //Nabbia painamalla näytetään tai piilotetaan se
-            $("#uusi").toggle();
+            $("#tiedot").toggle();
         });
 
-        $('a.edit').on('click', function () { //Kun painetaan edit vaneri nappia
+        $('a.tilauksenTiedot').on('click', function () { //Kun painetaan tilauksen tiedot nappia
             $.ajax({
                 url: this.href,
                 type: 'GET',
                 cache: true,
                 success: function (result) {
-                    $('#myModal').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                    $('#tilausModal').html(result).find('.modal').modal({ //avataan modaali jossa näkyy uusi datatable jossa tilauksen tiedot näkyvät
                         show: true
                     });
                 }
@@ -76,43 +78,7 @@
 
             return false;
         });
-        $('a.edit2').on('click', function () { //Kun painetaan edit maali nappia
-            $.ajax({
-                url: this.href,
-                type: 'GET',
-                cache: true,
-                success: function (result) {
-                    $('#myModal2').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
-                        show: true
-                    });
-                }
-            });
-            return false;
-        });
-        $('a.edit3').on('click', function () { //Kun painetaan edit lauta nappia
-            $.ajax({
-                url: this.href,
-                type: 'GET',
-                cache: true,
-                success: function (result) {
-                    $('#myModal3').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
-                        show: true
-                    });
-                }
-            });
-            return false;
-        });
 
-        $("#sijainti").change(function () {
-            if ($(this).data('options') === undefined) {
-                /*Taking an array of all options-2 and kind of embedding it on the select1*/
-                $(this).data('options', $('#skaappi option').clone());
-            }
-            var id = $(this).val();
-            var options = $(this).data('options').filter('[value=' + id + ']');
-            $('#skaappi').html(options);
-
-        });
 
     </script>
 }
@@ -161,19 +127,7 @@
     <!--Tilausten tarkastelu (Ei toiminnallisuutta vielä)-->
 
     <div class="row">
-        <!--div class="col-25">
-            <label for="tilaukset">Tilaukset :</label>
-        </div>
-        <div class="col-75">
-            <select id="tilaukset" style="width:240px;">
-                @foreach (var item in Model.Tilaukset)
-                {
-                    <option value="@item.Id">tilaus @item.Id</option>
 
-                };
-            </select>
-
-        </div>-->
         <div class="col-75">
             <table id="tilausTaulu" class="display">
                 <thead>
@@ -193,106 +147,119 @@
                             <td>@tilattava.TilaajanNimi</td>
                             <td>@tilattava.TilaajanOsoite</td>
                             <td>
-                                @Html.ActionLink("Tiedot", "lisatiedot", new { id = tilattava.Id }, new { @class = "btn tiedot" })
-                            @Html.ActionLink("Poista", "poistaTilaus", new { id = tilattava.Id }, new { @class = "btn poistatilaus" })
-                        </td>
-                    </tr>
-                }
+                                @Html.ActionLink("Tiedot", "tilauksenTiedot", new { id = tilattava.Id }, new { @class = "btn tilauksenTiedot" })
+                                @Html.ActionLink("Poista", "poistaTilaus", new { id = tilattava.Id }, new { @class = "btn poistatilaus" })
+                            </td>
+                        </tr>
+                    }
 
                 </tbody>
             </table>
         </div>
     </div>
+    <div id="tilausModal"></div>
 
     <br />
+
 </fieldset>
 
-<fieldset>
-    <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
-    <legend>Uuden tilauksen luonti</legend>
+
+    <fieldset>
+        <!--Uuden tilauksen luonti (Ei toiminnallisuutta vielä)-->
+        <legend>Uuden tilauksen luonti</legend>
 
 
-    @using (Html.BeginForm("lisaaTilattava", "Home", FormMethod.Post))
-    {
-        <div class="row">
-            <div class="col-25">
-                <label for="tilausId">tilausId:</label><br>
+        @using (Html.BeginForm("lisaaTilattava", "Home", FormMethod.Post))
+        {
+            
+            <div class="row">
+                <div class="col-25">
+                    <label for="tilausID">Tilaus id:</label>
+                </div>
+                <div class="col-75">
+                    <select id="tilausID" name="tilausID" style="width:240px">
+                        @foreach (var id in Model.Tilaukset)
+                        {
+                            <option value="@id.Id">@id.Id</option>
+
+                        }
+                    </select>
+                </div>
             </div>
-            <div class="col-75">
-                <input type="text" id="tilausId" name="tilausId"><br>
+            <div class="row">
+                <div class="col-25">
+                    <label for="tyyppi">Tyyppi :</label>
+                </div>
+                <div class="col-75">
+                    <select id="materiaaliID" name="materiaaliID" style="width:240px;">
+                        <option value="1">Vaneri</option>
+                        <option value="4">Maali</option>
+                        <option value="2">Lauta</option>
+
+
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="tyyppi">Tyyppi :</label>
-            </div>
-            <div class="col-75">
-                <select id="materiaaliID" name="materiaaliID" style="width:240px;">
-                    <option value="1">Vaneri</option>
-                    <option value="4">Maali</option>
-                    <option value="2">Lauta</option>
-
-
-                </select>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-25">
-                <input type="submit" value="Lisää tilaukseen" class="btn btn-default" />
-            </div>
-
-        </div>
-    }
-
-
-    @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <fieltset>
 
 
 
             <div class="row">
                 <div class="col-25">
-                    <label for="tilaajanNimi">Nimi:</label>
-
+                    <input type="submit" value="Lisää tilaukseen" class="btn btn-default" />
                 </div>
-                <div class="col-75">
-                    <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
-
-
-                </div>
-
-
 
             </div>
-            <div class="row">
-                <div class="col-25">
+        }
 
-                    <label for="tilaajanOsoite">Osoite:</label>
+
+        @using (Html.BeginForm("LisaaTilaus", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <fieltset>
+
+
+
+                <div class="row">
+                    <div class="col-25">
+                        <label for="tilaajanNimi">Nimi:</label>
+
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="tilaajanNimi" name="tilaajanNimi" />
+
+
+                    </div>
+
+
+
                 </div>
-                <div class="col-75">
+                <div class="row">
+                    <div class="col-25">
+
+                        <label for="tilaajanOsoite">Osoite:</label>
+                    </div>
+                    <div class="col-75">
 
 
-                    <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
+                        <input type="text" id="tilaajanOsoite" name="tilaajanOsoite" />
+                    </div>
+
+
+
                 </div>
 
-
-
+            </fieltset>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <input type="submit" value="Lisää tilaus" class="btn btn-default" />
             </div>
-
-        </fieltset>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <input type="submit" value="Lisää tilaus" class="btn btn-default" />
-        </div>
-    }
-   
-      
+        }
 
 
-</fieldset>
-<thead>
+
+
+
+
+    </fieldset>
+
+    <thead>
