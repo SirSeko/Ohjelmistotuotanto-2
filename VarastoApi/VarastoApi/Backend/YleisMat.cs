@@ -53,5 +53,18 @@ namespace VarastoApi.Backend {
             return y;
         }
 
+        public static YleisMat MuunnaYleiseksi(Ymat x) {
+            YleisMat y = new YleisMat();
+            y.Id = x.Id;
+            y.Koko = x.Koko;
+            y.Hinta = x.Hinta;
+            y.Maara = x.Maara;
+            y.Yksikko = x.Yksikko;
+            y.Sijainti = x.Sijainti;
+            y.Kauppa = x.Kauppa;
+            y.Lisatiedot = x.Lisatiedot;
+            return y;
+        }
+
     }
 }

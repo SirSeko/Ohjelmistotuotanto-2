@@ -30,6 +30,7 @@ namespace VarastoApi.Backend {
             DatabaseLauta dbL = new DatabaseLauta(cnn);
             DatabaseVaneri dbV = new DatabaseVaneri(cnn);
             DatabaseMaali dbM = new DatabaseMaali(cnn);
+            DatabaseYmat dbY = new DatabaseYmat(cnn);
             List<YleisMat> tilMat = new List<YleisMat>();
             List<Tilattava> tilattavat = dbT.SelectTilaus(TilausId);
             if (tilattavat != null) {
@@ -43,6 +44,9 @@ namespace VarastoApi.Backend {
                     }
                     if (o == null) {
                         o = YleisMat.MuunnaYleiseksi(dbM.SelectId(t.MateriaaliId));
+                    }
+                    if (o == null) {
+                        o = YleisMat.MuunnaYleiseksi(dbY.SelectId(t.MateriaaliId));
                     }
                     if (o != null) {
                         tilMat.Add(o);
