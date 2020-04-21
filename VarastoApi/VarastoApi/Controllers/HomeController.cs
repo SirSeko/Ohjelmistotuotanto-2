@@ -1,6 +1,6 @@
 ﻿
 using System.Web.Mvc;
-using System.Collections.Generic;
+
 using System.Data.SqlClient;
 using VarastoApi.Backend;
 using System;
@@ -21,11 +21,12 @@ namespace VarastoApi.Controllers {
         DatabaseLauta dbLau;
         DatabaseTilaus dbTil;
         DatabaseTilattava dbTilattava;
+        DatabaseYmat dbYmat;
 
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
         TilausKoonti tilko = new TilausKoonti();
-
+        
         public ActionResult Index()
         {
             if (Session["Kayttajanimi"] != null)
@@ -103,6 +104,13 @@ namespace VarastoApi.Controllers {
                     Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
                     dbMan.CloseConnection();
                     return PartialView(lau);
+
+                case "3":
+                    dbYmat = new DatabaseYmat(cnn);
+                    Ymat ym = dbYmat.SelectId(id); //Select id puuttuu lautadatabasesta
+                    dbMan.CloseConnection();
+                    return PartialView(ym);
+
 
             };
             return RedirectToAction("Index");
@@ -315,6 +323,21 @@ namespace VarastoApi.Controllers {
                         dmLau.Delete(id);
                     }
                     return true;
+                case "3":
+                    DatabaseYmat dmYmat = new DatabaseYmat(cnn);
+                    if (kutsu == "uusi")
+                    {
+                        dmYmat.InsertInto(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "muokkaus")
+                    {
+                        dmYmat.Update(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    }
+                    else if (kutsu == "poisto")
+                    {
+                        dmYmat.Delete(id);
+                    }
+                    return true;
 
             };
             return false; //Jos tyyppi ei täsmää palautetaan false
@@ -424,8 +447,6 @@ namespace VarastoApi.Controllers {
         [HttpGet]
         public ActionResult tilauksenTiedot()
         {
-            
-            
             return PartialView();
         }
         [HttpGet]
@@ -463,23 +484,7 @@ namespace VarastoApi.Controllers {
             dbMan.CloseConnection(); //suljetaan yhteys
             return RedirectToAction("Index");
         }
-        /*
-         * @{ /// TÄMÄ TÄSSÄ VAIN HETKEN /// IGNORE
-                    var myList = Model.Links
-                        .GroupBy(x => x.Season)
-                        .Select(x => new { Season = x.Key, Episodes = x });
-                }
-                @foreach (var season in myList)
-                {
-                   <strong>Season @Html.DisplayFor(modelItem => season.Season)</strong>
-                   foreach(var episode in season.Episodes)
-                   {
-                        @Html.DisplayFor(modelItem => item.Episode)
-                   }
-                }
-         * 
-         * 
-         */
+      
 
     }
 
