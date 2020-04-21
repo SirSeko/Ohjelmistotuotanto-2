@@ -26,6 +26,7 @@ namespace VarastoApi.Controllers {
         MateriaaliKoonti matko = new MateriaaliKoonti();
         TilausKoonti tilko = new TilausKoonti();
 
+
         public ActionResult Index()
         {
             if (Session["Kayttajanimi"] != null)
@@ -74,7 +75,7 @@ namespace VarastoApi.Controllers {
             }
         }
         public ActionResult Logout() {
-            Session["Kayttajanimi"] = "0";
+            Session["Kayttajanimi"] = null;
             Session["Valtuus"] = "0";
             return RedirectToAction("Login", "Login");
         }
