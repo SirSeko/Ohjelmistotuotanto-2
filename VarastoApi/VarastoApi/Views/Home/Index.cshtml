@@ -184,12 +184,14 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
             </thead>
             <!--Täytetään taulu-->
             <tbody>
+            
                 @foreach (var item in @Model.Vanerit)
                 {
 
@@ -200,6 +202,7 @@
                         <td>@item.Maara</td>
                         <td>@item.Yksikko</td>
                         <td>@item.Kauppa</td>
+                        <td>@item.Sijainti</td>
                         <td>@item.Lisatiedot</td>
                         <td>
                             @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
@@ -232,6 +235,7 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
@@ -240,20 +244,21 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Maalit)
                 {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Koko</td>
-                        <td>@item.Hinta</td>
-                        <td>@item.Maara</td>
-                        <td>@item.Yksikko</td>
-                        <td>@item.Kauppa</td>
-                        <td>@item.Lisatiedot</td>
-                        <td>
-                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Yksikko</td>
+                    <td>@item.Kauppa</td>
+                    <td>@item.Sijainti</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
 
-                            @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-                        </td>
-                    </tr>
+                        @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -272,6 +277,7 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
@@ -280,20 +286,21 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Laudat)
                 {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Koko</td>
-                        <td>@item.Hinta</td>
-                        <td>@item.Maara</td>
-                        <td>@item.Yksikko</td>
-                        <td>@item.Kauppa</td>
-                        <td>@item.Lisatiedot</td>
-                        <td>
-                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Yksikko</td>
+                    <td>@item.Kauppa</td>
+                    <td>@item.Sijainti</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
 
-                            @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-                        </td>
-                    </tr>
+                        @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -313,6 +320,7 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
@@ -328,6 +336,7 @@
                         <td>@item.Maara</td>
                         <td>@item.Yksikko</td>
                         <td>@item.Kauppa</td>
+                        <td>@item.Sijainti</td>
                         <td>@item.Lisatiedot</td>
                         <td>
                             @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit4" })|
