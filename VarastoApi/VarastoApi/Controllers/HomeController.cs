@@ -65,14 +65,7 @@ namespace VarastoApi.Controllers {
         }
         public ActionResult Ohjeet()
         {
-            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1")
-            {
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Login");
-            }
         }
         public ActionResult Logout() {
             Session["Kayttajanimi"] = null;
