@@ -144,7 +144,7 @@ namespace VarastoApi.Controllers {
                 string Lisatiedot = form[String.Format("TLisatiedot")];
                 if (!SQLFilter.checkInput(Lisatiedot))
                 {
-                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    ExceptionController.WriteException(this, "VaneriLisätiedot ei läpäissyt SQLFilteriä.");
                     return RedirectToAction("Index");
                 }
                 if (!int.TryParse(form[String.Format("TSijainti")], out int sijainti))
@@ -178,11 +178,15 @@ namespace VarastoApi.Controllers {
         [HttpGet] // Poistetaan tietueet tällä Getillä  
         public ActionResult Delete(int id)
         { //Tuodaan tietueen id 
-            string kutsu = "poisto";
-            // Annetaan switchille tietoja koska se haluaa. Ainoa tärkeä tieto on kutsu ja id.
-            switchi(kutsu, id, "a", 1, 1, "a", 1, "a", "a");
-            dbMan.CloseConnection();
-            return RedirectToAction("Index");
+            if ((string)Session["Valtuus"] == "2") {
+                string kutsu = "poisto";
+                // Annetaan switchille tietoja koska se haluaa. Ainoa tärkeä tieto on kutsu ja id.
+                switchi(kutsu, id, "a", 1, 1, "a", 1, "a", "a");
+                dbMan.CloseConnection();
+                return RedirectToAction("Index");
+            } else {
+                return RedirectToAction("Index");
+            }
 
         }
 
@@ -198,62 +202,58 @@ namespace VarastoApi.Controllers {
         [HttpPost] // Muokataan tietuetta
         public ActionResult AddNew(FormCollection form)
         {
+            if ((string)Session["Valtuus"] == "2") {
+                //Haetaan tyyppi id. eli ensimmäinen numero joka määrittää mikä materiaali kyseessä
+                int.TryParse(form[String.Format("tyyppi")], out int id);
+                //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
+                string Koko = form[String.Format("koko")];
+                if (!SQLFilter.checkInput(Koko)) {
+                    ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!float.TryParse(form[String.Format("hinta")], out float Hinta)) {
+                    ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string Kauppa = form[String.Format("kauppa")];
+                if (!SQLFilter.checkInput(Kauppa)) {
+                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                string Lisatiedot = form[String.Format("komm")];
+                if (!SQLFilter.checkInput(Lisatiedot)) {
+                    ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti)) {
+                    ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string kaappi = form[String.Format("kaappi")];
+                if (!SQLFilter.checkInput(kaappi)) {
+                    ExceptionController.WriteException(this, "VaneriKaappi ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                string Yksikko = Request.Form["yksikko"].ToString();
+                if (!SQLFilter.checkInput(Yksikko)) {
+                    ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
 
-            //Haetaan tyyppi id. eli ensimmäinen numero joka määrittää mikä materiaali kyseessä
-            int.TryParse(form[String.Format("tyyppi")], out int id);
-            //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
-            string Koko = form[String.Format("koko")];
-            if (!SQLFilter.checkInput(Koko))
-            {
-                ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            if (!float.TryParse(form[String.Format("hinta")], out float Hinta))
-            {
-                ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
-                return RedirectToAction("Index");
-            }
-            string Kauppa = form[String.Format("kauppa")];
-            if (!SQLFilter.checkInput(Kauppa))
-            {
-                ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            string Lisatiedot = form[String.Format("komm")];
-            if (!SQLFilter.checkInput(Lisatiedot))
-            {
-                ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti))
-            {
-                ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
-                return RedirectToAction("Index");
-            }
-            string kaappi = form[String.Format("kaappi")];
-            if (!SQLFilter.checkInput(kaappi))
-            {
-                ExceptionController.WriteException(this, "VaneriKaappi ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            string Yksikko = Request.Form["yksikko"].ToString();
-            if (!SQLFilter.checkInput(Yksikko))
-            {
-                ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
+                if (!int.TryParse(form[String.Format("maara")], out int Maara)) {
+                    ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
 
-            if (!int.TryParse(form[String.Format("maara")], out int Maara))
-            {
-                ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                //Kertoo switchille mikä kutsu on kyseessä
+                string kutsu = "uusi";
+                switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
+                dbMan.CloseConnection(); //suljetaan yhteys
+                return RedirectToAction("Index"); // palataan
+            } else {
                 return RedirectToAction("Index");
             }
-
-            //Kertoo switchille mikä kutsu on kyseessä
-            string kutsu = "uusi";
-            switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
-            dbMan.CloseConnection(); //suljetaan yhteys
-            return RedirectToAction("Index"); // palataan
+           
 
 
         }
@@ -462,6 +462,23 @@ namespace VarastoApi.Controllers {
 
             dbMan.CloseConnection(); //suljetaan yhteys
             return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        public ActionResult EditU(string id)  //Edit napilla palauttaa materiaalin
+        {
+            return RedirectToAction("Kayttajat");
+        }
+
+        [HttpGet] // Poistetaan tietueet tällä Getillä  
+        public ActionResult DeleteU(string id) { //Tuodaan tietueen id 
+            cnn = dbMan.OpenConnection();
+            dbKay = new DatabaseKayttaja(cnn);
+            dbKay.Delete(id);
+            dbMan.CloseConnection();
+            return RedirectToAction("Kayttajat");
+
         }
         /*
          * @{ /// TÄMÄ TÄSSÄ VAIN HETKEN /// IGNORE
