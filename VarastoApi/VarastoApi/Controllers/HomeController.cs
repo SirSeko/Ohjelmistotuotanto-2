@@ -37,8 +37,8 @@ namespace VarastoApi.Controllers {
             {
                 return RedirectToAction("Login", "Login");
             }
-
         }
+        
         public ActionResult Tilaukset()
         {
             if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1")
@@ -72,6 +72,11 @@ namespace VarastoApi.Controllers {
             {
                 return RedirectToAction("Login", "Login");
             }
+        }
+        public ActionResult Logout() {
+            Session["Kayttajanimi"] = "0";
+            Session["Valtuus"] = "0";
+            return RedirectToAction("Login", "Login");
         }
 
 
@@ -254,8 +259,6 @@ namespace VarastoApi.Controllers {
             switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
             dbMan.CloseConnection(); //suljetaan yhteys
             return RedirectToAction("Index"); // palataan
-
-
         }
 
         // Tämä tutkii tiedot ja päättää onko kyseessä lisäys, muokkaus vai poisto // Private huvin vuoksi..
@@ -319,7 +322,6 @@ namespace VarastoApi.Controllers {
             };
             return false; //Jos tyyppi ei täsmää palautetaan false
         }
-
 
         //Rekisteröinti
         DatabaseKayttaja dbKay;
