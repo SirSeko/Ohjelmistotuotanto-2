@@ -21,6 +21,7 @@ namespace VarastoApi.Controllers {
         DatabaseLauta dbLau;
         DatabaseTilaus dbTil;
         DatabaseTilattava dbTilattava;
+        DatabaseYmat dbYmat;
 
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
@@ -41,10 +42,12 @@ namespace VarastoApi.Controllers {
         }
         public ActionResult Tilaukset()
         {
-            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1")
+            if ((string)Session["Valtuus"] == "2")
             {
                 tilko.Initiate();
                 return View(tilko);
+            } else if ((string)Session["Valtuus"] == "1") {
+                return RedirectToAction("Index");
             }
             else
             {
@@ -64,14 +67,7 @@ namespace VarastoApi.Controllers {
         }
         public ActionResult Ohjeet()
         {
-            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1")
-            {
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Login");
-            }
         }
 
 
@@ -92,17 +88,24 @@ namespace VarastoApi.Controllers {
                     dbMan.CloseConnection();
                     return PartialView(v);
 
+                case "2":
+                    dbLau = new DatabaseLauta(cnn);
+                    Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
+                    dbMan.CloseConnection();
+                    return PartialView(lau);
+
+                case "3":
+                    dbYmat = new DatabaseYmat(cnn);
+                    Ymat ym = dbYmat.SelectId(id); //Select id puuttuu lautadatabasesta
+                    dbMan.CloseConnection();
+                    return PartialView(ym);
+
                 case "4":
                     dbMaa = new DatabaseMaali(cnn);
                     Maali maa = dbMaa.SelectId(id);
                     dbMan.CloseConnection();
                     return PartialView(maa);
 
-                case "2":
-                    dbLau = new DatabaseLauta(cnn);
-                    Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
-                    dbMan.CloseConnection();
-                    return PartialView(lau);
 
             };
             return RedirectToAction("Index");
@@ -113,7 +116,6 @@ namespace VarastoApi.Controllers {
         [HttpPost] // Muokataan tietuetta
         public ActionResult EditInfo(FormCollection form) //Tuodaan formin tiedot
         {
-
             //Haetaan id formista
             string sid = form[String.Format("Tid")];
             if (form["Tid"] != null)
@@ -277,13 +279,53 @@ namespace VarastoApi.Controllers {
                     }
                     else if (kutsu == "muokkaus") //Jos muokkaus niin muokataan
                     {
-                        dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Vaneri v = dmVan.SelectId(id);
+                            v.Maara = Maara;
+                            dmVan.Update(v);
+                        }
                     }
                     else if (kutsu == "poisto") //Jos poisto niin poistetaan
                     {
                         dmVan.Delete(id);
                     }
                     return true; //Palauteaan true jos homma ok.
+
+                case "2":
+                    DatabaseLauta dmLau = new DatabaseLauta(cnn);
+                    if (kutsu == "uusi") {
+                        dmLau.InsertInto(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    } else if (kutsu == "muokkaus") {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmLau.Update(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Lauta v = dmLau.SelectId(id);
+                            v.Maara = Maara;
+                            dmLau.Update(v);
+                        }
+                    } else if (kutsu == "poisto") {
+                        dmLau.Delete(id);
+                    }
+                    return true;
+
+                case "3":
+                    DatabaseYmat dmYmat = new DatabaseYmat(cnn);
+                    if (kutsu == "uusi") {
+                        dmYmat.InsertInto(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    } else if (kutsu == "muokkaus") {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmYmat.Update(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Ymat v = dmYmat.SelectId(id);
+                            v.Maara = Maara;
+                            dmYmat.Update(v);
+                        }
+                    } else if (kutsu == "poisto") {
+                        dmYmat.Delete(id);
+                    }
+                    return true;
 
                 case "4":
                     DatabaseMaali dmMaa = new DatabaseMaali(cnn);
@@ -293,28 +335,20 @@ namespace VarastoApi.Controllers {
                     }
                     else if (kutsu == "muokkaus")
                     {
-                        dmMaa.Update(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmMaa.Update(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Maali v = dmMaa.SelectId(id);
+                            v.Maara = Maara;
+                            dmMaa.Update(v);
+                        }
                     }
                     else if (kutsu == "poisto")
                     {
                         dmMaa.Delete(id);
                     }
                     return true;
-                case "2":
-                    DatabaseLauta dmLau = new DatabaseLauta(cnn);
-                    if (kutsu == "uusi")
-                    {
-                        dmLau.InsertInto(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "muokkaus")
-                    {
-                        dmLau.Update(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "poisto")
-                    {
-                        dmLau.Delete(id);
-                    }
-                    return true;
+
 
             };
             return false; //Jos tyyppi ei täsmää palautetaan false
