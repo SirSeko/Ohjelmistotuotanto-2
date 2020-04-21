@@ -499,7 +499,9 @@ namespace VarastoApi.Controllers {
         public ActionResult DeleteU(string id) { //Tuodaan tietueen id 
             cnn = dbMan.OpenConnection();
             dbKay = new DatabaseKayttaja(cnn);
-            dbKay.Delete(id);
+            if ((string)Session["Kayttajanimi"] != id) {
+                dbKay.Delete(id);
+            }
             dbMan.CloseConnection();
             return RedirectToAction("Kayttajat");
 
