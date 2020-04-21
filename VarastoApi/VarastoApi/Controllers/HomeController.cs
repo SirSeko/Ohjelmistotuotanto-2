@@ -21,6 +21,7 @@ namespace VarastoApi.Controllers {
         DatabaseLauta dbLau;
         DatabaseTilaus dbTil;
         DatabaseTilattava dbTilattava;
+        DatabaseYmat dbYmat;
 
         SqlConnection cnn; //tietokantayhteys-olio, jaetaan tämä muualle
         MateriaaliKoonti matko = new MateriaaliKoonti();
@@ -42,13 +43,12 @@ namespace VarastoApi.Controllers {
         
         public ActionResult Tilaukset()
         {
-            if ((string)Session["Valtuus"] == "2" || (string)Session["Valtuus"] == "1")
-            {
+            if ((string)Session["Valtuus"] == "2") {
                 tilko.Initiate();
                 return View(tilko);
-            }
-            else
-            {
+            } else if ((string)Session["Valtuus"] == "1") {
+                return RedirectToAction("Index");
+            } else {
                 return RedirectToAction("Login", "Login");
             }
         }
@@ -91,17 +91,23 @@ namespace VarastoApi.Controllers {
                     dbMan.CloseConnection();
                     return PartialView(v);
 
-                case "4":
-                    dbMaa = new DatabaseMaali(cnn);
-                    Maali maa = dbMaa.SelectId(id);
-                    dbMan.CloseConnection();
-                    return PartialView(maa);
-
                 case "2":
                     dbLau = new DatabaseLauta(cnn);
                     Lauta lau = dbLau.SelectId(id); //Select id puuttuu lautadatabasesta
                     dbMan.CloseConnection();
                     return PartialView(lau);
+
+                case "3":
+                    dbYmat = new DatabaseYmat(cnn);
+                    Ymat ym = dbYmat.SelectId(id); //Select id puuttuu lautadatabasesta
+                    dbMan.CloseConnection();
+                    return PartialView(ym);
+
+                case "4":
+                    dbMaa = new DatabaseMaali(cnn);
+                    Maali maa = dbMaa.SelectId(id);
+                    dbMan.CloseConnection();
+                    return PartialView(maa);
 
             };
             return RedirectToAction("Index");
@@ -177,11 +183,15 @@ namespace VarastoApi.Controllers {
         [HttpGet] // Poistetaan tietueet tällä Getillä  
         public ActionResult Delete(int id)
         { //Tuodaan tietueen id 
-            string kutsu = "poisto";
-            // Annetaan switchille tietoja koska se haluaa. Ainoa tärkeä tieto on kutsu ja id.
-            switchi(kutsu, id, "a", 1, 1, "a", 1, "a", "a");
-            dbMan.CloseConnection();
-            return RedirectToAction("Index");
+            if ((string)Session["Valtuus"] == "2") {
+                string kutsu = "poisto";
+                // Annetaan switchille tietoja koska se haluaa. Ainoa tärkeä tieto on kutsu ja id.
+                switchi(kutsu, id, "a", 1, 1, "a", 1, "a", "a");
+                dbMan.CloseConnection();
+                return RedirectToAction("Index");
+            } else {
+                return RedirectToAction("Index");
+            }
 
         }
 
@@ -198,61 +208,57 @@ namespace VarastoApi.Controllers {
         public ActionResult AddNew(FormCollection form)
         {
 
-            //Haetaan tyyppi id. eli ensimmäinen numero joka määrittää mikä materiaali kyseessä
-            int.TryParse(form[String.Format("tyyppi")], out int id);
-            //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
-            string Koko = form[String.Format("koko")];
-            if (!SQLFilter.checkInput(Koko))
-            {
-                ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            if (!float.TryParse(form[String.Format("hinta")], out float Hinta))
-            {
-                ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
-                return RedirectToAction("Index");
-            }
-            string Kauppa = form[String.Format("kauppa")];
-            if (!SQLFilter.checkInput(Kauppa))
-            {
-                ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            string Lisatiedot = form[String.Format("komm")];
-            if (!SQLFilter.checkInput(Lisatiedot))
-            {
-                ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti))
-            {
-                ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
-                return RedirectToAction("Index");
-            }
-            string kaappi = form[String.Format("kaappi")];
-            if (!SQLFilter.checkInput(kaappi))
-            {
-                ExceptionController.WriteException(this, "VaneriKaappi ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
-            string Yksikko = Request.Form["yksikko"].ToString();
-            if (!SQLFilter.checkInput(Yksikko))
-            {
-                ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
-                return RedirectToAction("Index");
-            }
+            if ((string)Session["Valtuus"] == "2") {
+                //Haetaan tyyppi id. eli ensimmäinen numero joka määrittää mikä materiaali kyseessä
+                int.TryParse(form[String.Format("tyyppi")], out int id);
+                //Käydään läpi kaikki tiedot ja kirjoitetaan exception jos ongelmia
+                string Koko = form[String.Format("koko")];
+                if (!SQLFilter.checkInput(Koko)) {
+                    ExceptionController.WriteException(this, "VaneriKoko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!float.TryParse(form[String.Format("hinta")], out float Hinta)) {
+                    ExceptionController.WriteException(this, "VaneriHinta muunnossa floatiksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string Kauppa = form[String.Format("kauppa")];
+                if (!SQLFilter.checkInput(Kauppa)) {
+                    ExceptionController.WriteException(this, "VaneriKauppa ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                string Lisatiedot = form[String.Format("komm")];
+                if (!SQLFilter.checkInput(Lisatiedot)) {
+                    ExceptionController.WriteException(this, "VaneriLisatiedot ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                if (!int.TryParse(form[String.Format("sijainti")], out int Sijainti)) {
+                    ExceptionController.WriteException(this, "VaneriSijainti muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
+                string kaappi = form[String.Format("kaappi")];
+                if (!SQLFilter.checkInput(kaappi)) {
+                    ExceptionController.WriteException(this, "VaneriKaappi ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
+                string Yksikko = Request.Form["yksikko"].ToString();
+                if (!SQLFilter.checkInput(Yksikko)) {
+                    ExceptionController.WriteException(this, "VaneriYksikko ei läpäissyt SQLFilteriä.");
+                    return RedirectToAction("Index");
+                }
 
-            if (!int.TryParse(form[String.Format("maara")], out int Maara))
-            {
-                ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                if (!int.TryParse(form[String.Format("maara")], out int Maara)) {
+                    ExceptionController.WriteException(this, "VaneriMaara muunnossa integeriksi virhe.");
+                    return RedirectToAction("Index");
+                }
+
+                //Kertoo switchille mikä kutsu on kyseessä
+                string kutsu = "uusi";
+                switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
+                dbMan.CloseConnection(); //suljetaan yhteys
+                return RedirectToAction("Index"); // palataan
+            } else {
                 return RedirectToAction("Index");
             }
-
-            //Kertoo switchille mikä kutsu on kyseessä
-            string kutsu = "uusi";
-            switchi(kutsu, id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot); //Kutsutaan switchiä joka tekee loput hommasta
-            dbMan.CloseConnection(); //suljetaan yhteys
-            return RedirectToAction("Index"); // palataan
         }
 
         // Tämä tutkii tiedot ja päättää onko kyseessä lisäys, muokkaus vai poisto // Private huvin vuoksi..
@@ -268,48 +274,71 @@ namespace VarastoApi.Controllers {
                 case "1":
                     DatabaseVaneri dmVan = new DatabaseVaneri(cnn);
 
-                    if (kutsu == "uusi")
-                    {  //Jos uusi niin luodaan uusi
+                    if (kutsu == "uusi") {  //Jos uusi niin luodaan uusi
                         dmVan.InsertInto(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "muokkaus") //Jos muokkaus niin muokataan
-                    {
-                        dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "poisto") //Jos poisto niin poistetaan
-                    {
+                    } else if (kutsu == "muokkaus") //Jos muokkaus niin muokataan
+                      {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmVan.Update(Vaneri.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Vaneri v = dmVan.SelectId(id);
+                            v.Maara = Maara;
+                            dmVan.Update(v);
+                        }
+                    } else if (kutsu == "poisto") //Jos poisto niin poistetaan
+                      {
                         dmVan.Delete(id);
                     }
                     return true; //Palauteaan true jos homma ok.
 
-                case "4":
-                    DatabaseMaali dmMaa = new DatabaseMaali(cnn);
-                    if (kutsu == "uusi")
-                    {
-                        dmMaa.InsertInto(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "muokkaus")
-                    {
-                        dmMaa.Update(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "poisto")
-                    {
-                        dmMaa.Delete(id);
-                    }
-                    return true;
                 case "2":
                     DatabaseLauta dmLau = new DatabaseLauta(cnn);
-                    if (kutsu == "uusi")
-                    {
+                    if (kutsu == "uusi") {
                         dmLau.InsertInto(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "muokkaus")
-                    {
-                        dmLau.Update(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
-                    }
-                    else if (kutsu == "poisto")
-                    {
+                    } else if (kutsu == "muokkaus") {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmLau.Update(Lauta.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Lauta v = dmLau.SelectId(id);
+                            v.Maara = Maara;
+                            dmLau.Update(v);
+                        }
+                    } else if (kutsu == "poisto") {
                         dmLau.Delete(id);
+                    }
+                    return true;
+
+                case "3":
+                    DatabaseYmat dmYmat = new DatabaseYmat(cnn);
+                    if (kutsu == "uusi") {
+                        dmYmat.InsertInto(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    } else if (kutsu == "muokkaus") {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmYmat.Update(Ymat.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Ymat v = dmYmat.SelectId(id);
+                            v.Maara = Maara;
+                            dmYmat.Update(v);
+                        }
+                    } else if (kutsu == "poisto") {
+                        dmYmat.Delete(id);
+                    }
+                    return true;
+
+                case "4":
+                    DatabaseMaali dmMaa = new DatabaseMaali(cnn);
+                    if (kutsu == "uusi") {
+                        dmMaa.InsertInto(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                    } else if (kutsu == "muokkaus") {
+                        if ((string)Session["Valtuus"] == "2") {
+                            dmMaa.Update(Maali.Create(id, Koko, Hinta, Maara, Yksikko, Sijainti, Kauppa, Lisatiedot));
+                        } else {
+                            Maali v = dmMaa.SelectId(id);
+                            v.Maara = Maara;
+                            dmMaa.Update(v);
+                        }
+                    } else if (kutsu == "poisto") {
+                        dmMaa.Delete(id);
                     }
                     return true;
 
@@ -459,6 +488,23 @@ namespace VarastoApi.Controllers {
             dbMan.CloseConnection(); //suljetaan yhteys
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult EditU(string id)  //Edit napilla palauttaa materiaalin
+{
+            return RedirectToAction("Kayttajat");
+        }
+
+        [HttpGet] // Poistetaan tietueet tällä Getillä  
+        public ActionResult DeleteU(string id) { //Tuodaan tietueen id 
+            cnn = dbMan.OpenConnection();
+            dbKay = new DatabaseKayttaja(cnn);
+            dbKay.Delete(id);
+            dbMan.CloseConnection();
+            return RedirectToAction("Kayttajat");
+
+        }
+
         /*
          * @{ /// TÄMÄ TÄSSÄ VAIN HETKEN /// IGNORE
                     var myList = Model.Links
