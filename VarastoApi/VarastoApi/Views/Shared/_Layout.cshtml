@@ -24,23 +24,22 @@
                     <li>@Html.ActionLink("Varasto", "Index", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Tilaukset", "Tilaukset", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Käyttäjät", "Kayttajat", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Asetukset", "Asetukset", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Ohjeet", "Ohjeet", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Kirjaudu Ulos", "Logout", "Home", new { area = "" }, null)</li>
                 </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - VarastoApi</p>
-        </footer>
-    </div>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - VarastoApi</p>
+            </footer>
+        </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-</body>
-</html>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
+    </html>
