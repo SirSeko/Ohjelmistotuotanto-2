@@ -3,7 +3,87 @@
 @{
     ViewBag.Title = "Kayttajat";
 }
+<style>
 
+    /*Taulujen tyyli*/
+    table, th, td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    table {
+        border-spacing: 10px;
+    }
+    /*Lomakkeiden tyyli ja formatointi*/
+    input {
+        width: 240px;
+    }
+
+    .col-25 {
+        float: left;
+        width: 20%;
+        margin-top: 5px;
+    }
+
+    .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 5px;
+    }
+    /*Clear floats after the columns*/
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+@section scripts {
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<script>
+
+        //Javascript funktioita
+
+        $(document).ready(function () { //Kun sivun lataus valmis suoritetaan seuraaavat
+
+            //Datatables funktiot lähde: https://datatables.net/ //
+            $('table.display').DataTable({ //Käytetään datatablesia jossa seuraavat toiminnot select, ordering
+                select: true,
+                ordering: true,
+                paging: false,
+                responsive: true,
+                dom: 'Bfrtip', //Datatables napit
+                language: {
+                    buttons: {
+                        colvisRestore: "Palauta", //Muutetaan napin nimi koska muuten se olisi englanniksi
+                        colvis: "Rivit"
+
+                    }
+                },
+                buttons: [ //Määritellään mitän nappeja halutaan käyttää
+                    {
+                        extend: 'colvis', //Datatablesin omia nimityksiä napeille.
+                        postfixButtons: ['colvisRestore']
+                    }
+                ],
+               
+            });
+
+
+    });
+</script>
+}
 <h2>Käyttäjät</h2>
 <div class="row">
     <div class="col-75">
