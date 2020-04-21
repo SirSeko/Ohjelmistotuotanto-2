@@ -11,6 +11,7 @@ namespace VarastoApi.Backend {
         public List<Sijainti> Sijainnit;
         public List<Maali> Maalit;
         public List<Lauta> Laudat;
+        public List<Ymat> YleisetMateriaalit;
 
         private DatabaseManager dbMan;
         private DatabaseMateriaali dbMat;
@@ -18,6 +19,7 @@ namespace VarastoApi.Backend {
         private DatabaseMaali dbMaa;
         private DatabaseVaneri dbVan;
         private DatabaseSijainti dbSij;
+        private DatabaseYmat dbYmat;
 
         SqlConnection cnn;
 
@@ -27,6 +29,7 @@ namespace VarastoApi.Backend {
             Sijainnit = new List<Sijainti>();
             Maalit = new List<Maali>();
             Laudat = new List<Lauta>();
+            YleisetMateriaalit = new List<Ymat>();
 
             dbMan = new DatabaseManager();
 
@@ -41,11 +44,13 @@ namespace VarastoApi.Backend {
             dbMaa = new DatabaseMaali(cnn);
             dbVan = new DatabaseVaneri(cnn);
             dbSij = new DatabaseSijainti(cnn);
+            dbYmat = new DatabaseYmat(cnn);
             Materiaalit = dbMat.SelectAll(Materiaalit);
             Vanerit = dbVan.SelectAll(Vanerit);
             Sijainnit = dbSij.SelectAll(Sijainnit);
             Maalit = dbMaa.SelectAll(Maalit);
             Laudat = dbLau.SelectAll(Laudat);
+            YleisetMateriaalit = dbYmat.SelectAll(YleisetMateriaalit);
             dbMan.CloseConnection();
         }
     }

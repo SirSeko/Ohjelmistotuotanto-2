@@ -104,6 +104,19 @@
             });
             return false;
         });
+        $('a.edit4').on('click', function () { //Kun painetaan edit lauta nappia
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: true,
+                success: function (result) {
+                    $('#myModal4').html(result).find('.modal').modal({ //Niin avataan modaali jolla voi muokata materiaalia
+                        show: true
+                    });
+                }
+            });
+            return false;
+        });
 
         $("#sijainti").change(function () {
             if ($(this).data('options') === undefined) {
@@ -171,12 +184,14 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
             </thead>
             <!--Täytetään taulu-->
             <tbody>
+            
                 @foreach (var item in @Model.Vanerit)
                 {
 
@@ -187,6 +202,7 @@
                         <td>@item.Maara</td>
                         <td>@item.Yksikko</td>
                         <td>@item.Kauppa</td>
+                        <td>@item.Sijainti</td>
                         <td>@item.Lisatiedot</td>
                         <td>
                             @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit" })|
@@ -219,6 +235,7 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
@@ -227,20 +244,21 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Maalit)
                 {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Koko</td>
-                        <td>@item.Hinta</td>
-                        <td>@item.Maara</td>
-                        <td>@item.Yksikko</td>
-                        <td>@item.Kauppa</td>
-                        <td>@item.Lisatiedot</td>
-                        <td>
-                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Yksikko</td>
+                    <td>@item.Kauppa</td>
+                    <td>@item.Sijainti</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit2" })|
 
-                            @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-                        </td>
-                    </tr>
+                        @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -259,6 +277,7 @@
                     <th>Määrä</th>
                     <th>Yksikkö</th>
                     <th>Kauppa</th>
+                    <th>Sijainti</th>
                     <th>Lisätiedot</th>
                     <th>Muokkaa</th>
                 </tr>
@@ -267,6 +286,49 @@
                 <!--Täytetään taulu-->
                 @foreach (var item in @Model.Laudat)
                 {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Koko</td>
+                    <td>@item.Hinta</td>
+                    <td>@item.Maara</td>
+                    <td>@item.Yksikko</td>
+                    <td>@item.Kauppa</td>
+                    <td>@item.Sijainti</td>
+                    <td>@item.Lisatiedot</td>
+                    <td>
+                        @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
+
+                        @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+    </div>
+</div>
+<div id="myModal3"></div>
+<h3>Yleiset Materiaalit</h3>
+<div class="row">
+    <div class="col-75">
+        <table id="" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kuvaus</th>
+                    <th>Hinta</th>
+                    <th>Määrä</th>
+                    <th>Yksikkö</th>
+                    <th>Kauppa</th>
+                    <th>Sijainti</th>
+                    <th>Lisätiedot</th>
+                    <th>Muokkaa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Täytetään taulu-->
+                @foreach (var item in @Model.YleisetMateriaalit)
+                {
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Koko</td>
@@ -274,9 +336,10 @@
                         <td>@item.Maara</td>
                         <td>@item.Yksikko</td>
                         <td>@item.Kauppa</td>
+                        <td>@item.Sijainti</td>
                         <td>@item.Lisatiedot</td>
                         <td>
-                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit3" })|
+                            @Html.ActionLink("Muokkaa", "Edit", new { id = item.Id }, new { @class = "btn edit4" })|
 
                             @Html.ActionLink("Poista", "Delete", new { id = item.Id }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
                         </td>
@@ -287,7 +350,7 @@
         <hr />
     </div>
 </div>
-<div id="myModal3"></div>
+<div id="myModal4"></div>
 <!--Uuden tavaran/materiaalin lisäys varastoon-->
 <button id="show">Lisää uusi materiaali</button>
 <a href="#ex1" rel="modal:open" id="">Lisää uusi sijainti</a>
@@ -308,6 +371,7 @@
                         <option value="1">Vaneri</option>
                         <option value="4">Maali</option>
                         <option value="2">Lauta</option>
+                        <option value="3">Yleinen Materiaali</option>
 
 
                     </select>
@@ -357,9 +421,9 @@
 
                         {
                             <option id="@item.Nimi" value="@item.Id">@item.Nimi</option>
-                             
+
                         }
-                        
+
 
 
                     </select>
@@ -369,18 +433,18 @@
                 <div class="col-25">
                     <label for="sijainti">Kaappi :</label>
                 </div>
-                    <div class="col-75">
-                        <select id="skaappi" name="kaappi" value="1" style="width:160px;">
-                            @foreach (var item in @Model.Sijainnit)
+                <div class="col-75">
+                    <select id="skaappi" name="kaappi" value="1" style="width:160px;">
+                        @foreach (var item in @Model.Sijainnit)
 
-                            {
-                                <option id="@item.Nimi" value="@item.Kaappi">@item.Kaappi</option>
-                            }
+                        {
+                            <option id="@item.Nimi" value="@item.Kaappi">@item.Kaappi</option>
+                        }
 
-                        </select>
+                    </select>
 
-                    </div>
-                
+                </div>
+
             </div>
 
             <div class="row">
@@ -415,7 +479,7 @@
         </div>
     }
 </div>
-  
+
 <div id="ex1" class="modal">
     @using (Html.BeginForm("AddSijainti", "Home", FormMethod.Post))
     {
@@ -453,5 +517,5 @@
         </div>
     }
 </div>
-        
+
 
