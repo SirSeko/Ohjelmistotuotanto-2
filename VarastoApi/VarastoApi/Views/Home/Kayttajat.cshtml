@@ -4,6 +4,21 @@
     ViewBag.Title = "Kayttajat";
 }
 <style>
+
+    /*Taulujen tyyli*/
+    table, th, td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    table {
+        border-spacing: 10px;
+    }
+    /*Lomakkeiden tyyli ja formatointi*/
+    input {
+        width: 240px;
+    }
+
     .col-25 {
         float: left;
         width: 20%;
@@ -22,8 +37,37 @@
         clear: both;
     }
 </style>
-
 <h2>Käyttäjät</h2>
+<div class="row">
+    <div class="col-75">
+        <table id="" class="display">
+            <thead>
+                <tr>
+                    <th>Käyttäjänimi</th>
+                    <th>Valtuus</th>
+                    <th>Muokkaa</th>
+                </tr>
+            </thead>
+            <!--Täytetään taulu-->
+            <tbody>
+                @foreach (var item in @Model.Lista) {
+
+                    <tr>
+                        <td>@item.Kayttajanimi</td>
+                        <td>@item.Valtuus</td>
+                        <td>
+                            @Html.ActionLink("Muokkaa", "EditU", new { id = item.Kayttajanimi }, new { @class = "btn edit" })|
+
+                            @Html.ActionLink("Poista", "DeleteU", new { id = item.Kayttajanimi }, new { onclick = "return confirm('Haluatko poistaa käyttäjän?');" })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
 @using (Html.BeginForm("Register", "Home", FormMethod.Post)) {
     {
         @Html.AntiForgeryToken()
@@ -64,13 +108,4 @@
             </div>
         </div>
     }
-}
-
-@foreach(var item in Model.Lista) {
-        <tr>
-            <td>@item.Kayttajanimi</td>
-            <td>@item.Valtuus</td>
-            @Html.ActionLink("Delete", "DeleteKayttaja", new { Kayttajanimi = item.Kayttajanimi }, new { onclick = "return confirm('Haluatko poistaa tiedot?');" })
-        </tr>
-    <br />
 }
