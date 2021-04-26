@@ -1,4 +1,4 @@
-Ohjelmistotuotanto 2
+Ohjelmistotuotanto 2 04/2020
 
 Varastonhallinta-sovellus
 Prototyyppi
